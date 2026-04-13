@@ -984,14 +984,14 @@
             </div>
             <div class="form-group">
               <label><span data-en="Phone Number" data-es="Teléfono">Phone Number</span><span class="req">*</span></label>
-              <input type="tel" id="phone" placeholder="(512) 555-0100" autocomplete="tel" inputmode="numeric" onkeydown="return restrictPhone(event)" oninput="this.value=this.value.replace(/[^\d\s\(\)\-\+]/g,'')"/>
+              <input type="tel" id="phone" placeholder="(512) 555-0100" autocomplete="tel" inputmode="numeric" onkeydown="return restrictPhone(event)" oninput="this.value=this.value.replace(/[^\d\s\(\)\-\+]/g,'')" onblur="validatePhoneField('phone','err-phone')"/>
               <div class="field-error" id="err-phone"></div>
             </div>
           </div>
           <div class="form-row full">
             <div class="form-group">
               <label><span data-en="Email Address" data-es="Correo Electrónico">Email Address</span><span class="req">*</span></label>
-              <input type="email" id="email" placeholder="john@example.com" autocomplete="email"/>
+              <input type="email" id="email" placeholder="john@example.com" autocomplete="email" onblur="validateEmailField('email','err-email')"/>
               <div class="field-error" id="err-email"></div>
             </div>
           </div>
@@ -1005,7 +1005,7 @@
             </div>
             <div class="form-group">
               <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
-              <input type="text" id="zip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,'')"/>
+              <input type="text" id="zip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,''); if(this.value.length===5) lookupZip(this.value,'city','err-zip')"/>
               <div class="field-error" id="err-zip"></div>
             </div>
           </div>
@@ -1363,11 +1363,13 @@
         <div class="form-row">
           <div class="form-group">
             <label><span data-en="Phone" data-es="Teléfono">Phone</span><span class="req">*</span></label>
-            <input type="tel" id="shopPhone" placeholder="(512) 555-0200" inputmode="numeric" onkeydown="return restrictPhone(event)" oninput="this.value=this.value.replace(/[^\d\s\(\)\-\+]/g,'')"/>
+            <input type="tel" id="shopPhone" placeholder="(512) 555-0200" inputmode="numeric" onkeydown="return restrictPhone(event)" oninput="this.value=this.value.replace(/[^\d\s\(\)\-\+]/g,'')" onblur="validatePhoneField('shopPhone','err-shopPhone')"/>
+            <div class="field-error" id="err-shopPhone"></div>
           </div>
           <div class="form-group">
             <label><span data-en="Email" data-es="Correo">Email</span><span class="req">*</span></label>
-            <input type="email" id="shopEmail" placeholder="owner@myshop.com"/>
+            <input type="email" id="shopEmail" placeholder="owner@myshop.com" onblur="validateEmailField('shopEmail','err-shopEmail')"/>
+            <div class="field-error" id="err-shopEmail"></div>
           </div>
         </div>
         <div class="form-row">
@@ -1377,7 +1379,8 @@
           </div>
           <div class="form-group">
             <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
-            <input type="text" id="shopZip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,'')"/>
+            <input type="text" id="shopZip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,''); if(this.value.length===5) lookupZip(this.value,'shopCity','err-shopZip')"/>
+            <div class="field-error" id="err-shopZip"></div>
           </div>
         </div>
         <div class="form-row">
@@ -1813,6 +1816,71 @@ document.getElementById('shopForm').addEventListener('submit', function(e) {
   setLang(currentLang);
   if (typeof gtag === 'function') gtag('event', 'shop_application_submitted', { tier: document.getElementById('shopTier').value });
 });
+
+// ── Real-time field validation ────────────────────────────────────────────────
+function validatePhoneField(fieldId, errId) {
+  const field = document.getElementById(fieldId);
+  const errEl = document.getElementById(errId);
+  const val   = field.value.trim();
+  const digits = val.replace(/\D/g, '');
+  if (!val) {
+    field.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+    return;
+  }
+  if (digits.length < 10 || digits.length > 11) {
+    field.classList.add('error');
+    if (errEl) errEl.textContent = currentLang === 'es'
+      ? 'Ingresa un número de teléfono válido (10 dígitos)'
+      : 'Enter a valid phone number (10 digits)';
+  } else {
+    field.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+    // Auto-format as (XXX) XXX-XXXX
+    const d = digits.slice(-10);
+    field.value = `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
+  }
+}
+
+function validateEmailField(fieldId, errId) {
+  const field = document.getElementById(fieldId);
+  const errEl = document.getElementById(errId);
+  const val   = field.value.trim();
+  if (!val) {
+    field.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+    return;
+  }
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val);
+  if (!valid) {
+    field.classList.add('error');
+    if (errEl) errEl.textContent = currentLang === 'es'
+      ? 'Ingresa un correo electrónico válido'
+      : 'Enter a valid email address';
+  } else {
+    field.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+  }
+}
+
+// ── ZIP → City auto-lookup (zippopotam.us free API) ───────────────────────────
+async function lookupZip(zip, cityFieldId, errId) {
+  const cityField = document.getElementById(cityFieldId);
+  const errEl     = document.getElementById(errId);
+  try {
+    const res  = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    if (!res.ok) throw new Error('not found');
+    const data = await res.json();
+    const city = data.places[0]['place name'];
+    cityField.value = city;
+    cityField.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+  } catch {
+    if (errEl) errEl.textContent = currentLang === 'es'
+      ? 'Código postal no encontrado'
+      : 'ZIP code not found — please enter your city manually';
+  }
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 renderCities();
