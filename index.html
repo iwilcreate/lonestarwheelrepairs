@@ -999,14 +999,14 @@
           <div class="form-section-title" data-en="YOUR LOCATION" data-es="TU UBICACIÓN">YOUR LOCATION</div>
           <div class="form-row">
             <div class="form-group">
-              <label><span data-en="City" data-es="Ciudad">City</span><span class="req">*</span></label>
-              <input type="text" id="city" placeholder="Austin"/>
-              <div class="field-error" id="err-city"></div>
-            </div>
-            <div class="form-group">
               <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
               <input type="text" id="zip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,''); if(this.value.length===5) lookupZip(this.value,'city','err-zip')"/>
               <div class="field-error" id="err-zip"></div>
+            </div>
+            <div class="form-group">
+              <label><span data-en="City" data-es="Ciudad">City</span><span class="req">*</span></label>
+              <input type="text" id="city" placeholder="Austin"/>
+              <div class="field-error" id="err-city"></div>
             </div>
           </div>
 
@@ -1374,13 +1374,14 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label><span data-en="City" data-es="Ciudad">City</span><span class="req">*</span></label>
-            <input type="text" id="shopCity" placeholder="Austin"/>
-          </div>
-          <div class="form-group">
             <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
             <input type="text" id="shopZip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,''); if(this.value.length===5) lookupZip(this.value,'shopCity','err-shopZip')"/>
             <div class="field-error" id="err-shopZip"></div>
+          </div>
+          <div class="form-group">
+            <label><span data-en="City" data-es="Ciudad">City</span><span class="req">*</span></label>
+            <input type="text" id="shopCity" placeholder="Austin"/>
+            <div class="field-error" id="err-shopCity"></div>
           </div>
         </div>
         <div class="form-row">
