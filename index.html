@@ -1539,46 +1539,35 @@ async function loadYears() {
     sel.appendChild(opt);
   }
 }
-async function loadMakes(year) {
-  const makeSel = document.getElementById('vehicleMake');
+const APPROVED_MAKES = [
+  // American
+  "Buick","Cadillac","Chevrolet","Chrysler","Dodge","Ford","GMC",
+  "Jeep","Lincoln","Lucid","RAM","Rivian","Tesla",
+  // Japanese
+  "Acura","Honda","INFINITI","Lexus","Mazda","Mitsubishi",
+  "Nissan","Subaru","Toyota",
+  // Korean
+  "Genesis","Hyundai","Kia",
+  // German
+  "Audi","BMW","Mercedes-Benz","MINI","Porsche","Volkswagen",
+  // European
+  "Alfa Romeo","Aston Martin","Bentley","Ferrari","FIAT",
+  "Jaguar","Lamborghini","Land Rover","Lotus",
+  "Maserati","McLaren","Polestar","Rolls-Royce","Volvo"
+].sort();
+
+function loadMakes(year) {
+  const makeSel  = document.getElementById('vehicleMake');
   const modelSel = document.getElementById('vehicleModel');
-  makeSel.innerHTML = '<option value="">Loading...</option>';
-  makeSel.disabled = true;
+  makeSel.innerHTML  = '<option value="">-- Select Make --</option>';
   modelSel.innerHTML = '<option value="">-- Select Make First --</option>';
-  modelSel.disabled = true;
-  try {
-    const res  = await fetch(`${NHTSA}/GetMakesForVehicleType/car?modelyear=${year}&format=json`);
-    const data = await res.json();
-    const makes = (data.Results || []).map(m => m.MakeName).sort();
-    makeSel.innerHTML = '<option value="">-- Select Make --</option>';
-    if (makes.length === 0) populateFallbackMakes(makeSel);
-    else makes.forEach(make => {
-      const opt = document.createElement('option');
-      opt.value = make; opt.textContent = make;
-      makeSel.appendChild(opt);
-    });
-    makeSel.disabled = false;
-  } catch { populateFallbackMakes(makeSel); makeSel.disabled = false; }
-}
-function populateFallbackMakes(sel) {
-  const common = [
-    // American
-    "Buick","Cadillac","Chevrolet","Chrysler","Dodge","Ford","GMC",
-    "Jeep","Lincoln","Lucid","RAM","Rivian","Tesla",
-    // Japanese
-    "Acura","Honda","INFINITI","Lexus","Mazda","Mitsubishi",
-    "Nissan","Subaru","Toyota",
-    // Korean
-    "Genesis","Hyundai","Kia",
-    // German
-    "Audi","BMW","Mercedes-Benz","MINI","Porsche","Volkswagen",
-    // European
-    "Alfa Romeo","Aston Martin","Bentley","Ferrari","FIAT",
-    "Jaguar","Lamborghini","Land Rover","Lotus",
-    "Maserati","McLaren","Polestar","Rolls-Royce","Volvo",
-  ].sort();
-  sel.innerHTML = '<option value="">-- Select Make --</option>';
-  common.forEach(make => { const opt = document.createElement('option'); opt.value = make; opt.textContent = make; sel.appendChild(opt); });
+  modelSel.disabled  = true;
+  APPROVED_MAKES.forEach(make => {
+    const opt = document.createElement('option');
+    opt.value = make; opt.textContent = make;
+    makeSel.appendChild(opt);
+  });
+  makeSel.disabled = false;
 }
 
 // ── Input restriction helpers ─────────────────────────────────────────────────
