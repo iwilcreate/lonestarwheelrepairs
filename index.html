@@ -477,33 +477,48 @@
     /* ── Why Us ──────────────────────────────────────────── */
     #why-us { background: var(--bg); }
     .why-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1px; margin-top: 3rem;
-      background: var(--border);
-      border-radius: var(--radius-xl); overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 3rem;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .why-card {
-      background: var(--bg2); padding: 2rem 1.75rem;
-      transition: var(--transition); position: relative; overflow: hidden;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem 1.75rem;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
     }
-    .why-card::after {
+    .why-card::before {
       content: '';
-      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(59,130,246,.3), transparent);
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--blue-glow), transparent);
       opacity: 0; transition: var(--transition);
     }
-    .why-card:hover { background: rgba(59,130,246,.04); }
-    .why-card:hover::after { opacity: 1; }
+    .why-card:hover {
+      background: rgba(59,130,246,.05);
+      border-color: rgba(59,130,246,.25);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.35);
+    }
+    .why-card:hover::before { opacity: 1; }
     .why-icon-wrap {
-      width: 44px; height: 44px; border-radius: 12px;
+      width: 60px; height: 60px; border-radius: 16px;
       background: var(--surface); border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; margin-bottom: 1rem;
+      font-size: 1.75rem; margin-bottom: 1.1rem;
       transition: var(--transition);
+      flex-shrink: 0;
     }
     .why-card:hover .why-icon-wrap { background: var(--blue-dim); border-color: rgba(59,130,246,.2); }
-    .why-title { font-size: .92rem; font-weight: 700; margin-bottom: .4rem; letter-spacing: -.01em; }
-    .why-desc { font-size: .81rem; color: var(--w45); line-height: 1.7; }
+    .why-title { font-size: .95rem; font-weight: 700; margin-bottom: .4rem; letter-spacing: -.01em; }
+    .why-desc { font-size: .8rem; color: var(--w45); line-height: 1.65; }
 
     /* ── Testimonials ────────────────────────────────────── */
     #testimonials { background: var(--bg3); text-align: center; }
@@ -664,15 +679,14 @@
       .hero-right { display: none; }
       .footer-top { grid-template-columns: 1fr 1fr; }
       .steps { grid-template-columns: 1fr; }
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .services-grid, .why-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 680px) {
       .form-row, .form-row.three { grid-template-columns: 1fr; }
       .nav-links { display: none; }
       .footer-top { grid-template-columns: 1fr; }
       section { padding: 4rem 1.25rem; }
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-      .why-grid { grid-template-columns: 1fr 1fr; }
+      .services-grid, .why-grid { grid-template-columns: repeat(2, 1fr); }
       .hero-stat { padding-right: 1.25rem; margin-right: 1.25rem; }
     }
     @media (max-width: 420px) {
