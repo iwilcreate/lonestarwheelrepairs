@@ -919,132 +919,137 @@
           <div class="badge-lbl" data-en="Verified Shops" data-es="Talleres Verificados">Verified Shops</div>
         </div>
 
-        <!-- Texas Flag Map SVG -->
-        <svg class="map-svg" viewBox="0 0 500 480" xmlns="http://www.w3.org/2000/svg">
+        <!-- Texas Outline Map SVG -->
+        <svg class="map-svg" viewBox="0 0 500 490" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+              <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
-            <filter id="mapShadow" x="-12%" y="-12%" width="124%" height="124%">
-              <feDropShadow dx="0" dy="4" stdDeviation="14" flood-color="rgba(0,0,0,.55)"/>
+            <filter id="outlineGlow" x="-6%" y="-6%" width="112%" height="112%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
-            <!-- Texas outline used as clip path -->
-            <clipPath id="texasClip">
-              <path d="M 130,16 L 238,16 L 238,121 L 274,121 L 346,129 L 418,137 L 452,139 L 452,288 C 456,294 460,298 460,300 C 448,306 436,310 425,313 C 412,318 408,325 404,331 C 388,343 372,356 358,368 C 344,375 338,379 331,381 C 323,390 318,404 314,418 C 308,436 342,449 341,459 C 320,462 298,462 280,458 C 268,453 262,447 256,440 C 248,432 252,402 256,380 C 244,372 230,350 220,338 C 212,322 208,310 205,298 C 192,292 176,308 162,312 C 148,313 134,313 121,314 C 110,308 92,294 76,281 C 58,262 36,230 14,198 L 14,16 Z"/>
-            </clipPath>
           </defs>
 
-          <!-- Drop shadow behind the whole map -->
+          <!-- Subtle inner fill so city dots pop against the background -->
           <path
-            d="M 130,16 L 238,16 L 238,121 L 274,121 L 346,129 L 418,137 L 452,139 L 452,288 C 456,294 460,298 460,300 C 448,306 436,310 425,313 C 412,318 408,325 404,331 C 388,343 372,356 358,368 C 344,375 338,379 331,381 C 323,390 318,404 314,418 C 308,436 342,449 341,459 C 320,462 298,462 280,458 C 268,453 262,447 256,440 C 248,432 252,402 256,380 C 244,372 230,350 220,338 C 212,322 208,310 205,298 C 192,292 176,308 162,312 C 148,313 134,313 121,314 C 110,308 92,294 76,281 C 58,262 36,230 14,198 L 14,16 Z"
-            fill="rgba(0,0,0,.4)" filter="url(#mapShadow)" transform="translate(3,5)"
+            d="M 128,14
+               L 240,14 L 240,14 L 244,18 L 240,22 L 243,26 L 240,30
+               L 240,122
+               L 248,122 L 260,120 L 274,122
+               L 300,124 L 320,126 L 346,128 L 370,132 L 394,134 L 418,136
+               L 436,137 L 452,138
+               L 453,160 L 453,200 L 454,240 L 454,288
+               C 457,293 461,297 462,301
+               C 452,306 440,310 428,314
+               C 416,318 410,324 405,331
+               C 392,342 376,356 360,368
+               C 346,375 340,379 332,382
+               C 325,390 319,404 315,418
+               C 310,432 318,444 326,452
+               C 320,458 308,463 295,463
+               C 282,463 270,460 260,456
+               C 252,451 248,444 244,437
+               C 240,428 243,408 246,390
+               C 238,380 226,358 216,342
+               C 209,326 206,312 203,300
+               C 194,294 180,306 166,312
+               C 152,316 136,315 122,315
+               C 112,310 96,296 80,282
+               C 62,263 40,232 16,200
+               L 16,14
+               Z"
+            fill="rgba(255,255,255,.04)"
+            stroke="rgba(255,255,255,.85)"
+            stroke-width="2.2"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            filter="url(#outlineGlow)"
           />
 
-          <!-- ── Texas Flag Sections (clipped to state shape) ── -->
-          <!-- Blue stripe — left ~38% -->
-          <rect x="0" y="0" width="183" height="480" fill="#002868" clip-path="url(#texasClip)"/>
-          <!-- White — upper right -->
-          <rect x="183" y="0" width="320" height="262" fill="#FFFFFF" clip-path="url(#texasClip)"/>
-          <!-- Red — lower right -->
-          <rect x="183" y="262" width="320" height="220" fill="#BF0A30" clip-path="url(#texasClip)"/>
+          <!-- ── City dots ── -->
 
-          <!-- White Star centered in blue stripe -->
-          <!-- cx=97, cy=228, outer R=55, inner r=22 — 5-pointed star -->
-          <polygon
-            points="97,173 110,211 149,212 118,236 129,273 97,251 65,273 76,236 45,212 84,211"
-            fill="white"
-            clip-path="url(#texasClip)"
-          />
-
-          <!-- Texas outline border -->
-          <path
-            d="M 130,16 L 238,16 L 238,121 L 274,121 L 346,129 L 418,137 L 452,139 L 452,288 C 456,294 460,298 460,300 C 448,306 436,310 425,313 C 412,318 408,325 404,331 C 388,343 372,356 358,368 C 344,375 338,379 331,381 C 323,390 318,404 314,418 C 308,436 342,449 341,459 C 320,462 298,462 280,458 C 268,453 262,447 256,440 C 248,432 252,402 256,380 C 244,372 230,350 220,338 C 212,322 208,310 205,298 C 192,292 176,308 162,312 C 148,313 134,313 121,314 C 110,308 92,294 76,281 C 58,262 36,230 14,198 L 14,16 Z"
-            fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.8" stroke-linejoin="round"
-          />
-
-          <!-- ── City dots — white on blue/red, dark navy on white ── -->
-
-          <!-- Houston (red section) -->
+          <!-- Houston -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="404" cy="300" r="4.5" fill="#fff"/>
+            <circle class="city-dot-pulse" cx="404" cy="300" r="4.5" fill="#e63030"/>
           </g>
-          <text x="410" y="298" font-size="9" fill="rgba(255,255,255,.9)" font-family="sans-serif" font-weight="600">Houston</text>
+          <text x="410" y="298" font-size="9" fill="rgba(255,255,255,.85)" font-family="sans-serif" font-weight="600">Houston</text>
 
-          <!-- Dallas (white section) -->
+          <!-- Dallas -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="354" cy="162" r="4" fill="#002868"/>
+            <circle class="city-dot-pulse" cx="354" cy="162" r="4" fill="#ffffff"/>
           </g>
-          <text x="360" y="160" font-size="9" fill="#002868" font-family="sans-serif" font-weight="700">Dallas</text>
+          <text x="360" y="160" font-size="9" fill="rgba(255,255,255,.85)" font-family="sans-serif" font-weight="600">Dallas</text>
 
-          <!-- Fort Worth (white section) -->
+          <!-- Fort Worth -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="335" cy="170" r="3" fill="#002868"/>
+            <circle class="city-dot-pulse" cx="335" cy="168" r="3" fill="rgba(255,255,255,.7)"/>
           </g>
 
-          <!-- Austin (white/red border) -->
+          <!-- Austin -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="318" cy="263" r="4" fill="#002868"/>
+            <circle class="city-dot-pulse" cx="318" cy="263" r="4" fill="#e63030"/>
           </g>
-          <text x="324" y="261" font-size="9" fill="#002868" font-family="sans-serif" font-weight="700">Austin</text>
+          <text x="324" y="261" font-size="9" fill="rgba(230,48,48,.95)" font-family="sans-serif" font-weight="700">Austin</text>
 
-          <!-- San Antonio (red section) -->
+          <!-- San Antonio -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="292" cy="298" r="4" fill="#fff"/>
+            <circle class="city-dot-pulse" cx="292" cy="298" r="4" fill="#ffffff"/>
           </g>
-          <text x="298" y="296" font-size="8" fill="rgba(255,255,255,.9)" font-family="sans-serif" font-weight="600">S.Antonio</text>
+          <text x="298" y="296" font-size="8" fill="rgba(255,255,255,.8)" font-family="sans-serif">S.Antonio</text>
 
-          <!-- El Paso (blue section) -->
+          <!-- El Paso -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="20" cy="200" r="3.5" fill="#fff"/>
+            <circle class="city-dot-pulse" cx="22" cy="200" r="3.5" fill="#ffffff"/>
           </g>
-          <text x="26" y="198" font-size="8" fill="rgba(255,255,255,.85)" font-family="sans-serif">El Paso</text>
+          <text x="28" y="198" font-size="8" fill="rgba(255,255,255,.75)" font-family="sans-serif">El Paso</text>
 
-          <!-- Amarillo (blue section) -->
+          <!-- Amarillo -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="173" cy="57" r="3.5" fill="#fff"/>
+            <circle class="city-dot-pulse" cx="173" cy="57" r="3.5" fill="#ffffff"/>
           </g>
-          <text x="153" y="54" font-size="8" fill="rgba(255,255,255,.8)" font-family="sans-serif">Amarillo</text>
+          <text x="153" y="54" font-size="8" fill="rgba(255,255,255,.7)" font-family="sans-serif">Amarillo</text>
 
-          <!-- Lubbock (blue section) -->
+          <!-- Lubbock -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="172" cy="123" r="3.5" fill="#fff"/>
+            <circle class="city-dot-pulse" cx="172" cy="123" r="3.5" fill="#ffffff"/>
           </g>
-          <text x="152" y="120" font-size="8" fill="rgba(255,255,255,.8)" font-family="sans-serif">Lubbock</text>
+          <text x="152" y="120" font-size="8" fill="rgba(255,255,255,.7)" font-family="sans-serif">Lubbock</text>
 
-          <!-- Midland (blue section) -->
+          <!-- Midland -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="165" cy="192" r="3" fill="#fff"/>
-          </g>
-
-          <!-- Waco (white section) -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="342" cy="210" r="3" fill="#002868"/>
+            <circle class="city-dot-pulse" cx="165" cy="192" r="3" fill="rgba(255,255,255,.65)"/>
           </g>
 
-          <!-- Corpus Christi (red section) -->
+          <!-- Waco -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="330" cy="368" r="3.5" fill="#fff"/>
+            <circle class="city-dot-pulse" cx="342" cy="210" r="3" fill="rgba(255,255,255,.65)"/>
           </g>
 
-          <!-- Laredo (red section) -->
+          <!-- Corpus Christi -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="255" cy="378" r="3" fill="#fff"/>
+            <circle class="city-dot-pulse" cx="330" cy="368" r="3.5" fill="#ffffff"/>
           </g>
 
-          <!-- McAllen (red section) -->
+          <!-- Laredo -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="302" cy="432" r="3" fill="#fff"/>
+            <circle class="city-dot-pulse" cx="255" cy="378" r="3" fill="rgba(255,255,255,.65)"/>
           </g>
 
-          <!-- Tyler (white section) -->
+          <!-- McAllen -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="406" cy="182" r="3" fill="#002868"/>
+            <circle class="city-dot-pulse" cx="302" cy="432" r="3" fill="rgba(255,255,255,.65)"/>
           </g>
 
-          <!-- Beaumont (red section) -->
+          <!-- Tyler -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="448" cy="270" r="3" fill="#fff"/>
+            <circle class="city-dot-pulse" cx="406" cy="182" r="3" fill="rgba(255,255,255,.65)"/>
+          </g>
+
+          <!-- Beaumont -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="448" cy="270" r="3" fill="rgba(255,255,255,.65)"/>
           </g>
         </svg>
       </div>
