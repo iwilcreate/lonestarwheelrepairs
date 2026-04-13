@@ -7,518 +7,657 @@
   <meta name="description" content="Get fast quotes from verified wheel repair shops across Texas. Submit one request, hear from up to 5 local shops within 60 minutes." />
   <!-- GA4 placeholder: replace G-XXXXXXXXXX before launch -->
   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     /* ── Tokens ──────────────────────────────────────────── */
     :root {
-      --bg:       #06091a;
-      --bg2:      #0c1228;
-      --bg3:      #101830;
-      --red:      #e63030;
-      --red-h:    #ff3c3c;
-      --blue:     #2563eb;
-      --blue-glow:#3b82f6;
-      --gold:     #f59e0b;
-      --white:    #ffffff;
-      --w80:      rgba(255,255,255,.80);
-      --w55:      rgba(255,255,255,.55);
-      --w20:      rgba(255,255,255,.20);
-      --w10:      rgba(255,255,255,.10);
-      --w06:      rgba(255,255,255,.06);
-      --radius:   10px;
-      --gray-border: rgba(255,255,255,.12);
+      --bg:          #06091a;
+      --bg2:         #0b1020;
+      --bg3:         #0e1526;
+      --surface:     rgba(255,255,255,.045);
+      --surface-h:   rgba(255,255,255,.075);
+      --red:         #e63030;
+      --red-h:       #ff4444;
+      --red-dim:     rgba(230,48,48,.15);
+      --red-glow:    rgba(230,48,48,.25);
+      --blue:        #2563eb;
+      --blue-glow:   #3b82f6;
+      --blue-dim:    rgba(59,130,246,.12);
+      --gold:        #f59e0b;
+      --white:       #ffffff;
+      --w90:         rgba(255,255,255,.90);
+      --w70:         rgba(255,255,255,.70);
+      --w45:         rgba(255,255,255,.45);
+      --w20:         rgba(255,255,255,.20);
+      --w10:         rgba(255,255,255,.10);
+      --w06:         rgba(255,255,255,.06);
+      --border:      rgba(255,255,255,.09);
+      --border-h:    rgba(255,255,255,.18);
+      --radius-sm:   8px;
+      --radius:      12px;
+      --radius-lg:   18px;
+      --radius-xl:   24px;
+      --ease:        cubic-bezier(.4,0,.2,1);
+      --transition:  .25s var(--ease);
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
       background: var(--bg);
       color: var(--white);
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ── Utility ─────────────────────────────────────────── */
     .hidden { display: none !important; }
+
     .btn {
-      display: inline-block; padding: .75rem 1.75rem;
-      border-radius: var(--radius); font-size: 1rem; font-weight: 700;
-      cursor: pointer; border: none; transition: .2s; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: .4rem; padding: .75rem 1.6rem;
+      border-radius: 50px; font-size: .9rem; font-weight: 600;
+      letter-spacing: .01em;
+      cursor: pointer; border: none;
+      transition: var(--transition); text-decoration: none;
+      white-space: nowrap;
     }
-    .btn-red { background: var(--red); color: var(--white); }
-    .btn-red:hover { background: var(--red-h); box-shadow: 0 0 20px rgba(230,48,48,.45); }
-    .btn-ghost { background: var(--w10); color: var(--white); border: 1.5px solid var(--w20); }
-    .btn-ghost:hover { background: var(--w20); }
+    .btn-red {
+      background: linear-gradient(135deg, #e63030 0%, #c42020 100%);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(230,48,48,.3), inset 0 1px 0 rgba(255,255,255,.15);
+    }
+    .btn-red:hover {
+      background: linear-gradient(135deg, #ff4444 0%, #e63030 100%);
+      box-shadow: 0 6px 24px rgba(230,48,48,.45), inset 0 1px 0 rgba(255,255,255,.2);
+      transform: translateY(-1px);
+    }
+    .btn-ghost {
+      background: var(--w06); color: var(--w90);
+      border: 1px solid var(--border-h);
+      backdrop-filter: blur(8px);
+    }
+    .btn-ghost:hover {
+      background: var(--w10); border-color: var(--w20);
+      transform: translateY(-1px);
+    }
+
     .section-label {
-      font-size: .72rem; font-weight: 700; letter-spacing: .15em;
-      text-transform: uppercase; color: var(--red); margin-bottom: .5rem;
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .7rem; font-weight: 700; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--red); margin-bottom: .6rem;
+    }
+    .section-label::before {
+      content: ''; width: 18px; height: 2px;
+      background: var(--red); border-radius: 2px; flex-shrink: 0;
     }
     .section-title {
-      font-size: clamp(1.7rem, 3.5vw, 2.4rem); font-weight: 800;
-      line-height: 1.2; color: var(--white); margin-bottom: 1rem;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800;
+      line-height: 1.15; color: var(--white); margin-bottom: 1rem;
+      letter-spacing: -.02em;
     }
-    .section-sub { font-size: 1rem; color: var(--w55); max-width: 600px; line-height: 1.6; }
-    input, select, textarea { font-family: inherit; font-size: .95rem; }
+    .section-sub {
+      font-size: .95rem; color: var(--w45); max-width: 580px;
+      line-height: 1.7; font-weight: 400;
+    }
+    input, select, textarea { font-family: inherit; font-size: .9rem; }
     a { color: inherit; }
 
-    /* ── Navigation ──────────────────────────────────────── */
+    /* ── Nav ─────────────────────────────────────────────── */
     #nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      background: rgba(6,9,26,.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--gray-border);
+      background: rgba(6,9,26,.75);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
     }
     .nav-inner {
       max-width: 1200px; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between;
-      gap: 1rem; padding: 0 2rem; height: 64px;
+      gap: 1.5rem; padding: 0 2rem; height: 68px;
     }
     .nav-logo {
-      display: flex; align-items: center; gap: .6rem;
+      display: flex; align-items: center; gap: .65rem;
       text-decoration: none; flex-shrink: 0;
     }
     .nav-logo-icon {
-      width: 36px; height: 36px; border-radius: 8px;
-      background: var(--red); display: flex; align-items: center;
-      justify-content: center; font-size: 1.1rem;
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--red) 0%, #b01818 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(230,48,48,.35);
     }
     .nav-logo-text {
-      font-size: .82rem; font-weight: 800; line-height: 1.25;
-      color: var(--red); letter-spacing: .04em; text-transform: uppercase;
+      font-size: .78rem; font-weight: 800; line-height: 1.3;
+      color: var(--white); letter-spacing: .05em; text-transform: uppercase;
     }
+    .nav-logo-text span { color: var(--red); }
     .nav-links {
-      display: flex; align-items: center; gap: .25rem; list-style: none;
+      display: flex; align-items: center; gap: .1rem; list-style: none;
     }
     .nav-links a {
-      text-decoration: none; font-size: .82rem; font-weight: 600;
-      color: var(--w55); padding: .5rem .8rem; border-radius: 7px;
-      transition: .15s; white-space: nowrap;
+      text-decoration: none; font-size: .82rem; font-weight: 500;
+      color: var(--w45); padding: .5rem .9rem; border-radius: 50px;
+      transition: var(--transition); white-space: nowrap; letter-spacing: .01em;
     }
-    .nav-links a:hover { color: var(--white); background: var(--w10); }
-    .nav-right { display: flex; align-items: center; gap: .75rem; }
+    .nav-links a:hover { color: var(--white); background: var(--w06); }
+    .nav-right { display: flex; align-items: center; gap: .85rem; }
     .lang-toggle {
-      display: flex; border: 1px solid var(--gray-border); border-radius: 7px; overflow: hidden;
+      display: flex; background: var(--w06);
+      border: 1px solid var(--border); border-radius: 50px; overflow: hidden;
+      padding: 3px;
     }
     .lang-btn {
-      padding: .3rem .7rem; font-size: .75rem; font-weight: 700;
+      padding: .25rem .75rem; font-size: .72rem; font-weight: 700;
       cursor: pointer; border: none; background: transparent;
-      color: var(--w55); transition: .15s;
+      color: var(--w45); transition: var(--transition);
+      border-radius: 50px; letter-spacing: .04em;
     }
-    .lang-btn.active { background: var(--red); color: var(--white); }
-    .lang-btn:hover:not(.active) { background: var(--w10); color: var(--white); }
+    .lang-btn.active {
+      background: var(--red); color: var(--white);
+      box-shadow: 0 2px 8px rgba(230,48,48,.4);
+    }
+    .lang-btn:hover:not(.active) { color: var(--white); background: var(--w10); }
 
     /* ── Hero ────────────────────────────────────────────── */
     #hero {
       min-height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
       position: relative; overflow: hidden;
-      padding: 100px 2rem 5rem;
+      padding: 110px 2rem 5rem;
     }
-    /* animated starfield bg */
     #hero::before {
       content: '';
       position: absolute; inset: 0;
       background:
-        radial-gradient(ellipse 60% 60% at 70% 50%, rgba(37,99,235,.18) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(230,48,48,.10) 0%, transparent 60%);
+        radial-gradient(ellipse 65% 55% at 75% 50%, rgba(37,99,235,.15) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 45% at 15% 75%, rgba(230,48,48,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 30% at 50% 10%, rgba(230,48,48,.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    /* subtle grid overlay */
+    #hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 75%);
       pointer-events: none;
     }
     .hero-inner {
       position: relative; z-index: 1;
       max-width: 1200px; margin: 0 auto; width: 100%;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
     }
-    /* ── Hero Left ── */
-    .hero-left {}
     .hero-badge {
-      display: inline-flex; align-items: center; gap: .4rem;
-      background: rgba(230,48,48,.12); border: 1px solid rgba(230,48,48,.3);
-      border-radius: 20px; padding: .3rem 1rem;
-      font-size: .75rem; font-weight: 700; color: #ff6b6b;
-      text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1.5rem;
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: var(--red-dim);
+      border: 1px solid rgba(230,48,48,.25);
+      border-radius: 50px; padding: .35rem 1rem;
+      font-size: .72rem; font-weight: 600; color: #ff7070;
+      text-transform: uppercase; letter-spacing: .09em; margin-bottom: 1.75rem;
+      backdrop-filter: blur(8px);
     }
     .hero-headline {
-      font-size: clamp(3.5rem, 8vw, 7rem);
-      font-weight: 900; line-height: .95;
-      letter-spacing: -.02em;
+      font-size: clamp(3.8rem, 8.5vw, 7.5rem);
+      font-weight: 900; line-height: .92;
+      letter-spacing: -.03em;
       text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
     }
     .hero-headline .line-red { color: var(--red); }
     .hero-headline .line-white { color: var(--white); }
     .hero-sub {
-      font-size: 1.05rem; color: var(--w80);
-      font-weight: 600; margin-bottom: .6rem;
+      font-size: 1rem; color: var(--w90);
+      font-weight: 600; margin-bottom: .5rem; letter-spacing: -.01em;
     }
     .hero-desc {
-      font-size: .9rem; color: var(--w55); line-height: 1.65; margin-bottom: 2rem;
-      max-width: 440px;
+      font-size: .88rem; color: var(--w45); line-height: 1.75;
+      margin-bottom: 2.25rem; max-width: 420px; font-weight: 400;
     }
-    .hero-ctas { display: flex; gap: .9rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .hero-ctas { display: flex; gap: .85rem; flex-wrap: wrap; margin-bottom: 2.75rem; }
     .hero-stats {
-      display: flex; gap: 2rem; flex-wrap: wrap;
+      display: flex; gap: 0; flex-wrap: wrap;
       padding-top: 2rem;
-      border-top: 1px solid var(--gray-border);
+      border-top: 1px solid var(--border);
     }
+    .hero-stat {
+      padding-right: 2rem; margin-right: 2rem;
+      border-right: 1px solid var(--border);
+    }
+    .hero-stat:last-child { border-right: none; margin-right: 0; padding-right: 0; }
     .hero-stat-num {
-      font-size: 1.5rem; font-weight: 900; color: var(--white);
-      line-height: 1;
+      font-size: 1.6rem; font-weight: 800; color: var(--white);
+      line-height: 1; letter-spacing: -.02em;
     }
-    .hero-stat-lbl { font-size: .72rem; color: var(--w55); margin-top: .2rem; }
+    .hero-stat-lbl { font-size: .7rem; color: var(--w45); margin-top: .25rem; font-weight: 500; }
 
-    /* ── Hero Right — Map ── */
+    /* ── Hero Map ────────────────────────────────────────── */
     .hero-right {
       display: flex; align-items: center; justify-content: center;
       position: relative;
     }
     .map-glow {
-      position: absolute;
-      width: 480px; height: 480px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(37,99,235,.35) 0%, transparent 65%);
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,99,235,.28) 0%, transparent 65%);
       pointer-events: none;
     }
-    .map-wrap {
-      position: relative; z-index: 1;
-      width: 100%; max-width: 480px;
-    }
+    .map-wrap { position: relative; z-index: 1; width: 100%; max-width: 480px; }
     .map-svg {
       width: 100%; height: auto;
-      filter: drop-shadow(0 0 30px rgba(59,130,246,.25));
+      filter: drop-shadow(0 0 32px rgba(59,130,246,.22));
     }
-    /* Pulsing city dots */
-    .city-dot-pulse {
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-    .city-dot-pulse:nth-child(2n)   { animation-delay: .4s; }
-    .city-dot-pulse:nth-child(3n)   { animation-delay: .8s; }
-    .city-dot-pulse:nth-child(4n)   { animation-delay: 1.2s; }
-    .city-dot-pulse:nth-child(5n)   { animation-delay: 1.6s; }
+    .city-dot-pulse { animation: pulse 2.8s ease-in-out infinite; }
+    .city-dot-pulse:nth-child(2n) { animation-delay: .5s; }
+    .city-dot-pulse:nth-child(3n) { animation-delay: 1s; }
+    .city-dot-pulse:nth-child(4n) { animation-delay: 1.5s; }
+    .city-dot-pulse:nth-child(5n) { animation-delay: 2s; }
     @keyframes pulse {
-      0%, 100% { opacity: .7; r: 4; }
-      50%       { opacity: 1;  r: 5.5; }
+      0%, 100% { opacity: .6; }
+      50%       { opacity: 1; }
     }
-
-    /* ── Quote Badge (top-right of map) ── */
     .hero-badge-card {
-      position: absolute; top: 0; right: 0;
-      background: var(--white); color: #0d1528;
-      border-radius: 14px; padding: 1rem 1.25rem;
-      box-shadow: 0 8px 40px rgba(0,0,0,.4);
-      text-align: center; min-width: 120px;
-      z-index: 3;
+      position: absolute; top: 4px; right: 4px;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(12px);
+      color: #0d1528;
+      border-radius: var(--radius-lg); padding: 1rem 1.25rem;
+      box-shadow: 0 12px 48px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.2);
+      text-align: center; min-width: 116px; z-index: 3;
     }
-    .hero-badge-card .badge-icon { font-size: 1.6rem; margin-bottom: .3rem; }
-    .hero-badge-card .badge-num {
-      font-size: 1.4rem; font-weight: 900; color: #0d1528; line-height: 1;
-    }
-    .hero-badge-card .badge-lbl {
-      font-size: .68rem; font-weight: 700; color: #4b5563;
-      text-transform: uppercase; letter-spacing: .06em; margin-top: .2rem;
+    .hero-badge-card .badge-icon { font-size: 1.5rem; margin-bottom: .3rem; }
+    .hero-badge-card .badge-num  { font-size: 1.5rem; font-weight: 900; color: #0d1528; line-height: 1; }
+    .hero-badge-card .badge-lbl  {
+      font-size: .62rem; font-weight: 700; color: #6b7280;
+      text-transform: uppercase; letter-spacing: .07em; margin-top: .25rem;
     }
 
-    /* ── Section Base (dark) ─────────────────────────────── */
-    .dark-section  { background: var(--bg); }
-    .dark2-section { background: var(--bg2); }
-    .dark3-section { background: var(--bg3); }
-    section { padding: 5rem 2rem; }
+    /* ── Section Shell ───────────────────────────────────── */
+    section { padding: 5.5rem 2rem; }
     .inner { max-width: 1140px; margin: 0 auto; }
-    .section-head { text-align: center; margin-bottom: 3rem; }
+    .section-head { text-align: center; margin-bottom: 3.5rem; }
+    .section-head .section-label { justify-content: center; }
     .section-head .section-sub { margin: 0 auto; }
 
     /* ── Cities ──────────────────────────────────────────── */
     #cities { background: var(--bg2); }
-    .region-group { margin-bottom: 1.75rem; }
+    .region-group { margin-bottom: 2rem; }
     .region-name {
-      font-size: .68rem; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--w55);
-      margin-bottom: .65rem; padding-bottom: .3rem;
-      border-bottom: 1px solid var(--gray-border);
+      font-size: .65rem; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--w45);
+      margin-bottom: .75rem; padding-bottom: .4rem;
+      border-bottom: 1px solid var(--border);
     }
-    .city-grid { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .city-grid { display: flex; flex-wrap: wrap; gap: .45rem; }
     .city-chip {
-      padding: .4rem 1rem; border-radius: 20px; cursor: pointer;
-      font-size: .82rem; font-weight: 600;
-      background: var(--w06); color: var(--w80);
-      border: 1px solid var(--gray-border);
-      transition: .15s; white-space: nowrap;
+      padding: .38rem 1rem; border-radius: 50px; cursor: pointer;
+      font-size: .8rem; font-weight: 500;
+      background: var(--surface); color: var(--w70);
+      border: 1px solid var(--border);
+      transition: var(--transition); white-space: nowrap;
     }
     .city-chip:hover {
-      border-color: var(--red); color: var(--white);
-      background: rgba(230,48,48,.12);
-      box-shadow: 0 0 10px rgba(230,48,48,.2);
+      border-color: rgba(230,48,48,.5); color: var(--white);
+      background: var(--red-dim);
+      box-shadow: 0 0 14px rgba(230,48,48,.18);
+      transform: translateY(-1px);
     }
 
     /* ── Quote Form ──────────────────────────────────────── */
     #quote { background: var(--bg); }
     .form-card {
       background: var(--bg2);
-      border: 1px solid var(--gray-border);
-      border-radius: 16px; padding: 2.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 2.75rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,.3);
     }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; margin-bottom: 1.1rem; }
     .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
     .form-row.full  { grid-template-columns: 1fr; }
-    .form-group { display: flex; flex-direction: column; gap: .4rem; }
-    .form-group label { font-size: .78rem; font-weight: 700; color: var(--w80); }
+    .form-group { display: flex; flex-direction: column; gap: .45rem; }
+    .form-group label {
+      font-size: .73rem; font-weight: 600; color: var(--w70);
+      letter-spacing: .02em;
+    }
     .form-group label .req { color: var(--red); margin-left: .15rem; }
     .form-group input,
     .form-group select,
     .form-group textarea {
-      width: 100%; padding: .65rem .9rem;
-      border: 1px solid rgba(255,255,255,.15); border-radius: var(--radius);
-      background: rgba(255,255,255,.07); color: var(--white);
-      transition: border-color .15s;
+      width: 100%; padding: .75rem 1rem;
+      border: 1px solid var(--border-h); border-radius: var(--radius);
+      background: var(--surface); color: var(--white);
+      transition: var(--transition); outline: none;
     }
-    .form-group input::placeholder { color: var(--w55); }
+    .form-group input::placeholder { color: var(--w45); }
     .form-group select option { background: #0d1528; color: var(--white); }
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
-      outline: none; border-color: var(--blue-glow);
-      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+      border-color: var(--blue-glow);
+      background: var(--surface-h);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.12);
     }
     .form-group input.error,
-    .form-group select.error { border-color: var(--red); }
-    .field-error { font-size: .72rem; color: #ff6b6b; margin-top: .15rem; }
+    .form-group select.error {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(230,48,48,.1);
+    }
+    .field-error { font-size: .7rem; color: #ff6b6b; margin-top: .15rem; font-weight: 500; }
     .form-section-title {
-      font-size: .68rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .12em; color: var(--w55);
-      border-bottom: 1px solid var(--gray-border);
-      padding-bottom: .4rem; margin-bottom: .9rem; margin-top: 1.5rem;
+      font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--w45);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: .45rem; margin-bottom: 1rem; margin-top: 1.75rem;
     }
     .form-section-title:first-child { margin-top: 0; }
 
     /* Photo Upload */
     .photo-drop {
-      border: 1.5px dashed rgba(255,255,255,.18); border-radius: var(--radius);
-      padding: 1.5rem; text-align: center; cursor: pointer;
-      transition: .2s; background: var(--w06);
+      border: 1.5px dashed var(--border-h); border-radius: var(--radius);
+      padding: 1.75rem; text-align: center; cursor: pointer;
+      transition: var(--transition); background: var(--surface);
     }
     .photo-drop:hover, .photo-drop.drag-over {
       border-color: var(--blue-glow);
-      background: rgba(59,130,246,.08);
+      background: var(--blue-dim);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.08);
     }
-    .photo-drop-icon { font-size: 1.8rem; margin-bottom: .4rem; }
-    .photo-drop-text { font-size: .82rem; color: var(--w55); }
-    .photo-drop-text strong { color: var(--w80); }
-    .photo-previews { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .65rem; }
+    .photo-drop-icon { font-size: 2rem; margin-bottom: .5rem; opacity: .7; }
+    .photo-drop-text { font-size: .82rem; color: var(--w45); line-height: 1.6; }
+    .photo-drop-text strong { color: var(--w70); font-weight: 600; }
+    .photo-previews { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
     .photo-thumb {
-      position: relative; width: 68px; height: 68px;
-      border-radius: 8px; overflow: hidden;
-      border: 1px solid var(--gray-border);
+      position: relative; width: 72px; height: 72px;
+      border-radius: var(--radius-sm); overflow: hidden;
+      border: 1px solid var(--border-h);
     }
     .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .photo-thumb button {
-      position: absolute; top: 2px; right: 2px;
-      background: rgba(0,0,0,.65); color: #fff;
+      position: absolute; top: 3px; right: 3px;
+      background: rgba(0,0,0,.7); color: #fff;
       border: none; border-radius: 50%; width: 18px; height: 18px;
       font-size: 10px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
     }
     #photoInput { display: none; }
 
-    .form-submit-row { text-align: center; margin-top: 1.5rem; }
-    .form-submit-row .btn { width: 100%; font-size: 1.05rem; padding: .9rem; }
-    .form-note { font-size: .73rem; color: var(--w55); margin-top: .6rem; }
+    .form-submit-row { text-align: center; margin-top: 1.75rem; }
+    .form-submit-row .btn { width: 100%; font-size: 1rem; padding: 1rem; border-radius: var(--radius); }
+    .form-note { font-size: .71rem; color: var(--w45); margin-top: .7rem; font-weight: 500; }
 
     /* Confirmation */
-    #confirmation {
-      max-width: 540px; margin: 0 auto;
-      text-align: center; padding: 3rem 1rem;
-    }
-    .confirm-icon { font-size: 3.5rem; margin-bottom: .75rem; }
-    .confirm-title { font-size: 1.75rem; font-weight: 800; margin-bottom: .6rem; }
-    .confirm-sub { font-size: .95rem; color: var(--w55); line-height: 1.65; margin-bottom: 1.25rem; }
+    #confirmation { max-width: 540px; margin: 0 auto; text-align: center; padding: 3.5rem 1rem; }
+    .confirm-icon { font-size: 3.5rem; margin-bottom: .9rem; }
+    .confirm-title { font-size: 1.85rem; font-weight: 800; margin-bottom: .65rem; letter-spacing: -.02em; }
+    .confirm-sub { font-size: .92rem; color: var(--w45); line-height: 1.75; margin-bottom: 1.4rem; }
     .confirm-box {
-      background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25);
-      border-radius: var(--radius); padding: 1rem 1.5rem;
-      font-size: .88rem; color: #86efac; line-height: 1.6; margin-bottom: 1.5rem;
+      background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.2);
+      border-radius: var(--radius); padding: 1.1rem 1.5rem;
+      font-size: .87rem; color: #86efac; line-height: 1.7; margin-bottom: 1.75rem;
     }
 
     /* ── How It Works ────────────────────────────────────── */
     #how-it-works { background: var(--bg3); text-align: center; }
-    .steps { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem; }
-    .step { flex: 1 1 200px; max-width: 240px; }
-    .step-num {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: var(--red); color: var(--white);
-      font-size: 1.25rem; font-weight: 900;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto .8rem;
-      box-shadow: 0 0 20px rgba(230,48,48,.35);
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; margin-top: 3rem;
+      background: var(--border);
+      border-radius: var(--radius-xl); overflow: hidden;
     }
-    .step-title { font-size: .95rem; font-weight: 800; margin-bottom: .35rem; }
-    .step-desc { font-size: .84rem; color: var(--w55); line-height: 1.6; }
+    .step {
+      background: var(--bg2); padding: 2.5rem 2rem;
+      transition: var(--transition); position: relative;
+    }
+    .step:hover { background: var(--surface-h); }
+    .step-num {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--red) 0%, #a01010 100%);
+      color: var(--white); font-size: 1.1rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 6px 20px rgba(230,48,48,.3);
+    }
+    .step-title { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; letter-spacing: -.01em; }
+    .step-desc { font-size: .84rem; color: var(--w45); line-height: 1.7; }
 
     /* ── Services ────────────────────────────────────────── */
     #services { background: var(--bg2); }
     .services-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 1rem; margin-top: 2.5rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px; margin-top: 3rem;
+      background: var(--border);
+      border-radius: var(--radius-xl); overflow: hidden;
     }
     .service-card {
-      background: var(--w06); border: 1px solid var(--gray-border);
-      border-radius: var(--radius); padding: 1.5rem 1.2rem;
-      text-align: center; transition: .2s;
+      background: var(--bg3); padding: 2rem 1.5rem;
+      text-align: center; transition: var(--transition);
+      position: relative; overflow: hidden;
     }
-    .service-card:hover {
-      border-color: rgba(230,48,48,.4);
-      background: rgba(230,48,48,.06);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(230,48,48,.1);
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      opacity: 0; transition: var(--transition);
     }
-    .service-icon { font-size: 1.9rem; margin-bottom: .55rem; }
-    .service-name { font-size: .9rem; font-weight: 700; margin-bottom: .3rem; }
-    .service-desc { font-size: .78rem; color: var(--w55); line-height: 1.55; }
+    .service-card:hover { background: var(--surface-h); }
+    .service-card:hover::before { opacity: 1; }
+    .service-card:hover .service-icon-wrap { background: var(--red-dim); border-color: rgba(230,48,48,.3); }
+    .service-icon-wrap {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto .9rem; font-size: 1.6rem;
+      transition: var(--transition);
+    }
+    .service-name { font-size: .9rem; font-weight: 700; margin-bottom: .35rem; letter-spacing: -.01em; }
+    .service-desc { font-size: .78rem; color: var(--w45); line-height: 1.6; }
 
     /* ── Why Us ──────────────────────────────────────────── */
     #why-us { background: var(--bg); }
     .why-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 1.25rem; margin-top: 2.5rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px; margin-top: 3rem;
+      background: var(--border);
+      border-radius: var(--radius-xl); overflow: hidden;
     }
     .why-card {
-      background: var(--w06); border: 1px solid var(--gray-border);
-      border-radius: var(--radius); padding: 1.5rem; transition: .2s;
+      background: var(--bg2); padding: 2rem 1.75rem;
+      transition: var(--transition); position: relative; overflow: hidden;
     }
-    .why-card:hover { border-color: rgba(59,130,246,.35); background: rgba(59,130,246,.06); }
-    .why-icon { font-size: 1.7rem; margin-bottom: .5rem; }
-    .why-title { font-size: .9rem; font-weight: 700; margin-bottom: .3rem; }
-    .why-desc { font-size: .82rem; color: var(--w55); line-height: 1.6; }
+    .why-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(59,130,246,.3), transparent);
+      opacity: 0; transition: var(--transition);
+    }
+    .why-card:hover { background: rgba(59,130,246,.04); }
+    .why-card:hover::after { opacity: 1; }
+    .why-icon-wrap {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 1rem;
+      transition: var(--transition);
+    }
+    .why-card:hover .why-icon-wrap { background: var(--blue-dim); border-color: rgba(59,130,246,.2); }
+    .why-title { font-size: .92rem; font-weight: 700; margin-bottom: .4rem; letter-spacing: -.01em; }
+    .why-desc { font-size: .81rem; color: var(--w45); line-height: 1.7; }
 
     /* ── Testimonials ────────────────────────────────────── */
     #testimonials { background: var(--bg3); text-align: center; }
     .testimonials-grid {
       display: flex; gap: 1.25rem; flex-wrap: wrap;
-      justify-content: center; margin-top: 2.5rem;
+      justify-content: center; margin-top: 3rem;
     }
     .testimonial-card {
-      background: var(--w06); border: 1px solid var(--gray-border);
-      border-radius: var(--radius); padding: 1.75rem;
-      max-width: 320px; flex: 1 1 280px; text-align: left;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 2rem;
+      max-width: 340px; flex: 1 1 290px; text-align: left;
+      transition: var(--transition);
+      box-shadow: 0 4px 24px rgba(0,0,0,.15);
     }
-    .stars { color: var(--gold); font-size: .95rem; margin-bottom: .5rem; }
+    .testimonial-card:hover {
+      border-color: var(--border-h);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.25);
+    }
+    .stars { color: var(--gold); font-size: .9rem; margin-bottom: .75rem; letter-spacing: .1em; }
     .testimonial-text {
-      font-size: .85rem; color: var(--w80); line-height: 1.65;
-      margin-bottom: .9rem; font-style: italic;
+      font-size: .87rem; color: var(--w70); line-height: 1.7;
+      margin-bottom: 1.1rem; font-style: italic;
     }
-    .testimonial-author { font-size: .8rem; font-weight: 700; }
-    .testimonial-location { font-size: .74rem; color: var(--w55); }
+    .testimonial-divider {
+      height: 1px; background: var(--border); margin-bottom: 1rem;
+    }
+    .testimonial-author { font-size: .82rem; font-weight: 700; letter-spacing: -.01em; }
+    .testimonial-location { font-size: .73rem; color: var(--w45); margin-top: .15rem; }
 
     /* ── Pricing ─────────────────────────────────────────── */
     #pricing { background: var(--bg2); text-align: center; }
     .pricing-grid {
-      display: flex; gap: 1.1rem; justify-content: center;
-      flex-wrap: wrap; margin-top: 2.5rem;
+      display: flex; gap: 1.25rem; justify-content: center;
+      flex-wrap: wrap; margin-top: 3rem; align-items: stretch;
     }
     .pricing-card {
-      flex: 1 1 220px; max-width: 255px;
-      border-radius: 14px; padding: 2rem 1.4rem;
-      border: 1px solid var(--gray-border);
-      background: var(--w06); position: relative; text-align: center;
-      transition: .2s;
+      flex: 1 1 220px; max-width: 258px;
+      border-radius: var(--radius-lg); padding: 2rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg3); position: relative; text-align: center;
+      transition: var(--transition);
+      display: flex; flex-direction: column;
     }
-    .pricing-card:hover { transform: translateY(-3px); }
+    .pricing-card:hover {
+      border-color: var(--border-h);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.25);
+    }
     .pricing-card.featured {
-      border-color: var(--red);
-      background: rgba(230,48,48,.07);
-      box-shadow: 0 0 30px rgba(230,48,48,.18);
+      border-color: rgba(230,48,48,.4);
+      background: rgba(230,48,48,.04);
+      box-shadow: 0 0 0 1px rgba(230,48,48,.15), 0 20px 60px rgba(230,48,48,.1);
     }
+    .pricing-card.featured:hover { transform: translateY(-4px); }
     .pricing-badge {
-      position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
-      background: var(--red); color: var(--white);
-      font-size: .68rem; font-weight: 800;
-      padding: .2rem .9rem; border-radius: 20px; white-space: nowrap;
-      letter-spacing: .05em; text-transform: uppercase;
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--red) 0%, #c01010 100%);
+      color: var(--white); font-size: .65rem; font-weight: 700;
+      padding: .25rem 1rem; border-radius: 50px; white-space: nowrap;
+      letter-spacing: .07em; text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(230,48,48,.4);
     }
     .pricing-tier {
-      font-size: .7rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--w55); margin-bottom: .5rem;
+      font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--w45); margin-bottom: .6rem;
     }
-    .pricing-price { font-size: 2.4rem; font-weight: 900; line-height: 1; }
-    .pricing-price span { font-size: .85rem; font-weight: 600; color: var(--w55); }
-    .pricing-lead { font-size: .82rem; color: var(--w55); margin-top: .3rem; margin-bottom: .9rem; }
-    .pricing-divider { border: none; border-top: 1px solid var(--gray-border); margin: .9rem 0; }
+    .pricing-price { font-size: 2.6rem; font-weight: 900; line-height: 1; letter-spacing: -.03em; }
+    .pricing-price span { font-size: .82rem; font-weight: 500; color: var(--w45); }
+    .pricing-lead { font-size: .8rem; color: var(--w45); margin-top: .35rem; margin-bottom: 1rem; }
+    .pricing-divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
     .pricing-features {
       list-style: none; text-align: left; font-size: .82rem;
-      color: var(--w80); line-height: 1.6; margin-bottom: 1.4rem;
+      color: var(--w70); line-height: 1.6; margin-bottom: 1.5rem; flex: 1;
     }
     .pricing-features li {
-      display: flex; gap: .45rem; align-items: flex-start; padding: .2rem 0;
+      display: flex; gap: .5rem; align-items: flex-start; padding: .28rem 0;
     }
-    .pricing-features li::before { content: "✓"; color: var(--red); font-weight: 700; flex-shrink: 0; }
-    .pricing-cta { display: block; }
+    .pricing-features li::before {
+      content: "✓"; color: var(--red); font-weight: 800;
+      flex-shrink: 0; font-size: .8rem; margin-top: .1rem;
+    }
+    .pricing-cta { display: block; margin-top: auto; }
 
     /* ── Shop Application ────────────────────────────────── */
     #shop-apply { background: var(--bg); }
     .shop-form-card {
-      background: var(--bg2); border: 1px solid var(--gray-border);
-      border-radius: 16px; padding: 2.5rem; margin-top: 2rem;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 2.75rem; margin-top: 2.5rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,.3);
     }
-    .shop-form-card .form-group label { color: var(--w80); }
+    .shop-form-card .form-group label { color: var(--w70); }
     .shop-form-card .form-group input,
     .shop-form-card .form-group select {
-      background: rgba(255,255,255,.07);
-      border-color: rgba(255,255,255,.15); color: var(--white);
+      background: var(--surface);
+      border-color: var(--border-h); color: var(--white);
     }
-    .shop-form-card .form-group input::placeholder { color: var(--w55); }
+    .shop-form-card .form-group input::placeholder { color: var(--w45); }
     .shop-form-card .form-group select option { background: #0c1228; }
 
     /* ── Footer ──────────────────────────────────────────── */
     #footer {
       background: #030610;
-      padding: 3.5rem 2rem 1.5rem;
-      border-top: 1px solid var(--gray-border);
+      padding: 4rem 2rem 2rem;
+      border-top: 1px solid var(--border);
     }
     .footer-inner { max-width: 1140px; margin: 0 auto; }
     .footer-top {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 2.5rem; margin-bottom: 3rem;
+      display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 3.5rem;
     }
-    .footer-brand-desc { font-size: .85rem; color: var(--w55); line-height: 1.65; margin-top: .75rem; }
-    .footer-contact { margin-top: .75rem; font-size: .82rem; color: var(--w55); line-height: 2; }
-    .footer-contact a { text-decoration: none; }
+    .footer-brand-desc {
+      font-size: .84rem; color: var(--w45); line-height: 1.75;
+      margin-top: .85rem; max-width: 280px;
+    }
+    .footer-contact { margin-top: .85rem; font-size: .82rem; color: var(--w45); line-height: 2.1; }
+    .footer-contact a { text-decoration: none; transition: var(--transition); }
     .footer-contact a:hover { color: var(--white); }
     .footer-col h4 {
-      font-size: .78rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--w80); margin-bottom: .9rem;
+      font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--w70); margin-bottom: 1.1rem;
     }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .45rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
     .footer-col ul a {
-      text-decoration: none; font-size: .82rem; color: var(--w55); transition: .15s;
+      text-decoration: none; font-size: .83rem; color: var(--w45);
+      transition: var(--transition); display: inline-flex; align-items: center;
     }
-    .footer-col ul a:hover { color: var(--white); }
+    .footer-col ul a:hover { color: var(--white); padding-left: 3px; }
     .footer-bottom {
-      border-top: 1px solid var(--gray-border); padding-top: 1.5rem;
+      border-top: 1px solid var(--border); padding-top: 1.75rem;
       display: flex; justify-content: space-between; align-items: center;
       flex-wrap: wrap; gap: .75rem;
-      font-size: .78rem; color: var(--w55);
+      font-size: .76rem; color: var(--w45);
     }
-    .footer-legal a { margin-left: 1.25rem; text-decoration: none; color: var(--w55); }
+    .footer-legal a {
+      margin-left: 1.5rem; text-decoration: none; color: var(--w45);
+      transition: var(--transition);
+    }
     .footer-legal a:hover { color: var(--white); }
 
     /* ── WhatsApp Float ──────────────────────────────────── */
     #whatsapp-float {
-      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 300;
+      position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 300;
       background: #25d366; color: #fff; border-radius: 50%;
       width: 54px; height: 54px;
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 20px rgba(37,211,102,.4);
-      text-decoration: none; transition: .2s;
+      text-decoration: none; transition: var(--transition);
     }
-    #whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,.55); }
+    #whatsapp-float:hover {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 8px 32px rgba(37,211,102,.55);
+    }
 
     /* ── Responsive ──────────────────────────────────────── */
     @media (max-width: 900px) {
       .hero-inner { grid-template-columns: 1fr; }
       .hero-right { display: none; }
       .footer-top { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr; }
     }
     @media (max-width: 680px) {
       .form-row, .form-row.three { grid-template-columns: 1fr; }
       .nav-links { display: none; }
       .footer-top { grid-template-columns: 1fr; }
-      section { padding: 3.5rem 1.25rem; }
+      section { padding: 4rem 1.25rem; }
+      .services-grid, .why-grid { grid-template-columns: 1fr 1fr; }
+      .hero-stat { padding-right: 1.25rem; margin-right: 1.25rem; }
+    }
+    @media (max-width: 420px) {
+      .services-grid, .why-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -581,19 +720,19 @@
       </div>
 
       <div class="hero-stats">
-        <div>
+        <div class="hero-stat">
           <div class="hero-stat-num">500+</div>
           <div class="hero-stat-lbl" data-en="Partner Shops" data-es="Talleres Asociados">Partner Shops</div>
         </div>
-        <div>
+        <div class="hero-stat">
           <div class="hero-stat-num">4.9★</div>
           <div class="hero-stat-lbl" data-en="Avg. Rating" data-es="Calificación">Avg. Rating</div>
         </div>
-        <div>
+        <div class="hero-stat">
           <div class="hero-stat-num">&lt;60 min</div>
           <div class="hero-stat-lbl" data-en="Response Time" data-es="Tiempo de Respuesta">Response Time</div>
         </div>
-        <div>
+        <div class="hero-stat">
           <div class="hero-stat-num">Free</div>
           <div class="hero-stat-lbl" data-en="For Owners" data-es="Para Propietarios">For Owners</div>
         </div>
@@ -612,129 +751,178 @@
           <div class="badge-lbl" data-en="Verified Shops" data-es="Talleres Verificados">Verified Shops</div>
         </div>
 
-        <!-- Texas SVG Map -->
-        <svg class="map-svg" viewBox="0 0 480 520" xmlns="http://www.w3.org/2000/svg">
+        <!-- Texas SVG Map — accurate proportional outline -->
+        <!--
+          Coordinate system: viewBox 0 0 500 480
+          Based on Texas geographic bounds:
+            Longitude: 106.65°W (El Paso) → 93.51°W (Sabine Pass)  = 13.14° wide
+            Latitude:  36.50°N (Panhandle) → 25.84°N (Brownsville) = 10.66° tall
+          Scale: x = (106.65 - lon) * 36  + 14
+                 y = (36.50  - lat) * 42  + 16
+          Key border points derived from actual Texas boundary coordinates.
+        -->
+        <svg class="map-svg" viewBox="0 0 500 480" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <!-- Glow filter for dots -->
             <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-              <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
-            <!-- Subtle glow for state outline -->
-            <filter id="stateglow" x="-5%" y="-5%" width="110%" height="110%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
-              <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
+            <filter id="stateglow" x="-8%" y="-8%" width="116%" height="116%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
-            <!-- Radial gradient fill for the state -->
-            <radialGradient id="stateFill" cx="55%" cy="45%" r="55%">
-              <stop offset="0%"   stop-color="#1d3b82" stop-opacity=".55"/>
-              <stop offset="100%" stop-color="#0a1a4a" stop-opacity=".35"/>
+            <radialGradient id="stateFill" cx="55%" cy="42%" r="58%">
+              <stop offset="0%"   stop-color="#1d3b82" stop-opacity=".60"/>
+              <stop offset="100%" stop-color="#0a1a4a" stop-opacity=".30"/>
             </radialGradient>
           </defs>
 
-          <!-- State outline (simplified Texas shape, clockwise from NW panhandle) -->
+          <!--
+            Texas outline — clockwise from NW panhandle corner.
+            Panhandle: 103°W–100°W at 36.5°N, then SE along Oklahoma/Red River,
+            eastern border, Gulf Coast (SE→SW), Rio Grande (SW→NW) back to El Paso,
+            NM border north, back to panhandle.
+
+            Computed coords (lon,lat → x,y):
+              103.00W, 36.50N → (130, 16)   NW panhandle
+              100.00W, 36.50N → (238, 16)   NE panhandle top
+              100.00W, 34.00N → (238, 121)  panhandle SE / OK border start
+               99.00W, 34.00N → (274, 121)  step east along OK border
+               97.00W, 33.80N → (346, 129)
+               95.00W, 33.60N → (418, 137)  NE Texas (near Texarkana latitude)
+               94.04W, 33.55N → (452, 139)  actual NE corner
+               94.04W, 30.00N → (452, 288)  E border drops south
+               93.82W, 29.72N → (460, 300)  SE corner / Sabine Pass area
+               94.80W, 29.40N → (425, 313)  Gulf Coast curves west
+               95.37W, 28.98N → (404, 331)  Houston area
+               97.40W, 27.80N → (331, 381)  Corpus Christi area
+               97.86W, 26.93N → (314, 418)  coast continues SW
+               97.14W, 25.96N → (341, 459)  Brownsville / Rio Grande mouth
+               99.50W, 27.50N → (256, 380)  Rio Grande — Laredo
+              100.90W, 29.36N → (205, 298)  Del Rio
+              103.25W, 29.00N → (121, 314)  Big Bend south dip
+              104.50W, 29.80N → (76, 281)   Big Bend NW
+              106.50W, 31.78N → (14, 198)   El Paso
+              106.63W, 36.50N → (14, 16)    NM/TX north border (top)
+              103.00W, 36.50N → (130, 16)   back to NW panhandle
+          -->
           <path
-            d="M 95,22 L 276,22 L 276,118 L 390,118
-               L 400,162 L 406,208 L 402,254 L 392,292
-               L 374,328 L 350,360 L 316,384 L 280,406
-               L 242,422 L 204,428 L 166,416 L 134,394
-               L 108,362 L 84,322 L 66,278
-               L 52,232 L 47,188 L 50,156
-               L 60,134 L 74,122 L 95,118 Z"
+            d="M 130,16
+               L 238,16
+               L 238,121
+               L 274,121
+               L 346,129
+               L 418,137
+               L 452,139
+               L 452,288
+               C 456,294 460,298 460,300
+               C 448,306 436,310 425,313
+               C 412,318 408,325 404,331
+               C 388,343 372,356 358,368
+               C 344,375 338,379 331,381
+               C 323,390 318,404 314,418
+               C 308,436 342,449 341,459
+               C 320,462 298,462 280,458
+               C 268,453 262,447 256,440
+               C 248,432 252,402 256,380
+               C 244,372 230,350 220,338
+               C 212,322 208,310 205,298
+               C 192,292 176,308 162,312
+               C 148,313 134,313 121,314
+               C 110,308 92,294 76,281
+               C 58,262 36,230 14,198
+               L 14,16
+               Z"
             fill="url(#stateFill)"
             stroke="#3b82f6"
             stroke-width="1.5"
+            stroke-linejoin="round"
             filter="url(#stateglow)"
-            opacity=".9"
+            opacity=".92"
           />
 
-          <!-- ── City dots — (cx,cy) approximate positions in this viewBox ── -->
-          <!-- Houston -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="370" cy="336" r="4.5" fill="#ffffff"/>
-          </g>
-          <text x="378" y="340" font-size="9" fill="rgba(255,255,255,.65)" font-family="sans-serif">Houston</text>
+          <!-- ── City dots positioned to match geography ── -->
 
-          <!-- Dallas -->
+          <!-- Houston  (95.37W, 29.76N) → (404, 286) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="330" cy="190" r="4" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="404" cy="300" r="4.5" fill="#ffffff"/>
           </g>
-          <text x="338" y="194" font-size="9" fill="rgba(255,255,255,.65)" font-family="sans-serif">Dallas</text>
+          <text x="410" y="298" font-size="9" fill="rgba(255,255,255,.7)" font-family="sans-serif">Houston</text>
 
-          <!-- San Antonio -->
+          <!-- Dallas  (96.80W, 32.78N) → (353, 160) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="272" cy="362" r="4" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="354" cy="162" r="4" fill="#ffffff"/>
           </g>
-          <text x="280" y="366" font-size="8" fill="rgba(255,255,255,.65)" font-family="sans-serif">S.Antonio</text>
+          <text x="360" y="160" font-size="9" fill="rgba(255,255,255,.7)" font-family="sans-serif">Dallas</text>
 
-          <!-- Austin -->
+          <!-- Fort Worth  (97.33W, 32.72N) → (334, 165) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="290" cy="316" r="4" fill="#ff6b6b"/>
-          </g>
-          <text x="298" y="320" font-size="9" fill="rgba(255,150,150,.75)" font-family="sans-serif">Austin</text>
-
-          <!-- Fort Worth -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="308" cy="192" r="3.5" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="335" cy="165" r="3" fill="#ffffff"/>
           </g>
 
-          <!-- El Paso -->
+          <!-- Austin  (97.75W, 30.27N) → (319, 263) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="58" cy="204" r="3.5" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="318" cy="263" r="4" fill="#ff6b6b"/>
           </g>
-          <text x="44" y="198" font-size="8" fill="rgba(255,255,255,.6)" font-family="sans-serif">El Paso</text>
+          <text x="324" y="261" font-size="9" fill="rgba(255,120,120,.8)" font-family="sans-serif">Austin</text>
 
-          <!-- Lubbock -->
+          <!-- San Antonio  (98.49W, 29.42N) → (293, 297) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="170" cy="172" r="3.5" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="292" cy="298" r="4" fill="#ffffff"/>
           </g>
-          <text x="148" y="168" font-size="8" fill="rgba(255,255,255,.55)" font-family="sans-serif">Lubbock</text>
+          <text x="298" y="296" font-size="8" fill="rgba(255,255,255,.65)" font-family="sans-serif">S.Antonio</text>
 
-          <!-- Amarillo -->
+          <!-- El Paso  (106.49W, 31.76N) → (14, 200) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="182" cy="86" r="3.5" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="20" cy="200" r="3.5" fill="#ffffff"/>
           </g>
-          <text x="158" y="82" font-size="8" fill="rgba(255,255,255,.55)" font-family="sans-serif">Amarillo</text>
+          <text x="26" y="198" font-size="8" fill="rgba(255,255,255,.6)" font-family="sans-serif">El Paso</text>
 
-          <!-- Corpus Christi -->
+          <!-- Amarillo  (101.83W, 35.22N) → (173, 55) — in panhandle -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="322" cy="400" r="3.5" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="173" cy="57" r="3.5" fill="#ffffff"/>
           </g>
+          <text x="153" y="54" font-size="8" fill="rgba(255,255,255,.55)" font-family="sans-serif">Amarillo</text>
 
-          <!-- Midland -->
+          <!-- Lubbock  (101.87W, 33.58N) → (172, 121) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="148" cy="274" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="172" cy="123" r="3.5" fill="#ffffff"/>
           </g>
+          <text x="152" y="120" font-size="8" fill="rgba(255,255,255,.55)" font-family="sans-serif">Lubbock</text>
 
-          <!-- Waco -->
+          <!-- Midland  (102.08W, 31.99N) → (165, 193) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="314" cy="252" r="3" fill="#ffffff"/>
-          </g>
-
-          <!-- McAllen -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="276" cy="418" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="165" cy="192" r="3" fill="#ffffff"/>
           </g>
 
-          <!-- Laredo -->
+          <!-- Waco  (97.15W, 31.55N) → (342, 209) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="226" cy="402" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="342" cy="210" r="3" fill="#ffffff"/>
           </g>
 
-          <!-- Tyler -->
+          <!-- Corpus Christi  (97.40W, 27.80N) → (332, 367) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="370" cy="256" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="330" cy="368" r="3.5" fill="#ffffff"/>
           </g>
 
-          <!-- Beaumont -->
+          <!-- Laredo  (99.50W, 27.50N) → (256, 380) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="393" cy="308" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="255" cy="378" r="3" fill="#ffffff"/>
+          </g>
+
+          <!-- McAllen  (98.24W, 26.21N) → (303, 434) -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="302" cy="432" r="3" fill="#ffffff"/>
+          </g>
+
+          <!-- Tyler  (95.30W, 32.35N) → (406, 181) -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="406" cy="182" r="3" fill="#ffffff"/>
+          </g>
+
+          <!-- Beaumont  (94.10W, 30.08N) → (451, 270) -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="448" cy="270" r="3" fill="#ffffff"/>
           </g>
         </svg>
       </div>
@@ -781,7 +969,7 @@
             </div>
             <div class="form-group">
               <label><span data-en="Phone Number" data-es="Teléfono">Phone Number</span><span class="req">*</span></label>
-              <input type="tel" id="phone" placeholder="(512) 555-0100" autocomplete="tel"/>
+              <input type="tel" id="phone" placeholder="(512) 555-0100" autocomplete="tel" inputmode="numeric" onkeydown="return restrictPhone(event)" oninput="this.value=this.value.replace(/[^\d\s\(\)\-\+]/g,'')"/>
               <div class="field-error" id="err-phone"></div>
             </div>
           </div>
@@ -802,7 +990,7 @@
             </div>
             <div class="form-group">
               <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
-              <input type="text" id="zip" placeholder="78701" maxlength="5"/>
+              <input type="text" id="zip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,'')"/>
               <div class="field-error" id="err-zip"></div>
             </div>
           </div>
@@ -950,32 +1138,32 @@
     </div>
     <div class="services-grid">
       <div class="service-card">
-        <div class="service-icon">🔧</div>
+        <div class="service-icon-wrap">🔧</div>
         <div class="service-name" data-en="Curb Rash Repair" data-es="Raspón de Bordo">Curb Rash Repair</div>
         <div class="service-desc" data-en="Smooth out scuffs and scratches from curb contact on alloy or steel wheels." data-es="Elimina raspones de rines de aleación o acero por contacto con el bordo.">Smooth out scuffs and scratches from curb contact.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">⚙️</div>
+        <div class="service-icon-wrap">⚙️</div>
         <div class="service-name" data-en="Bent Rim Straightening" data-es="Enderezado de Rin Doblado">Bent Rim Straightening</div>
         <div class="service-desc" data-en="Hydraulic straightening restores bent rims to factory spec." data-es="El enderezado hidráulico restaura los rines a su especificación de fábrica.">Hydraulic straightening restores bent rims to factory spec.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">🔩</div>
+        <div class="service-icon-wrap">🔩</div>
         <div class="service-name" data-en="Cracked Wheel Welding" data-es="Soldadura de Rin Agrietado">Cracked Wheel Welding</div>
         <div class="service-desc" data-en="TIG welding repairs cracks in alloy wheels for structural integrity." data-es="Soldadura TIG repara grietas en rines de aleación.">TIG welding repairs cracks in alloy wheels.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">🎨</div>
+        <div class="service-icon-wrap">🎨</div>
         <div class="service-name" data-en="Wheel Painting & Refinishing" data-es="Pintura y Reacabado">Wheel Painting &amp; Refinishing</div>
         <div class="service-desc" data-en="Custom colors, powder coating, and OEM color-match refinishing." data-es="Colores personalizados, pintura en polvo y reacabado en color OEM.">Custom colors, powder coat, and OEM color-match.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">✨</div>
+        <div class="service-icon-wrap">✨</div>
         <div class="service-name" data-en="Chrome & Polish Repair" data-es="Cromo y Pulido">Chrome &amp; Polish Repair</div>
         <div class="service-desc" data-en="Restore mirror finish on chrome wheels — pitting, flaking, and oxidation." data-es="Restaura el acabado espejo en rines cromados.">Restore mirror finish — pitting, flaking, oxidation.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">🚘</div>
+        <div class="service-icon-wrap">🚘</div>
         <div class="service-name" data-en="All Vehicle Types" data-es="Todo Tipo de Vehículos">All Vehicle Types</div>
         <div class="service-desc" data-en="Cars, trucks, SUVs, vans, and luxury vehicles. OEM and aftermarket." data-es="Autos, camionetas, SUVs y vehículos de lujo. OEM y aftermarket.">Cars, trucks, SUVs, vans &amp; luxury vehicles.</div>
       </div>
@@ -992,32 +1180,32 @@
     </div>
     <div class="why-grid">
       <div class="why-card">
-        <div class="why-icon">🎯</div>
+        <div class="why-icon-wrap">🎯</div>
         <div class="why-title" data-en="Local, Verified Shops" data-es="Talleres Verificados">Local, Verified Shops</div>
         <div class="why-desc" data-en="Every shop is reviewed and verified before receiving leads." data-es="Cada taller es revisado y verificado.">Every shop is reviewed and verified before receiving leads.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">⚡</div>
+        <div class="why-icon-wrap">⚡</div>
         <div class="why-title" data-en="60-Minute Guarantee" data-es="Garantía de 60 Minutos">60-Minute Guarantee</div>
         <div class="why-desc" data-en="Shops commit to contacting you within 60 minutes." data-es="Los talleres se comprometen a contactarte en 60 minutos.">Shops commit to contacting you within 60 minutes.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">💬</div>
+        <div class="why-icon-wrap">💬</div>
         <div class="why-title" data-en="English & Spanish" data-es="Inglés y Español">English &amp; Spanish</div>
         <div class="why-desc" data-en="Fully bilingual platform — switch languages anytime with the toggle above." data-es="Plataforma completamente bilingüe.">Fully bilingual — switch languages anytime above.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">🆓</div>
+        <div class="why-icon-wrap">🆓</div>
         <div class="why-title" data-en="Always Free for You" data-es="Siempre Gratis Para Ti">Always Free for You</div>
         <div class="why-desc" data-en="Vehicle owners never pay. Shops subscribe to be in the network." data-es="Los propietarios nunca pagan. Los talleres se suscriben.">Vehicle owners never pay. Shops subscribe to be in the network.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">📍</div>
+        <div class="why-icon-wrap">📍</div>
         <div class="why-title" data-en="Statewide Coverage" data-es="Cobertura Estatal">Statewide Coverage</div>
         <div class="why-desc" data-en="From El Paso to Beaumont — every corner of Texas covered." data-es="Desde El Paso hasta Beaumont — todo Texas cubierto.">From El Paso to Beaumont — every corner of Texas.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">🛡️</div>
+        <div class="why-icon-wrap">🛡️</div>
         <div class="why-title" data-en="Fraud Protection" data-es="Protección Contra Fraude">Fraud Protection</div>
         <div class="why-desc" data-en="Duplicate submissions and bad actors are silently filtered." data-es="Solicitudes duplicadas y actores maliciosos son filtrados.">Duplicate submissions and bad actors are silently filtered.</div>
       </div>
@@ -1039,6 +1227,7 @@
            data-es='"Llené el formulario en 2 minutos, 3 talleres me llamaron en 45 minutos. ¡Terminado el mismo día!"'>
           "Filled out the form in 2 minutes, had 3 shops call me within 45 minutes. Best price was $120 — done same day!"
         </p>
+        <div class="testimonial-divider"></div>
         <div class="testimonial-author">Marcus T.</div>
         <div class="testimonial-location">Austin, TX</div>
       </div>
@@ -1048,6 +1237,7 @@
            data-es='"Tenía dos rines doblados. Recibí 4 cotizaciones en menos de una hora. El servicio en español fue excelente."'>
           "Tenía dos rines doblados. Recibí 4 cotizaciones en menos de una hora. El servicio en español fue excelente."
         </p>
+        <div class="testimonial-divider"></div>
         <div class="testimonial-author">Alejandro R.</div>
         <div class="testimonial-location">San Antonio, TX</div>
       </div>
@@ -1057,6 +1247,7 @@
            data-es='"En una hora tenía 5 cotizaciones. Ahorré cientos comparado con el distribuidor."'>
           "Within an hour I had 5 quotes ranging from $85 to $200. Saved hundreds compared to the dealership."
         </p>
+        <div class="testimonial-divider"></div>
         <div class="testimonial-author">Brenda K.</div>
         <div class="testimonial-location">Houston, TX</div>
       </div>
@@ -1157,7 +1348,7 @@
         <div class="form-row">
           <div class="form-group">
             <label><span data-en="Phone" data-es="Teléfono">Phone</span><span class="req">*</span></label>
-            <input type="tel" id="shopPhone" placeholder="(512) 555-0200"/>
+            <input type="tel" id="shopPhone" placeholder="(512) 555-0200" inputmode="numeric" onkeydown="return restrictPhone(event)" oninput="this.value=this.value.replace(/[^\d\s\(\)\-\+]/g,'')"/>
           </div>
           <div class="form-group">
             <label><span data-en="Email" data-es="Correo">Email</span><span class="req">*</span></label>
@@ -1171,7 +1362,7 @@
           </div>
           <div class="form-group">
             <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
-            <input type="text" id="shopZip" placeholder="78701" maxlength="5"/>
+            <input type="text" id="shopZip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,'')"/>
           </div>
         </div>
         <div class="form-row">
@@ -1370,9 +1561,43 @@ async function loadMakes(year) {
   } catch { populateFallbackMakes(makeSel); makeSel.disabled = false; }
 }
 function populateFallbackMakes(sel) {
-  const common = ["Acura","Audi","BMW","Buick","Cadillac","Chevrolet","Chrysler","Dodge","Ford","GMC","Honda","Hyundai","Infiniti","Jeep","Kia","Lexus","Lincoln","Mazda","Mercedes-Benz","Nissan","RAM","Subaru","Tesla","Toyota","Volkswagen","Volvo"];
+  const common = [
+    // American
+    "Buick","Cadillac","Chevrolet","Chrysler","Dodge","Ford","GMC",
+    "Jeep","Lincoln","Lucid","RAM","Rivian","Tesla",
+    // Japanese
+    "Acura","Honda","INFINITI","Lexus","Mazda","Mitsubishi",
+    "Nissan","Subaru","Toyota",
+    // Korean
+    "Genesis","Hyundai","Kia",
+    // German
+    "Audi","BMW","Mercedes-Benz","MINI","Porsche","Volkswagen",
+    // European
+    "Alfa Romeo","Aston Martin","Bentley","Ferrari","FIAT",
+    "Jaguar","Lamborghini","Land Rover","Lotus",
+    "Maserati","McLaren","Polestar","Rolls-Royce","Volvo",
+  ].sort();
   sel.innerHTML = '<option value="">-- Select Make --</option>';
   common.forEach(make => { const opt = document.createElement('option'); opt.value = make; opt.textContent = make; sel.appendChild(opt); });
+}
+
+// ── Input restriction helpers ─────────────────────────────────────────────────
+function restrictDigits(e) {
+  // Allow: backspace, delete, tab, escape, enter, arrows, home, end, ctrl/cmd+A/C/V/X
+  const allowed = [8,9,13,27,46,37,38,39,40,35,36];
+  if (allowed.includes(e.keyCode)) return true;
+  if ((e.ctrlKey||e.metaKey) && [65,67,86,88].includes(e.keyCode)) return true;
+  // Block anything that isn't a digit
+  if (e.key && e.key.length === 1 && !/\d/.test(e.key)) { e.preventDefault(); return false; }
+  return true;
+}
+function restrictPhone(e) {
+  const allowed = [8,9,13,27,46,37,38,39,40,35,36];
+  if (allowed.includes(e.keyCode)) return true;
+  if ((e.ctrlKey||e.metaKey) && [65,67,86,88].includes(e.keyCode)) return true;
+  // Allow digits and phone formatting characters: + ( ) - space
+  if (e.key && e.key.length === 1 && !/[\d\+\(\)\-\s]/.test(e.key)) { e.preventDefault(); return false; }
+  return true;
 }
 async function loadModels(year, make) {
   const modelSel = document.getElementById('vehicleModel');
