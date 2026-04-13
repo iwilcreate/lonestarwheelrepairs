@@ -287,24 +287,23 @@
       position: relative;
     }
     .map-glow {
-      position: absolute; width: 480px; height: 480px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(230,48,48,.18) 0%, transparent 62%);
+      position: absolute; width: 520px; height: 520px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,.2) 0%, transparent 65%);
       pointer-events: none;
     }
-    .map-wrap { position: relative; z-index: 1; width: 100%; max-width: 420px; }
-    .wheel-svg { width: 100%; height: auto; filter: drop-shadow(0 12px 48px rgba(0,0,0,.65)); }
-    .wheel-spin {
-      animation: wheelSpin 14s linear infinite;
-      transform-box: fill-box;
-      transform-origin: center;
+    .map-wrap { position: relative; z-index: 1; width: 100%; max-width: 480px; }
+    .texas-svg {
+      width: 100%; height: auto;
+      filter: drop-shadow(0 0 28px rgba(255,255,255,.08));
     }
-    @keyframes wheelSpin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
+    .city-dot-pulse { animation: pulse 2.8s ease-in-out infinite; }
+    .city-dot-pulse:nth-child(2n) { animation-delay: .6s; }
+    .city-dot-pulse:nth-child(3n) { animation-delay: 1.2s; }
+    .city-dot-pulse:nth-child(4n) { animation-delay: 1.8s; }
+    .city-dot-pulse:nth-child(5n) { animation-delay: 2.4s; }
     @keyframes pulse {
-      0%, 100% { opacity: .55; }
-      50%       { opacity: 1; }
+      0%, 100% { opacity: .5; transform: scale(1); }
+      50%       { opacity: 1; transform: scale(1.35); }
     }
     .hero-badge-card {
       position: absolute; top: 8px; right: 0;
@@ -923,7 +922,7 @@
       </div>
     </div>
 
-    <!-- Right: Animated Wheel -->
+    <!-- Right: Texas Map -->
     <div class="hero-right">
       <div class="map-glow"></div>
       <div class="map-wrap">
@@ -941,93 +940,71 @@
           <div class="badge-lbl" data-en="Shop Response" data-es="Respuesta">Shop Response</div>
         </div>
 
-        <!-- Animated Alloy Wheel SVG -->
-        <svg class="wheel-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Real Texas SVG — US Census / Albers USA projection 960×593 -->
+        <svg class="texas-svg" viewBox="278 318 264 258" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <radialGradient id="rimGrad" cx="38%" cy="32%" r="68%">
-              <stop offset="0%"   stop-color="#c8cdd8"/>
-              <stop offset="45%"  stop-color="#7a8396"/>
-              <stop offset="100%" stop-color="#3a4055"/>
-            </radialGradient>
-            <linearGradient id="spokeGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%"   stop-color="#4e5870"/>
-              <stop offset="50%"  stop-color="#8d97aa"/>
-              <stop offset="100%" stop-color="#4e5870"/>
-            </linearGradient>
-            <radialGradient id="hubGrad" cx="38%" cy="32%" r="68%">
-              <stop offset="0%"   stop-color="#9aa8bc"/>
-              <stop offset="100%" stop-color="#252e42"/>
-            </radialGradient>
-            <filter id="redGlow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="7" result="blur"/>
+            <filter id="dotGlow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="1.8" result="blur"/>
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
-            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur"/>
+            <filter id="stateGlow" x="-5%" y="-5%" width="110%" height="110%">
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
           </defs>
 
-          <!-- Outer red glow ring -->
-          <circle cx="200" cy="200" r="194" fill="none"
-                  stroke="rgba(230,48,48,.18)" stroke-width="6"
-                  filter="url(#redGlow)"/>
+          <!-- Texas state outline — real geographic path from US Census data -->
+          <path
+            d="M361.46423,330.57358L384.15502,331.65952L415.24771,332.80264L412.9131,356.25844L412.61634,374.41196L412.68444,376.49375L417.02827,380.31218L419.01492,381.75934L420.19913,381.19965L420.5725,379.38193L421.71282,381.18555L423.82446,381.22945L423.82146,379.78236L425.4914,380.74963L426.6301,381.1585L426.27083,385.12615L430.35902,385.21965L433.28434,386.41682L437.23908,386.9422L439.62046,389.02118L441.74456,386.94501L445.4695,387.55992L447.69041,390.78486L448.76537,391.10582L448.6049,393.07109L450.81851,393.86338L453.14866,391.80858L455.28168,392.4235L457.51106,392.459L458.44413,394.89444L464.77222,397.00889L466.36527,396.24196L467.85474,392.06425L468.19546,392.06425L469.10195,392.14585L470.331,394.21448L474.26088,394.87976L477.59788,396.00264L481.02351,397.19861L482.86409,396.22361L483.57785,393.70877L488.03107,393.75297L489.83981,394.68375L492.63906,392.57724L493.7427,392.62144L494.59374,394.22651L498.64846,394.22651L500.16733,392.19789L502.0347,392.60513L503.98073,395.00841L507.5013,397.05256L510.36006,397.86237L511.87368,398.66221L514.32038,400.65953L517.36342,399.33174L520.05451,400.47062L520.61832,406.57656L520.57852,416.27873L521.26438,425.81274L521.96656,429.41785L524.64189,433.83771L525.54007,438.78844L529.75602,444.32646L529.95204,447.4714L530.69841,448.25724L529.96834,456.63731L527.09624,461.64381L528.62921,463.79668L527.99913,466.13476L527.32956,473.53908L525.82524,476.87708L526.12012,480.37943L520.45524,481.96461L510.59395,486.49111L509.62399,488.43103L507.03742,490.37096L504.93584,491.8259L503.64255,492.6342L497.98444,497.969L495.23621,500.07059L489.90141,503.30379L484.2433,505.7287L477.93854,509.12357L476.16028,510.57852L470.3405,514.13505L466.94563,514.78169L463.06578,520.27814L459.02427,520.60147L458.0543,522.54139L460.31755,524.48132L458.8626,529.97777L457.56932,534.50427L456.4377,538.38412L455.6294,542.91061L456.4377,545.33552L458.21596,552.28692L459.18593,558.43001L460.96419,561.17824L459.99423,562.63319L456.92268,564.57311L451.26456,560.69326L445.76811,559.56164L444.47482,560.04662L441.24161,559.39998L437.03844,556.32843L431.86531,555.19681L424.26726,551.80194L422.16568,547.92208L420.87239,541.45567L417.63919,539.51574L416.99254,537.25249L417.63919,536.60585L417.96251,533.21098L416.66922,532.56434L416.02258,531.59438L417.31586,527.22954L415.69926,524.9663L412.46605,523.67301L409.07118,519.30818L405.51465,512.6801L401.31148,510.09353L401.47314,508.15361L396.13834,495.86741L395.33004,491.66424L393.55178,489.72432L393.39012,488.26937L387.40868,482.93458L384.82211,479.86303L384.82211,478.7314L382.23554,476.62982L375.4458,475.49819L368.00942,474.85155L364.93787,472.58831L360.41138,474.36657L356.85485,475.82152L354.5916,479.05472L353.62164,482.77292L349.25681,488.91601L346.8319,491.34092L344.24533,490.37096L342.46707,489.23933L340.52714,488.59269L336.64729,486.32945L336.64729,485.6828L334.86903,483.74288L329.69589,481.64129L322.25951,473.88159L319.99626,469.19344L319.99626,461.11041L316.76305,454.64399L316.27807,451.89577L314.66147,450.9258L313.52984,448.82422L308.51837,446.72263L307.22509,445.10603L300.11202,437.18466L298.81874,433.95145L294.13058,431.6882L292.67563,427.32333L290.08904,424.41346L288.14913,423.9285L287.4999,419.25086L295.50177,419.93675L324.53676,422.6802L353.57184,424.28056L355.80537,404.81874L359.69192,349.26372L361.29231,330.5164Z
+             M461.6934,560.20774L461.12759,553.09466L458.37935,545.90074L457.81353,538.86849L459.34931,530.62378L462.66337,523.75319L466.13907,518.33754L469.29147,514.78099L469.93811,515.02349L465.16911,521.65159L460.80427,528.19887L458.7835,534.82696L458.46018,540.00012L459.34931,546.14324L461.93589,553.33716L462.42087,558.5103L462.58253,559.96526L461.6934,560.20774Z"
+            fill="rgba(59,130,246,.1)"
+            stroke="rgba(255,255,255,.82)"
+            stroke-width="0.9"
+            stroke-linejoin="round"
+            filter="url(#stateGlow)"
+          />
 
-          <!-- Tire (outermost black ring) -->
-          <circle cx="200" cy="200" r="190" fill="#0a0d14"/>
-          <!-- Tire highlight ridges -->
-          <circle cx="200" cy="200" r="176" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="2"/>
-          <circle cx="200" cy="200" r="171" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1.5"/>
+          <!-- ── City dots (Albers USA coordinates) ── -->
 
-          <!-- Rim outer chrome edge -->
-          <circle cx="200" cy="200" r="165" fill="url(#rimGrad)"/>
-          <!-- Rim edge shadow -->
-          <circle cx="200" cy="200" r="165" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="1.5"/>
+          <!-- Houston (95.37°W 29.76°N) -->
+          <circle class="city-dot-pulse" cx="497" cy="479" r="2.8" fill="#e63030" filter="url(#dotGlow)"/>
+          <text x="500" y="477.5" font-size="6.5" fill="rgba(255,255,255,.85)" font-family="sans-serif" font-weight="600">Houston</text>
 
-          <!-- ── Rotating Group ── -->
-          <g class="wheel-spin">
-            <!-- Rim face dark background -->
-            <circle cx="200" cy="200" r="156" fill="#141c2e"/>
+          <!-- Dallas (96.80°W 32.78°N) -->
+          <circle class="city-dot-pulse" cx="470" cy="412" r="2.8" fill="#ffffff" filter="url(#dotGlow)"/>
+          <text x="473" y="410.5" font-size="6.5" fill="rgba(255,255,255,.85)" font-family="sans-serif" font-weight="600">Dallas</text>
 
-            <!-- 5 Spokes — wider at rim, narrower at hub -->
-            <g transform="translate(200,200)">
-              <path d="M -13,-62 C -17,-95 -23,-128 -27,-153 L 27,-153 C 23,-128 17,-95 13,-62 Z"
-                    fill="url(#spokeGrad)" transform="rotate(0)"/>
-              <path d="M -13,-62 C -17,-95 -23,-128 -27,-153 L 27,-153 C 23,-128 17,-95 13,-62 Z"
-                    fill="url(#spokeGrad)" transform="rotate(72)"/>
-              <path d="M -13,-62 C -17,-95 -23,-128 -27,-153 L 27,-153 C 23,-128 17,-95 13,-62 Z"
-                    fill="url(#spokeGrad)" transform="rotate(144)"/>
-              <path d="M -13,-62 C -17,-95 -23,-128 -27,-153 L 27,-153 C 23,-128 17,-95 13,-62 Z"
-                    fill="url(#spokeGrad)" transform="rotate(216)"/>
-              <path d="M -13,-62 C -17,-95 -23,-128 -27,-153 L 27,-153 C 23,-128 17,-95 13,-62 Z"
-                    fill="url(#spokeGrad)" transform="rotate(288)"/>
-            </g>
+          <!-- Fort Worth (97.33°W 32.72°N) -->
+          <circle class="city-dot-pulse" cx="460" cy="413" r="2" fill="rgba(255,255,255,.7)" filter="url(#dotGlow)"/>
 
-            <!-- Rim inner ring -->
-            <circle cx="200" cy="200" r="156" fill="none" stroke="#4a5470" stroke-width="2"/>
-            <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <!-- Austin (97.75°W 30.27°N) -->
+          <circle class="city-dot-pulse" cx="453" cy="467" r="2.8" fill="#e63030" filter="url(#dotGlow)"/>
+          <text x="456" y="465.5" font-size="6.5" fill="rgba(230,48,48,.95)" font-family="sans-serif" font-weight="700">Austin</text>
 
-            <!-- Hub outer ring -->
-            <circle cx="200" cy="200" r="70"  fill="#0a0d14"/>
-            <circle cx="200" cy="200" r="66"  fill="url(#hubGrad)"/>
-            <circle cx="200" cy="200" r="60"  fill="#151e32"/>
+          <!-- San Antonio (98.49°W 29.42°N) -->
+          <circle class="city-dot-pulse" cx="439" cy="486" r="2.5" fill="#ffffff" filter="url(#dotGlow)"/>
+          <text x="442" y="484.5" font-size="5.8" fill="rgba(255,255,255,.8)" font-family="sans-serif">S.Antonio</text>
 
-            <!-- 5 Lug nuts at r=84 — top=270°, then +72° each -->
-            <!-- (200,116) (279,175) (249,268) (151,268) (121,175) -->
-            <circle cx="200" cy="116" r="9" fill="#353e54"/><circle cx="200" cy="116" r="5.5" fill="#6a7488"/>
-            <circle cx="279" cy="175" r="9" fill="#353e54"/><circle cx="279" cy="175" r="5.5" fill="#6a7488"/>
-            <circle cx="249" cy="268" r="9" fill="#353e54"/><circle cx="249" cy="268" r="5.5" fill="#6a7488"/>
-            <circle cx="151" cy="268" r="9" fill="#353e54"/><circle cx="151" cy="268" r="5.5" fill="#6a7488"/>
-            <circle cx="121" cy="175" r="9" fill="#353e54"/><circle cx="121" cy="175" r="5.5" fill="#6a7488"/>
+          <!-- El Paso (106.49°W 31.76°N) -->
+          <circle class="city-dot-pulse" cx="291" cy="435" r="2.5" fill="#ffffff" filter="url(#dotGlow)"/>
+          <text x="294" y="433.5" font-size="5.8" fill="rgba(255,255,255,.75)" font-family="sans-serif">El Paso</text>
 
-            <!-- Center cap -->
-            <circle cx="200" cy="200" r="34" fill="#0a0d14"/>
-            <circle cx="200" cy="200" r="30" fill="url(#rimGrad)"/>
-            <circle cx="200" cy="200" r="22" fill="#141c2e"/>
-            <!-- Red center brand dot -->
-            <circle cx="200" cy="200" r="13" fill="#e63030" filter="url(#redGlow)"/>
-            <circle cx="200" cy="200" r="6"  fill="rgba(255,255,255,.6)"/>
-          </g>
+          <!-- Amarillo (101.83°W 35.22°N) -->
+          <circle class="city-dot-pulse" cx="377" cy="358" r="2.5" fill="#ffffff" filter="url(#dotGlow)"/>
+          <text x="358" y="356.5" font-size="5.8" fill="rgba(255,255,255,.7)" font-family="sans-serif">Amarillo</text>
+
+          <!-- Lubbock (101.87°W 33.58°N) -->
+          <circle class="city-dot-pulse" cx="376" cy="394" r="2.2" fill="rgba(255,255,255,.7)" filter="url(#dotGlow)"/>
+          <text x="358" y="392.5" font-size="5.8" fill="rgba(255,255,255,.65)" font-family="sans-serif">Lubbock</text>
+
+          <!-- Corpus Christi (97.40°W 27.80°N) -->
+          <circle class="city-dot-pulse" cx="459" cy="522" r="2.2" fill="rgba(255,255,255,.75)" filter="url(#dotGlow)"/>
+
+          <!-- Laredo (99.50°W 27.50°N) -->
+          <circle class="city-dot-pulse" cx="420" cy="529" r="2" fill="rgba(255,255,255,.65)" filter="url(#dotGlow)"/>
+
+          <!-- Midland (102.08°W 31.99°N) -->
+          <circle class="city-dot-pulse" cx="373" cy="429" r="2" fill="rgba(255,255,255,.6)" filter="url(#dotGlow)"/>
         </svg>
       </div>
     </div>
