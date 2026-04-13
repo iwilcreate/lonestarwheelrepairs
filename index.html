@@ -285,27 +285,86 @@
     .section-head .section-sub { margin: 0 auto; }
 
     /* ── Cities ──────────────────────────────────────────── */
-    #cities { background: var(--bg2); }
-    .region-group { margin-bottom: 2rem; }
-    .region-name {
-      font-size: .65rem; font-weight: 700; letter-spacing: .14em;
-      text-transform: uppercase; color: var(--w45);
-      margin-bottom: .75rem; padding-bottom: .4rem;
+    #cities {
+      background: var(--bg2);
+      position: relative;
+      overflow: hidden;
+    }
+    #cities::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(230,48,48,.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cities-stats {
+      display: flex; justify-content: center; gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .cities-stat {
+      text-align: center;
+    }
+    .cities-stat-num {
+      font-size: 2rem; font-weight: 800; color: var(--white);
+      letter-spacing: -.03em; line-height: 1;
+      background: linear-gradient(135deg, var(--white), rgba(255,255,255,.6));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .cities-stat-label {
+      font-size: .72rem; font-weight: 600; color: var(--w45);
+      text-transform: uppercase; letter-spacing: .1em; margin-top: .3rem;
+    }
+    .cities-divider {
+      width: 1px; background: var(--border); align-self: stretch;
+    }
+    .regions-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .region-group {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.5rem 1.25rem;
+      transition: var(--transition);
+    }
+    .region-group:hover {
+      border-color: rgba(230,48,48,.2);
+      box-shadow: 0 8px 28px rgba(0,0,0,.25);
+    }
+    .region-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem; padding-bottom: .75rem;
       border-bottom: 1px solid var(--border);
     }
-    .city-grid { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .region-name {
+      font-size: .65rem; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--red);
+    }
+    .region-count {
+      font-size: .65rem; font-weight: 600;
+      color: var(--w45); background: var(--surface);
+      border: 1px solid var(--border);
+      padding: .15rem .55rem; border-radius: 50px;
+    }
+    .city-grid { display: flex; flex-wrap: wrap; gap: .4rem; }
     .city-chip {
-      padding: .38rem 1rem; border-radius: 50px; cursor: pointer;
-      font-size: .8rem; font-weight: 500;
+      padding: .35rem .9rem; border-radius: 50px; cursor: pointer;
+      font-size: .78rem; font-weight: 500;
       background: var(--surface); color: var(--w70);
       border: 1px solid var(--border);
       transition: var(--transition); white-space: nowrap;
     }
     .city-chip:hover {
-      border-color: rgba(230,48,48,.5); color: var(--white);
+      border-color: var(--red); color: var(--white);
       background: var(--red-dim);
-      box-shadow: 0 0 14px rgba(230,48,48,.18);
-      transform: translateY(-1px);
+      box-shadow: 0 0 16px rgba(230,48,48,.2);
+      transform: translateY(-2px);
+    }
+    .city-chip.active {
+      background: var(--red); color: var(--white);
+      border-color: var(--red);
+      box-shadow: 0 0 20px rgba(230,48,48,.35);
     }
 
     /* ── Quote Form ──────────────────────────────────────── */
@@ -989,7 +1048,23 @@
         Click your city — we'll pre-fill your quote form automatically.
       </p>
     </div>
-    <div id="cityRegions"></div>
+    <div class="cities-stats">
+      <div class="cities-stat">
+        <div class="cities-stat-num" id="totalCitiesCount">100+</div>
+        <div class="cities-stat-label" data-en="Cities Covered" data-es="Ciudades">Cities Covered</div>
+      </div>
+      <div class="cities-divider"></div>
+      <div class="cities-stat">
+        <div class="cities-stat-num">7</div>
+        <div class="cities-stat-label" data-en="Metro Regions" data-es="Regiones">Metro Regions</div>
+      </div>
+      <div class="cities-divider"></div>
+      <div class="cities-stat">
+        <div class="cities-stat-num">254</div>
+        <div class="cities-stat-label" data-en="Texas Counties" data-es="Condados">Texas Counties</div>
+      </div>
+    </div>
+    <div class="regions-layout" id="cityRegions"></div>
   </div>
 </section>
 
@@ -1567,13 +1642,24 @@ function setLang(lang) {
 function renderCities() {
   const container = document.getElementById('cityRegions');
   container.innerHTML = '';
+  let totalCities = 0;
   for (const [region, cities] of Object.entries(TEXAS_CITIES)) {
+    totalCities += cities.length;
     const group = document.createElement('div');
     group.className = 'region-group';
+
+    const header = document.createElement('div');
+    header.className = 'region-header';
     const label = document.createElement('div');
     label.className = 'region-name';
     label.textContent = region;
-    group.appendChild(label);
+    const count = document.createElement('div');
+    count.className = 'region-count';
+    count.textContent = cities.length + ' cities';
+    header.appendChild(label);
+    header.appendChild(count);
+    group.appendChild(header);
+
     const grid = document.createElement('div');
     grid.className = 'city-grid';
     cities.forEach(city => {
@@ -1581,14 +1667,19 @@ function renderCities() {
       chip.className = 'city-chip';
       chip.type = 'button';
       chip.textContent = city;
-      chip.addEventListener('click', () => selectCity(city));
+      chip.addEventListener('click', () => selectCity(city, chip));
       grid.appendChild(chip);
     });
     group.appendChild(grid);
     container.appendChild(group);
   }
+  const countEl = document.getElementById('totalCitiesCount');
+  if (countEl) countEl.textContent = totalCities + '+';
 }
-function selectCity(city) {
+function selectCity(city, chipEl) {
+  // Clear previous active chip
+  document.querySelectorAll('.city-chip.active').forEach(c => c.classList.remove('active'));
+  if (chipEl) chipEl.classList.add('active');
   document.getElementById('city').value = city;
   document.getElementById('quote').scrollIntoView({ behavior: 'smooth', block: 'start' });
   setTimeout(() => document.getElementById('firstName').focus(), 600);
