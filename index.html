@@ -13,28 +13,28 @@
   <style>
     /* ── Tokens ──────────────────────────────────────────── */
     :root {
-      --bg:          #06091a;
-      --bg2:         #0b1020;
-      --bg3:         #0e1526;
-      --surface:     rgba(255,255,255,.045);
-      --surface-h:   rgba(255,255,255,.075);
+      --bg:          #141c2e;
+      --bg2:         #1a2540;
+      --bg3:         #1f2d4d;
+      --surface:     rgba(255,255,255,.07);
+      --surface-h:   rgba(255,255,255,.12);
       --red:         #e63030;
       --red-h:       #ff4444;
-      --red-dim:     rgba(230,48,48,.15);
-      --red-glow:    rgba(230,48,48,.25);
+      --red-dim:     rgba(230,48,48,.18);
+      --red-glow:    rgba(230,48,48,.30);
       --blue:        #2563eb;
       --blue-glow:   #3b82f6;
-      --blue-dim:    rgba(59,130,246,.12);
+      --blue-dim:    rgba(59,130,246,.15);
       --gold:        #f59e0b;
       --white:       #ffffff;
-      --w90:         rgba(255,255,255,.90);
-      --w70:         rgba(255,255,255,.70);
-      --w45:         rgba(255,255,255,.45);
-      --w20:         rgba(255,255,255,.20);
-      --w10:         rgba(255,255,255,.10);
-      --w06:         rgba(255,255,255,.06);
-      --border:      rgba(255,255,255,.09);
-      --border-h:    rgba(255,255,255,.18);
+      --w90:         rgba(255,255,255,.92);
+      --w70:         rgba(255,255,255,.78);
+      --w45:         rgba(255,255,255,.58);
+      --w20:         rgba(255,255,255,.22);
+      --w10:         rgba(255,255,255,.12);
+      --w06:         rgba(255,255,255,.08);
+      --border:      rgba(255,255,255,.13);
+      --border-h:    rgba(255,255,255,.24);
       --radius-sm:   8px;
       --radius:      12px;
       --radius-lg:   18px;
@@ -919,178 +919,132 @@
           <div class="badge-lbl" data-en="Verified Shops" data-es="Talleres Verificados">Verified Shops</div>
         </div>
 
-        <!-- Texas SVG Map — accurate proportional outline -->
-        <!--
-          Coordinate system: viewBox 0 0 500 480
-          Based on Texas geographic bounds:
-            Longitude: 106.65°W (El Paso) → 93.51°W (Sabine Pass)  = 13.14° wide
-            Latitude:  36.50°N (Panhandle) → 25.84°N (Brownsville) = 10.66° tall
-          Scale: x = (106.65 - lon) * 36  + 14
-                 y = (36.50  - lat) * 42  + 16
-          Key border points derived from actual Texas boundary coordinates.
-        -->
+        <!-- Texas Flag Map SVG -->
         <svg class="map-svg" viewBox="0 0 500 480" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
-            <filter id="stateglow" x="-8%" y="-8%" width="116%" height="116%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            <filter id="mapShadow" x="-12%" y="-12%" width="124%" height="124%">
+              <feDropShadow dx="0" dy="4" stdDeviation="14" flood-color="rgba(0,0,0,.55)"/>
             </filter>
-            <radialGradient id="stateFill" cx="55%" cy="42%" r="58%">
-              <stop offset="0%"   stop-color="#1d3b82" stop-opacity=".60"/>
-              <stop offset="100%" stop-color="#0a1a4a" stop-opacity=".30"/>
-            </radialGradient>
+            <!-- Texas outline used as clip path -->
+            <clipPath id="texasClip">
+              <path d="M 130,16 L 238,16 L 238,121 L 274,121 L 346,129 L 418,137 L 452,139 L 452,288 C 456,294 460,298 460,300 C 448,306 436,310 425,313 C 412,318 408,325 404,331 C 388,343 372,356 358,368 C 344,375 338,379 331,381 C 323,390 318,404 314,418 C 308,436 342,449 341,459 C 320,462 298,462 280,458 C 268,453 262,447 256,440 C 248,432 252,402 256,380 C 244,372 230,350 220,338 C 212,322 208,310 205,298 C 192,292 176,308 162,312 C 148,313 134,313 121,314 C 110,308 92,294 76,281 C 58,262 36,230 14,198 L 14,16 Z"/>
+            </clipPath>
           </defs>
 
-          <!--
-            Texas outline — clockwise from NW panhandle corner.
-            Panhandle: 103°W–100°W at 36.5°N, then SE along Oklahoma/Red River,
-            eastern border, Gulf Coast (SE→SW), Rio Grande (SW→NW) back to El Paso,
-            NM border north, back to panhandle.
-
-            Computed coords (lon,lat → x,y):
-              103.00W, 36.50N → (130, 16)   NW panhandle
-              100.00W, 36.50N → (238, 16)   NE panhandle top
-              100.00W, 34.00N → (238, 121)  panhandle SE / OK border start
-               99.00W, 34.00N → (274, 121)  step east along OK border
-               97.00W, 33.80N → (346, 129)
-               95.00W, 33.60N → (418, 137)  NE Texas (near Texarkana latitude)
-               94.04W, 33.55N → (452, 139)  actual NE corner
-               94.04W, 30.00N → (452, 288)  E border drops south
-               93.82W, 29.72N → (460, 300)  SE corner / Sabine Pass area
-               94.80W, 29.40N → (425, 313)  Gulf Coast curves west
-               95.37W, 28.98N → (404, 331)  Houston area
-               97.40W, 27.80N → (331, 381)  Corpus Christi area
-               97.86W, 26.93N → (314, 418)  coast continues SW
-               97.14W, 25.96N → (341, 459)  Brownsville / Rio Grande mouth
-               99.50W, 27.50N → (256, 380)  Rio Grande — Laredo
-              100.90W, 29.36N → (205, 298)  Del Rio
-              103.25W, 29.00N → (121, 314)  Big Bend south dip
-              104.50W, 29.80N → (76, 281)   Big Bend NW
-              106.50W, 31.78N → (14, 198)   El Paso
-              106.63W, 36.50N → (14, 16)    NM/TX north border (top)
-              103.00W, 36.50N → (130, 16)   back to NW panhandle
-          -->
+          <!-- Drop shadow behind the whole map -->
           <path
-            d="M 130,16
-               L 238,16
-               L 238,121
-               L 274,121
-               L 346,129
-               L 418,137
-               L 452,139
-               L 452,288
-               C 456,294 460,298 460,300
-               C 448,306 436,310 425,313
-               C 412,318 408,325 404,331
-               C 388,343 372,356 358,368
-               C 344,375 338,379 331,381
-               C 323,390 318,404 314,418
-               C 308,436 342,449 341,459
-               C 320,462 298,462 280,458
-               C 268,453 262,447 256,440
-               C 248,432 252,402 256,380
-               C 244,372 230,350 220,338
-               C 212,322 208,310 205,298
-               C 192,292 176,308 162,312
-               C 148,313 134,313 121,314
-               C 110,308 92,294 76,281
-               C 58,262 36,230 14,198
-               L 14,16
-               Z"
-            fill="url(#stateFill)"
-            stroke="#3b82f6"
-            stroke-width="1.5"
-            stroke-linejoin="round"
-            filter="url(#stateglow)"
-            opacity=".92"
+            d="M 130,16 L 238,16 L 238,121 L 274,121 L 346,129 L 418,137 L 452,139 L 452,288 C 456,294 460,298 460,300 C 448,306 436,310 425,313 C 412,318 408,325 404,331 C 388,343 372,356 358,368 C 344,375 338,379 331,381 C 323,390 318,404 314,418 C 308,436 342,449 341,459 C 320,462 298,462 280,458 C 268,453 262,447 256,440 C 248,432 252,402 256,380 C 244,372 230,350 220,338 C 212,322 208,310 205,298 C 192,292 176,308 162,312 C 148,313 134,313 121,314 C 110,308 92,294 76,281 C 58,262 36,230 14,198 L 14,16 Z"
+            fill="rgba(0,0,0,.4)" filter="url(#mapShadow)" transform="translate(3,5)"
           />
 
-          <!-- ── City dots positioned to match geography ── -->
+          <!-- ── Texas Flag Sections (clipped to state shape) ── -->
+          <!-- Blue stripe — left ~38% -->
+          <rect x="0" y="0" width="183" height="480" fill="#002868" clip-path="url(#texasClip)"/>
+          <!-- White — upper right -->
+          <rect x="183" y="0" width="320" height="262" fill="#FFFFFF" clip-path="url(#texasClip)"/>
+          <!-- Red — lower right -->
+          <rect x="183" y="262" width="320" height="220" fill="#BF0A30" clip-path="url(#texasClip)"/>
 
-          <!-- Houston  (95.37W, 29.76N) → (404, 286) -->
+          <!-- White Star centered in blue stripe -->
+          <!-- cx=97, cy=228, outer R=55, inner r=22 — 5-pointed star -->
+          <polygon
+            points="97,173 110,211 149,212 118,236 129,273 97,251 65,273 76,236 45,212 84,211"
+            fill="white"
+            clip-path="url(#texasClip)"
+          />
+
+          <!-- Texas outline border -->
+          <path
+            d="M 130,16 L 238,16 L 238,121 L 274,121 L 346,129 L 418,137 L 452,139 L 452,288 C 456,294 460,298 460,300 C 448,306 436,310 425,313 C 412,318 408,325 404,331 C 388,343 372,356 358,368 C 344,375 338,379 331,381 C 323,390 318,404 314,418 C 308,436 342,449 341,459 C 320,462 298,462 280,458 C 268,453 262,447 256,440 C 248,432 252,402 256,380 C 244,372 230,350 220,338 C 212,322 208,310 205,298 C 192,292 176,308 162,312 C 148,313 134,313 121,314 C 110,308 92,294 76,281 C 58,262 36,230 14,198 L 14,16 Z"
+            fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.8" stroke-linejoin="round"
+          />
+
+          <!-- ── City dots — white on blue/red, dark navy on white ── -->
+
+          <!-- Houston (red section) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="404" cy="300" r="4.5" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="404" cy="300" r="4.5" fill="#fff"/>
           </g>
-          <text x="410" y="298" font-size="9" fill="rgba(255,255,255,.7)" font-family="sans-serif">Houston</text>
+          <text x="410" y="298" font-size="9" fill="rgba(255,255,255,.9)" font-family="sans-serif" font-weight="600">Houston</text>
 
-          <!-- Dallas  (96.80W, 32.78N) → (353, 160) -->
+          <!-- Dallas (white section) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="354" cy="162" r="4" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="354" cy="162" r="4" fill="#002868"/>
           </g>
-          <text x="360" y="160" font-size="9" fill="rgba(255,255,255,.7)" font-family="sans-serif">Dallas</text>
+          <text x="360" y="160" font-size="9" fill="#002868" font-family="sans-serif" font-weight="700">Dallas</text>
 
-          <!-- Fort Worth  (97.33W, 32.72N) → (334, 165) -->
+          <!-- Fort Worth (white section) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="335" cy="165" r="3" fill="#ffffff"/>
-          </g>
-
-          <!-- Austin  (97.75W, 30.27N) → (319, 263) -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="318" cy="263" r="4" fill="#ff6b6b"/>
-          </g>
-          <text x="324" y="261" font-size="9" fill="rgba(255,120,120,.8)" font-family="sans-serif">Austin</text>
-
-          <!-- San Antonio  (98.49W, 29.42N) → (293, 297) -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="292" cy="298" r="4" fill="#ffffff"/>
-          </g>
-          <text x="298" y="296" font-size="8" fill="rgba(255,255,255,.65)" font-family="sans-serif">S.Antonio</text>
-
-          <!-- El Paso  (106.49W, 31.76N) → (14, 200) -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="20" cy="200" r="3.5" fill="#ffffff"/>
-          </g>
-          <text x="26" y="198" font-size="8" fill="rgba(255,255,255,.6)" font-family="sans-serif">El Paso</text>
-
-          <!-- Amarillo  (101.83W, 35.22N) → (173, 55) — in panhandle -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="173" cy="57" r="3.5" fill="#ffffff"/>
-          </g>
-          <text x="153" y="54" font-size="8" fill="rgba(255,255,255,.55)" font-family="sans-serif">Amarillo</text>
-
-          <!-- Lubbock  (101.87W, 33.58N) → (172, 121) -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="172" cy="123" r="3.5" fill="#ffffff"/>
-          </g>
-          <text x="152" y="120" font-size="8" fill="rgba(255,255,255,.55)" font-family="sans-serif">Lubbock</text>
-
-          <!-- Midland  (102.08W, 31.99N) → (165, 193) -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="165" cy="192" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="335" cy="170" r="3" fill="#002868"/>
           </g>
 
-          <!-- Waco  (97.15W, 31.55N) → (342, 209) -->
+          <!-- Austin (white/red border) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="342" cy="210" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="318" cy="263" r="4" fill="#002868"/>
+          </g>
+          <text x="324" y="261" font-size="9" fill="#002868" font-family="sans-serif" font-weight="700">Austin</text>
+
+          <!-- San Antonio (red section) -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="292" cy="298" r="4" fill="#fff"/>
+          </g>
+          <text x="298" y="296" font-size="8" fill="rgba(255,255,255,.9)" font-family="sans-serif" font-weight="600">S.Antonio</text>
+
+          <!-- El Paso (blue section) -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="20" cy="200" r="3.5" fill="#fff"/>
+          </g>
+          <text x="26" y="198" font-size="8" fill="rgba(255,255,255,.85)" font-family="sans-serif">El Paso</text>
+
+          <!-- Amarillo (blue section) -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="173" cy="57" r="3.5" fill="#fff"/>
+          </g>
+          <text x="153" y="54" font-size="8" fill="rgba(255,255,255,.8)" font-family="sans-serif">Amarillo</text>
+
+          <!-- Lubbock (blue section) -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="172" cy="123" r="3.5" fill="#fff"/>
+          </g>
+          <text x="152" y="120" font-size="8" fill="rgba(255,255,255,.8)" font-family="sans-serif">Lubbock</text>
+
+          <!-- Midland (blue section) -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="165" cy="192" r="3" fill="#fff"/>
           </g>
 
-          <!-- Corpus Christi  (97.40W, 27.80N) → (332, 367) -->
+          <!-- Waco (white section) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="330" cy="368" r="3.5" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="342" cy="210" r="3" fill="#002868"/>
           </g>
 
-          <!-- Laredo  (99.50W, 27.50N) → (256, 380) -->
+          <!-- Corpus Christi (red section) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="255" cy="378" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="330" cy="368" r="3.5" fill="#fff"/>
           </g>
 
-          <!-- McAllen  (98.24W, 26.21N) → (303, 434) -->
+          <!-- Laredo (red section) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="302" cy="432" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="255" cy="378" r="3" fill="#fff"/>
           </g>
 
-          <!-- Tyler  (95.30W, 32.35N) → (406, 181) -->
+          <!-- McAllen (red section) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="406" cy="182" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="302" cy="432" r="3" fill="#fff"/>
           </g>
 
-          <!-- Beaumont  (94.10W, 30.08N) → (451, 270) -->
+          <!-- Tyler (white section) -->
           <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="448" cy="270" r="3" fill="#ffffff"/>
+            <circle class="city-dot-pulse" cx="406" cy="182" r="3" fill="#002868"/>
+          </g>
+
+          <!-- Beaumont (red section) -->
+          <g filter="url(#glow)">
+            <circle class="city-dot-pulse" cx="448" cy="270" r="3" fill="#fff"/>
           </g>
         </svg>
       </div>
