@@ -1709,15 +1709,66 @@ function validateQuoteForm() {
 }
 
 // ── Quote Submit ──────────────────────────────────────────────────────────────
-document.getElementById('quoteForm').addEventListener('submit', function(e) {
+document.getElementById('quoteForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   if (!validateQuoteForm()) return;
-  isDuplicate(document.getElementById('phone').value.trim(), document.getElementById('email').value.trim());
-  if (typeof gtag === 'function') gtag('event', 'quote_submitted', { city: document.getElementById('city').value, repair_type: document.getElementById('repairType').value });
-  document.getElementById('quoteFormWrap').classList.add('hidden');
-  document.getElementById('confirmation').classList.remove('hidden');
-  document.getElementById('quote').scrollIntoView({ behavior: 'smooth' });
-  setLang(currentLang);
+
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  isDuplicate(phone, email);
+
+  // ── Collect form data ──────────────────────────────────────
+  const payload = {
+    name:         document.getElementById('firstName').value.trim(),
+    phone,
+    email,
+    city:         document.getElementById('city').value.trim(),
+    zip:          document.getElementById('zip').value.trim(),
+    vehicle_year: document.getElementById('vehicleYear').value,
+    vehicle_make: document.getElementById('vehicleMake').value,
+    vehicle_model:document.getElementById('vehicleModel').value,
+    wheel_count:  document.getElementById('wheelCount').value,
+    repair_type:  document.getElementById('repairType').value,
+    damage_desc:  document.getElementById('damageDesc').value.trim(),
+    photos_count: uploadedPhotos.length,
+    language:     currentLang === 'es' ? 'Spanish' : 'English',
+    submitted_at: new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }) + ' CST'
+  };
+
+  // ── Disable button while sending ───────────────────────────
+  const btn = document.getElementById('submitBtn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = currentLang === 'es' ? 'Enviando...' : 'Sending...';
+
+  try {
+    const res = await fetch('https://formspree.io/f/mzdybzwq', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body:    JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      // GA4 event
+      if (typeof gtag === 'function') gtag('event', 'quote_submitted', {
+        city: payload.city, repair_type: payload.repair_type
+      });
+      // Show confirmation
+      document.getElementById('quoteFormWrap').classList.add('hidden');
+      document.getElementById('confirmation').classList.remove('hidden');
+      document.getElementById('quote').scrollIntoView({ behavior: 'smooth' });
+      setLang(currentLang);
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (err) {
+    alert(currentLang === 'es'
+      ? 'Hubo un error al enviar. Por favor intenta de nuevo.'
+      : 'There was an error submitting. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
 });
 function resetForm() {
   document.getElementById('quoteForm').reset();
