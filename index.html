@@ -220,6 +220,50 @@
       font-size: .88rem; color: var(--w45); line-height: 1.75;
       margin-bottom: 2.25rem; max-width: 420px; font-weight: 400;
     }
+    /* Hero ZIP bar */
+    .hero-zip-bar {
+      display: flex; gap: 0; align-items: stretch;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: .75rem;
+      max-width: 460px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      transition: var(--transition);
+    }
+    .hero-zip-bar:focus-within {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(230,48,48,.15), 0 4px 24px rgba(0,0,0,.35);
+    }
+    .hero-zip-input-wrap {
+      display: flex; align-items: center; flex: 1;
+      padding: 0 1rem; gap: .6rem; min-width: 0;
+    }
+    .hero-zip-icon { color: var(--w45); flex-shrink: 0; }
+    .hero-zip-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: var(--white); font-size: 1rem; font-weight: 500;
+      font-family: inherit; padding: 1rem 0; min-width: 0;
+    }
+    .hero-zip-input::placeholder { color: var(--w45); }
+    .hero-zip-city {
+      font-size: .8rem; font-weight: 600; color: var(--red);
+      white-space: nowrap; transition: var(--transition);
+    }
+    .hero-zip-btn {
+      background: var(--red); color: var(--white);
+      border: none; cursor: pointer;
+      padding: 0 1.5rem; font-size: .9rem; font-weight: 700;
+      font-family: inherit; letter-spacing: -.01em;
+      transition: var(--transition); white-space: nowrap;
+      border-left: 1px solid rgba(255,255,255,.1);
+    }
+    .hero-zip-btn:hover { background: var(--red-h); }
+    .hero-zip-hint {
+      font-size: .72rem; color: var(--w45); margin-bottom: 2rem;
+      letter-spacing: .02em;
+    }
     .hero-ctas { display: flex; gap: .85rem; flex-wrap: wrap; margin-bottom: 2.75rem; }
     .hero-stats {
       display: flex; gap: 0; flex-wrap: wrap;
@@ -819,9 +863,26 @@
         Submit one free request and hear back from up to 5 verified local shops within 60 minutes — no account needed, completely free for vehicle owners.
       </p>
 
-      <div class="hero-ctas">
-        <a href="#quote" class="btn btn-red" style="font-size:1rem;padding:.85rem 2rem;"
-           data-en="Get My Free Quotes →" data-es="Obtener Mis Cotizaciones →">Get My Free Quotes →</a>
+      <!-- ZIP Quick-Find Bar -->
+      <div class="hero-zip-bar">
+        <div class="hero-zip-input-wrap">
+          <svg class="hero-zip-icon" viewBox="0 0 20 20" fill="none" width="16" height="16">
+            <path d="M10 2C7.24 2 5 4.24 5 7c0 4.25 5 11 5 11s5-6.75 5-11c0-2.76-2.24-5-5-5zm0 6.75A1.75 1.75 0 1 1 10 5.25a1.75 1.75 0 0 1 0 3.5z" fill="currentColor"/>
+          </svg>
+          <input type="text" id="heroZip" class="hero-zip-input"
+            placeholder="Enter ZIP code..."
+            maxlength="5" inputmode="numeric"
+            onkeydown="return restrictDigits(event)"
+            oninput="this.value=this.value.replace(/\D/g,''); handleHeroZip(this.value)"
+            data-en-placeholder="Enter ZIP code..."
+            data-es-placeholder="Ingresa tu código postal..."/>
+          <div class="hero-zip-city" id="heroZipCity"></div>
+        </div>
+        <button class="hero-zip-btn" onclick="heroZipGo()" data-en="Find My Shops →" data-es="Buscar Talleres →">Find My Shops →</button>
+      </div>
+      <div class="hero-zip-hint" data-en="Free · No account needed · Results in 60 min" data-es="Gratis · Sin cuenta · Resultados en 60 min">Free · No account needed · Results in 60 min</div>
+
+      <div class="hero-ctas" style="margin-top:1.5rem;">
         <a href="#shop-apply" class="btn btn-ghost"
            data-en="Join as a Shop" data-es="Unirme como Taller">Join as a Shop</a>
       </div>
@@ -2006,6 +2067,54 @@ async function lookupZip(zip, cityFieldId, errId) {
       : 'ZIP code not found — please enter your city manually';
   }
 }
+
+// ── Hero ZIP bar ──────────────────────────────────────────────────────────────
+let heroZipResolved = '';
+async function handleHeroZip(zip) {
+  const cityEl = document.getElementById('heroZipCity');
+  if (zip.length < 5) { cityEl.textContent = ''; heroZipResolved = ''; return; }
+  try {
+    const res  = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const city = data.places[0]['place name'];
+    heroZipResolved = city;
+    cityEl.textContent = '📍 ' + city;
+  } catch {
+    heroZipResolved = '';
+    cityEl.textContent = '❌ Not found';
+  }
+}
+function heroZipGo() {
+  const zip = document.getElementById('heroZip').value.trim();
+  if (zip.length === 5 && heroZipResolved) {
+    document.getElementById('zip').value   = zip;
+    document.getElementById('city').value  = heroZipResolved;
+    document.getElementById('quote').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => document.getElementById('firstName').focus(), 650);
+  } else if (zip.length === 5) {
+    // Lookup hasn't resolved yet — trigger and go
+    fetch(`https://api.zippopotam.us/us/${zip}`)
+      .then(r => r.json())
+      .then(data => {
+        const city = data.places[0]['place name'];
+        document.getElementById('zip').value  = zip;
+        document.getElementById('city').value = city;
+        document.getElementById('quote').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => document.getElementById('firstName').focus(), 650);
+      })
+      .catch(() => {
+        document.getElementById('heroZipCity').textContent = '❌ ZIP not found';
+      });
+  } else {
+    document.getElementById('heroZip').focus();
+  }
+}
+// Allow Enter key on hero ZIP input
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('heroZip');
+  if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') heroZipGo(); });
+});
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 renderCities();
