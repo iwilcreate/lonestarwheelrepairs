@@ -110,7 +110,7 @@
     [data-theme="light"] .hero-badge-card-2 .badge-lbl { color: rgba(13,22,40,.5); }
 
     /* Texas map */
-    [data-theme="light"] .map-glow { background: radial-gradient(circle, rgba(37,99,235,.08) 0%, transparent 65%); }
+    [data-theme="light"] .map-glow { background: radial-gradient(circle, rgba(37,99,235,.07) 0%, transparent 65%); width: 900px; height: 900px; }
     [data-theme="light"] .texas-svg { filter: drop-shadow(0 4px 16px rgba(13,22,40,.1)); }
     [data-theme="light"] .texas-svg path {
       fill: rgba(37,99,235,.09);
@@ -393,7 +393,7 @@
     .hero-inner {
       position: relative; z-index: 1;
       max-width: 1200px; margin: 0 auto; width: 100%;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+      display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 3rem; align-items: center;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: .45rem;
@@ -488,11 +488,11 @@
       position: relative;
     }
     .map-glow {
-      position: absolute; width: 520px; height: 520px; border-radius: 50%;
+      position: absolute; width: 800px; height: 800px; border-radius: 50%;
       background: radial-gradient(circle, rgba(59,130,246,.2) 0%, transparent 65%);
       pointer-events: none;
     }
-    .map-wrap { position: relative; z-index: 1; width: 100%; max-width: 480px; }
+    .map-wrap { position: relative; z-index: 1; width: 100%; max-width: 100%; margin-top: -2.5rem; }
     .texas-svg {
       width: 100%; height: auto;
       filter: drop-shadow(0 0 28px rgba(255,255,255,.08));
@@ -1328,7 +1328,7 @@
         </div>
 
         <!-- Real Texas SVG — US Census / Albers USA projection 960×593 -->
-        <svg class="texas-svg" viewBox="278 318 264 258" xmlns="http://www.w3.org/2000/svg">
+        <svg class="texas-svg" viewBox="278 325 264 270" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <filter id="dotGlow" x="-80%" y="-80%" width="260%" height="260%">
               <feGaussianBlur stdDeviation="1.8" result="blur"/>
