@@ -206,11 +206,23 @@
     [data-theme="light"] .pricing-feature  { color: rgba(13,22,40,.55); }
 
     /* Footer */
-    [data-theme="light"] footer            { background: #eef0f8; border-top-color: rgba(13,22,40,.08); }
-    [data-theme="light"] .footer-bottom    { border-top-color: rgba(13,22,40,.08); color: rgba(13,22,40,.45); }
-    [data-theme="light"] .footer-heading   { color: #0d1628; }
-    [data-theme="light"] .footer-link      { color: rgba(13,22,40,.55); }
-    [data-theme="light"] .footer-link:hover { color: var(--red); }
+    [data-theme="light"] #footer {
+      background: #f0f3fa;
+      border-top: 1px solid rgba(13,22,40,.1);
+    }
+    [data-theme="light"] .footer-brand-desc   { color: rgba(13,22,40,.55); }
+    [data-theme="light"] .footer-contact      { color: rgba(13,22,40,.55); }
+    [data-theme="light"] .footer-contact a    { color: rgba(13,22,40,.65); }
+    [data-theme="light"] .footer-contact a:hover { color: var(--red); }
+    [data-theme="light"] .footer-col h4       { color: #0d1628; }
+    [data-theme="light"] .footer-col ul a     { color: rgba(13,22,40,.58); }
+    [data-theme="light"] .footer-col ul a:hover { color: var(--red); }
+    [data-theme="light"] .footer-bottom {
+      border-top-color: rgba(13,22,40,.1);
+      color: rgba(13,22,40,.45);
+    }
+    [data-theme="light"] .footer-legal a      { color: rgba(13,22,40,.5); }
+    [data-theme="light"] .footer-legal a:hover { color: var(--red); }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
