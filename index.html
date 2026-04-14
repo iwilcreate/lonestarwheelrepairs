@@ -445,7 +445,7 @@
     .hero-zip-input {
       flex: 1; background: transparent; border: none; outline: none;
       color: var(--white); font-size: 1rem; font-weight: 500;
-      font-family: inherit; padding: 1rem 0; min-width: 0;
+      font-family: inherit; padding: 1.05rem 0; min-width: 0;
     }
     .hero-zip-input::placeholder { color: var(--w45); }
     .hero-zip-city {
@@ -993,23 +993,92 @@
     }
 
     /* ── Responsive ──────────────────────────────────────── */
+    /* ── Tablet (≤ 900px) ───────────────────────────────── */
     @media (max-width: 900px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-right { display: none; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-      .steps { grid-template-columns: 1fr; }
-      .services-grid, .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-inner            { grid-template-columns: 1fr; }
+      .hero-right            { display: none; }
+      .footer-top            { grid-template-columns: 1fr 1fr; }
+      .steps                 { grid-template-columns: 1fr; }
+      .services-grid         { grid-template-columns: repeat(2, 1fr); }
+      .why-grid              { grid-template-columns: repeat(2, 1fr); }
     }
+
+    /* ── Mobile (≤ 680px) ───────────────────────────────── */
     @media (max-width: 680px) {
-      .form-row, .form-row.three { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
-      .footer-top { grid-template-columns: 1fr; }
-      section { padding: 4rem 1.25rem; }
-      .services-grid, .why-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero-stat { padding-right: 1.25rem; margin-right: 1.25rem; }
+      /* Nav */
+      .nav-links             { display: none; }
+      .nav-inner             { padding: 0 1.25rem; height: 62px; }
+      .lang-toggle           { display: none; }
+
+      /* Sections */
+      section                { padding: 3.5rem 1.25rem; }
+      .section-title         { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+
+      /* Hero */
+      #hero {
+        min-height: 100svh;
+        padding: 90px 1.25rem 3.5rem;
+        text-align: center;
+      }
+      .hero-left             { display: flex; flex-direction: column; align-items: center; }
+      .hero-badge            { font-size: .65rem; }
+      .hero-headline {
+        font-size: clamp(3rem, 14vw, 4.5rem);
+        margin-bottom: 1.25rem;
+      }
+      .hero-sub              { font-size: .92rem; }
+      .hero-desc             { font-size: .84rem; margin-bottom: 1.75rem; max-width: 100%; text-align: center; }
+
+      /* ZIP Bar — prominent on mobile */
+      .hero-zip-bar {
+        max-width: 100%;
+        border-radius: 16px;
+        box-shadow: 0 6px 32px rgba(0,0,0,.4);
+        margin-bottom: .6rem;
+      }
+      .hero-zip-input-wrap   { padding: 0 1rem; }
+      .hero-zip-input        { font-size: 1.05rem; padding: 1.1rem 0; }
+      .hero-zip-btn {
+        padding: 0 1.35rem;
+        font-size: .92rem;
+        min-width: 130px;
+      }
+      .hero-zip-hint         { font-size: .7rem; text-align: center; }
+
+      /* Stats row */
+      .hero-stats {
+        justify-content: center;
+        gap: 0;
+        flex-wrap: nowrap;
+        margin-top: 1.5rem;
+      }
+      .hero-stat {
+        padding-right: 1rem;
+        margin-right: 1rem;
+        text-align: center;
+      }
+      .hero-stat-num         { font-size: 1.25rem; }
+      .hero-stat-lbl         { font-size: .62rem; }
+
+      /* CTA */
+      .hero-ctas             { justify-content: center; }
+
+      /* Forms */
+      .form-row,
+      .form-row.three        { grid-template-columns: 1fr; }
+
+      /* Footer */
+      .footer-top            { grid-template-columns: 1fr; gap: 2rem; }
     }
+
+    /* ── Small Mobile (≤ 420px) ─────────────────────────── */
     @media (max-width: 420px) {
-      .services-grid, .why-grid { grid-template-columns: 1fr; }
+      .hero-headline         { font-size: clamp(2.6rem, 13vw, 3.5rem); }
+      .services-grid,
+      .why-grid              { grid-template-columns: 1fr; }
+      .hero-zip-btn          { min-width: 110px; font-size: .82rem; padding: 0 1rem; }
+      .hero-stats            { flex-wrap: wrap; justify-content: center; gap: .5rem; }
+      .hero-stat             { border-right: none !important; margin-right: 0; padding-right: 0; }
     }
   </style>
 </head>
