@@ -689,6 +689,27 @@
     .photo-drop-icon { font-size: 2rem; margin-bottom: .5rem; opacity: .7; }
     .photo-drop-text { font-size: .82rem; color: var(--w45); line-height: 1.6; }
     .photo-drop-text strong { color: var(--w70); font-weight: 600; }
+    /* Desktop only — mobile swapped for buttons */
+    .photo-drop-desktop { display: block; }
+    /* Mobile tap buttons — hidden on desktop */
+    .photo-mobile-btns {
+      display: none;
+    }
+    .photo-mobile-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .45rem; padding: 1.25rem .75rem;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius); cursor: pointer;
+      color: var(--w70); font-family: inherit; font-weight: 600; font-size: .88rem;
+      min-height: 90px; transition: var(--transition); width: 100%;
+    }
+    .photo-mobile-btn:active { background: var(--blue-dim); border-color: var(--blue-glow); transform: scale(.97); }
+    .photo-btn-icon { font-size: 1.75rem; line-height: 1; }
+    .photo-count-badge {
+      display: none; font-size: .75rem; color: var(--w45); margin-top: .6rem;
+      text-align: center; font-weight: 500;
+    }
+    .photo-count-badge.has-photos { color: var(--blue-glow); font-weight: 700; }
     .photo-previews { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
     .photo-thumb {
       position: relative; width: 72px; height: 72px;
@@ -1137,7 +1158,15 @@
       .form-row,
       .form-row.three    { grid-template-columns: 1fr; }
       .form-section-title { font-size: .62rem; margin-top: 1.25rem; }
-      .photo-drop        { padding: 1.25rem 1rem; }
+      /* Photo upload — mobile overhaul */
+      .photo-drop        { padding: 1rem; cursor: default; border-radius: var(--radius); }
+      .photo-drop:hover  { background: var(--surface); border-color: var(--border-h);
+                           box-shadow: none; }
+      .photo-drop-desktop { display: none; }
+      .photo-mobile-btns  { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+      .photo-count-badge  { display: block; }
+      .photo-thumb        { width: 90px; height: 90px; }
+      .photo-thumb button { width: 26px; height: 26px; font-size: .75rem; top: -5px; right: -5px; }
 
       /* ── Shop Form ── */
       .shop-form-card    { padding: 1.75rem 1.15rem; border-radius: var(--radius-lg); }
@@ -1543,15 +1572,31 @@
           <div class="form-row full">
             <div class="form-group">
               <div class="photo-drop" id="photoDrop">
-                <div class="photo-drop-icon">📷</div>
-                <div class="photo-drop-text">
-                  <strong data-en="Click to upload or drag & drop" data-es="Haz clic o arrastra">Click to upload or drag &amp; drop</strong><br>
-                  <span data-en="JPG, PNG, HEIC · up to 10MB · max 6 photos · at least 1 required" data-es="JPG, PNG, HEIC · máx 10MB · 6 fotos · mínimo 1 requerida">JPG, PNG, HEIC · up to 10MB · max 6 photos · at least 1 required</span>
+                <!-- Desktop: drag & drop zone -->
+                <div class="photo-drop-desktop">
+                  <div class="photo-drop-icon">📷</div>
+                  <div class="photo-drop-text">
+                    <strong data-en="Click to upload or drag & drop" data-es="Haz clic o arrastra">Click to upload or drag &amp; drop</strong><br>
+                    <span data-en="JPG, PNG, HEIC · up to 10MB · max 6 photos · at least 1 required" data-es="JPG, PNG, HEIC · máx 10MB · 6 fotos · mínimo 1 requerida">JPG, PNG, HEIC · up to 10MB · max 6 photos · at least 1 required</span>
+                  </div>
                 </div>
+                <!-- Mobile: two large tap buttons -->
+                <div class="photo-mobile-btns">
+                  <button type="button" class="photo-mobile-btn" onclick="document.getElementById('photoCameraInput').click()">
+                    <span class="photo-btn-icon">📸</span>
+                    <span data-en="Take Photo" data-es="Tomar Foto">Take Photo</span>
+                  </button>
+                  <button type="button" class="photo-mobile-btn" onclick="document.getElementById('photoInput').click()">
+                    <span class="photo-btn-icon">🖼️</span>
+                    <span data-en="Choose from Gallery" data-es="Elegir de Galería">Choose from Gallery</span>
+                  </button>
+                </div>
+                <div class="photo-count-badge" id="photoCountBadge" data-en="0 / 6 photos added" data-es="0 / 6 fotos añadidas">0 / 6 photos added</div>
                 <div class="photo-previews" id="photoPreviews"></div>
               </div>
               <div class="field-error" id="err-photos"></div>
               <input type="file" id="photoInput" accept="image/jpeg,image/png,image/heic,image/heif" multiple/>
+              <input type="file" id="photoCameraInput" accept="image/*" capture="environment"/>
             </div>
           </div>
 
@@ -2207,13 +2252,19 @@ document.getElementById('vehicleMake').addEventListener('change', e => {
 
 // ── Photo Upload ──────────────────────────────────────────────────────────────
 let uploadedPhotos = [];
-const photoDrop  = document.getElementById('photoDrop');
-const photoInput = document.getElementById('photoInput');
-photoDrop.addEventListener('click', () => photoInput.click());
+const photoDrop    = document.getElementById('photoDrop');
+const photoInput   = document.getElementById('photoInput');
+const photoCamInput = document.getElementById('photoCameraInput');
+// Desktop: click anywhere on drop zone opens gallery picker
+photoDrop.addEventListener('click', e => {
+  if (window.innerWidth > 680 && !e.target.closest('button') && !e.target.closest('.photo-thumb'))
+    photoInput.click();
+});
 photoDrop.addEventListener('dragover',  e => { e.preventDefault(); photoDrop.classList.add('drag-over'); });
 photoDrop.addEventListener('dragleave', () => photoDrop.classList.remove('drag-over'));
 photoDrop.addEventListener('drop', e => { e.preventDefault(); photoDrop.classList.remove('drag-over'); handleFiles(Array.from(e.dataTransfer.files)); });
 photoInput.addEventListener('change', () => handleFiles(Array.from(photoInput.files)));
+photoCamInput.addEventListener('change', () => handleFiles(Array.from(photoCamInput.files)));
 function handleFiles(files) {
   files.forEach(file => {
     if (uploadedPhotos.length >= 6) return;
@@ -2234,6 +2285,17 @@ function renderPreviews() {
     thumb.innerHTML = `<img src="${photo.url}" alt="Photo ${i+1}"><button type="button" onclick="removePhoto(${i})">✕</button>`;
     container.appendChild(thumb);
   });
+  // Update count badge
+  const badge = document.getElementById('photoCountBadge');
+  if (badge) {
+    const n = uploadedPhotos.length;
+    const enText = n === 0 ? '0 / 6 photos added' : `${n} / 6 photo${n > 1 ? 's' : ''} added`;
+    const esText = n === 0 ? '0 / 6 fotos añadidas' : `${n} / 6 foto${n > 1 ? 's' : ''} añadida${n > 1 ? 's' : ''}`;
+    badge.setAttribute('data-en', enText);
+    badge.setAttribute('data-es', esText);
+    badge.textContent = currentLang === 'es' ? esText : enText;
+    badge.classList.toggle('has-photos', n > 0);
+  }
   // Clear error state once a photo is added
   if (uploadedPhotos.length > 0) {
     const drop = document.getElementById('photoDrop');
