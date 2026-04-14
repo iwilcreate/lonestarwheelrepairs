@@ -1066,7 +1066,7 @@
             </div>
             <div class="form-group">
               <label><span data-en="Phone Number" data-es="Teléfono">Phone Number</span><span class="req">*</span></label>
-              <input type="tel" id="phone" placeholder="(512) 555-0100" autocomplete="tel" inputmode="numeric" onkeydown="return restrictPhone(event)" oninput="this.value=this.value.replace(/[^\d\s\(\)\-\+]/g,'')" onblur="validatePhoneField('phone','err-phone')"/>
+              <input type="tel" id="phone" placeholder="(512) 555-0100" autocomplete="tel" inputmode="numeric" maxlength="14" onkeydown="return restrictPhone(event)" oninput="formatPhone(this)" onblur="validatePhoneField('phone','err-phone')"/>
               <div class="field-error" id="err-phone"></div>
             </div>
           </div>
@@ -1152,17 +1152,18 @@
             </div>
           </div>
 
-          <div class="form-section-title" data-en="PHOTOS (OPTIONAL)" data-es="FOTOS (OPCIONAL)">PHOTOS (OPTIONAL)</div>
+          <div class="form-section-title" data-en="PHOTOS OF DAMAGE*" data-es="FOTOS DEL DAÑO*">PHOTOS OF DAMAGE<span class="req">*</span></div>
           <div class="form-row full">
             <div class="form-group">
               <div class="photo-drop" id="photoDrop">
                 <div class="photo-drop-icon">📷</div>
                 <div class="photo-drop-text">
                   <strong data-en="Click to upload or drag & drop" data-es="Haz clic o arrastra">Click to upload or drag &amp; drop</strong><br>
-                  <span data-en="JPG, PNG, HEIC · up to 10MB · max 6 photos" data-es="JPG, PNG, HEIC · máx 10MB · 6 fotos">JPG, PNG, HEIC · up to 10MB · max 6 photos</span>
+                  <span data-en="JPG, PNG, HEIC · up to 10MB · max 6 photos · at least 1 required" data-es="JPG, PNG, HEIC · máx 10MB · 6 fotos · mínimo 1 requerida">JPG, PNG, HEIC · up to 10MB · max 6 photos · at least 1 required</span>
                 </div>
                 <div class="photo-previews" id="photoPreviews"></div>
               </div>
+              <div class="field-error" id="err-photos"></div>
               <input type="file" id="photoInput" accept="image/jpeg,image/png,image/heic,image/heif" multiple/>
             </div>
           </div>
@@ -1716,9 +1717,18 @@ function restrictPhone(e) {
   const allowed = [8,9,13,27,46,37,38,39,40,35,36];
   if (allowed.includes(e.keyCode)) return true;
   if ((e.ctrlKey||e.metaKey) && [65,67,86,88].includes(e.keyCode)) return true;
-  // Allow digits and phone formatting characters: + ( ) - space
-  if (e.key && e.key.length === 1 && !/[\d\+\(\)\-\s]/.test(e.key)) { e.preventDefault(); return false; }
+  if (e.key && e.key.length === 1 && !/[\d]/.test(e.key)) { e.preventDefault(); return false; }
+  // Block input once 10 digits are already entered
+  const digits = e.target.value.replace(/\D/g,'');
+  if (digits.length >= 10 && e.key && /\d/.test(e.key)) { e.preventDefault(); return false; }
   return true;
+}
+function formatPhone(input) {
+  const digits = input.value.replace(/\D/g,'').slice(0, 10);
+  if (digits.length === 0)       input.value = '';
+  else if (digits.length <= 3)   input.value = '(' + digits;
+  else if (digits.length <= 6)   input.value = '(' + digits.slice(0,3) + ') ' + digits.slice(3);
+  else                           input.value = '(' + digits.slice(0,3) + ') ' + digits.slice(3,6) + '-' + digits.slice(6);
 }
 async function loadModels(year, make) {
   const modelSel = document.getElementById('vehicleModel');
@@ -1777,6 +1787,13 @@ function renderPreviews() {
     thumb.innerHTML = `<img src="${photo.url}" alt="Photo ${i+1}"><button type="button" onclick="removePhoto(${i})">✕</button>`;
     container.appendChild(thumb);
   });
+  // Clear error state once a photo is added
+  if (uploadedPhotos.length > 0) {
+    const drop = document.getElementById('photoDrop');
+    const err  = document.getElementById('err-photos');
+    if (drop) drop.classList.remove('error');
+    if (err)  err.textContent = '';
+  }
 }
 function removePhoto(i) { uploadedPhotos.splice(i, 1); renderPreviews(); }
 
@@ -1826,6 +1843,13 @@ function validateQuoteForm() {
   if (!mo)                                               { showError('vehicleModel','model','Select model','Selecciona modelo'); v=false; }
   if (!wh)                                               { showError('wheelCount','wheels','Select wheel count','Selecciona cantidad'); v=false; }
   if (!rt)                                               { showError('repairType','repairType','Select repair type','Selecciona tipo'); v=false; }
+  if (uploadedPhotos.length === 0) {
+    const photoEl = document.getElementById('photoDrop');
+    const photoErr = document.getElementById('err-photos');
+    if (photoEl)  photoEl.classList.add('error');
+    if (photoErr) photoErr.textContent = currentLang === 'es' ? 'Se requiere al menos 1 foto del daño' : 'At least 1 photo of the damage is required';
+    v = false;
+  }
   return v;
 }
 
