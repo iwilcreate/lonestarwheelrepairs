@@ -993,92 +993,167 @@
     }
 
     /* ── Responsive ──────────────────────────────────────── */
+    /* ── Hamburger Menu ─────────────────────────────────── */
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center;
+      gap: 5px; width: 38px; height: 38px;
+      background: var(--w06); border: 1px solid var(--border);
+      border-radius: 9px; cursor: pointer; padding: 9px 8px;
+      transition: var(--transition); flex-shrink: 0;
+    }
+    .hamburger:hover { background: var(--surface-h); }
+    .hamburger span {
+      display: block; width: 100%; height: 2px;
+      background: var(--w70); border-radius: 2px;
+      transition: var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    #mobileNav {
+      display: none; position: fixed;
+      top: 62px; left: 0; right: 0; z-index: 198;
+      background: rgba(8,12,26,.97);
+      backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.25rem 1.5rem;
+      flex-direction: column; gap: .2rem;
+      transform: translateY(-110%);
+      transition: transform .32s cubic-bezier(.4,0,.2,1);
+    }
+    [data-theme="light"] #mobileNav {
+      background: rgba(255,255,255,.97);
+    }
+    #mobileNav.open { transform: translateY(0); }
+    .mobile-nav-link {
+      display: block; padding: .9rem 1rem;
+      color: var(--w70); text-decoration: none;
+      font-size: .98rem; font-weight: 600;
+      border-radius: 10px; transition: var(--transition);
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-nav-link:last-of-type { border-bottom: none; }
+    .mobile-nav-link:hover,
+    .mobile-nav-link:active { background: var(--w06); color: var(--white); }
+    .mobile-nav-actions {
+      display: flex; gap: .75rem; margin-top: 1rem;
+      padding-top: 1rem; border-top: 1px solid var(--border);
+      align-items: center;
+    }
+    .mobile-nav-actions .btn { flex: 1; justify-content: center; padding: .85rem; font-size: .92rem; }
+    .mobile-nav-controls {
+      display: flex; gap: .6rem; align-items: center;
+    }
+
+    /* Body scroll lock when nav open */
+    body.nav-open { overflow: hidden; }
+
     /* ── Tablet (≤ 900px) ───────────────────────────────── */
     @media (max-width: 900px) {
-      .hero-inner            { grid-template-columns: 1fr; }
-      .hero-right            { display: none; }
-      .footer-top            { grid-template-columns: 1fr 1fr; }
-      .steps                 { grid-template-columns: 1fr; }
-      .services-grid         { grid-template-columns: repeat(2, 1fr); }
-      .why-grid              { grid-template-columns: repeat(2, 1fr); }
+      .hero-inner        { grid-template-columns: 1fr; }
+      .hero-right        { display: none; }
+      .footer-top        { grid-template-columns: 1fr 1fr; }
+      .steps             { grid-template-columns: 1fr 1fr; gap: 1px; }
+      .services-grid     { grid-template-columns: repeat(2, 1fr); }
+      .why-grid          { grid-template-columns: repeat(2, 1fr); }
+      .regions-layout    { grid-template-columns: 1fr 1fr; }
     }
 
     /* ── Mobile (≤ 680px) ───────────────────────────────── */
     @media (max-width: 680px) {
-      /* Nav */
-      .nav-links             { display: none; }
-      .nav-inner             { padding: 0 1.25rem; height: 62px; }
-      .lang-toggle           { display: none; }
 
-      /* Sections */
-      section                { padding: 3.5rem 1.25rem; }
-      .section-title         { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+      /* ── Nav ── */
+      .nav-links         { display: none; }
+      .nav-inner         { padding: 0 1.25rem; height: 62px; gap: .75rem; }
+      .lang-toggle       { display: none; }
+      .hamburger         { display: flex; }
+      #mobileNav         { display: flex; }
+      /* shrink nav CTA on mobile */
+      .nav-right .btn-red { display: none; }
+      .theme-toggle      { width: 32px; height: 32px; }
 
-      /* Hero */
-      #hero {
-        min-height: 100svh;
-        padding: 90px 1.25rem 3.5rem;
-        text-align: center;
-      }
-      .hero-left             { display: flex; flex-direction: column; align-items: center; }
-      .hero-badge            { font-size: .65rem; }
-      .hero-headline {
-        font-size: clamp(3rem, 14vw, 4.5rem);
-        margin-bottom: 1.25rem;
-      }
-      .hero-sub              { font-size: .92rem; }
-      .hero-desc             { font-size: .84rem; margin-bottom: 1.75rem; max-width: 100%; text-align: center; }
+      /* ── Sections ── */
+      section            { padding: 3rem 1.15rem; }
+      .section-head      { margin-bottom: 0; }
+      .section-title     { font-size: clamp(1.55rem, 7vw, 2rem); }
+      .section-sub       { font-size: .88rem; }
+      .inner             { padding-left: 1.15rem; padding-right: 1.15rem; }
 
-      /* ZIP Bar — prominent on mobile */
-      .hero-zip-bar {
-        max-width: 100%;
-        border-radius: 16px;
-        box-shadow: 0 6px 32px rgba(0,0,0,.4);
-        margin-bottom: .6rem;
-      }
-      .hero-zip-input-wrap   { padding: 0 1rem; }
-      .hero-zip-input        { font-size: 1.05rem; padding: 1.1rem 0; }
-      .hero-zip-btn {
-        padding: 0 1.35rem;
-        font-size: .92rem;
-        min-width: 130px;
-      }
-      .hero-zip-hint         { font-size: .7rem; text-align: center; }
+      /* ── Hero ── */
+      #hero              { min-height: 100svh; padding: 86px 1.15rem 3rem; text-align: center; }
+      .hero-left         { display: flex; flex-direction: column; align-items: center; }
+      .hero-badge        { font-size: .65rem; margin-bottom: 1.25rem; }
+      .hero-headline     { font-size: clamp(2.8rem, 13vw, 4.2rem); margin-bottom: 1rem; }
+      .hero-sub          { font-size: .9rem; }
+      .hero-desc         { font-size: .83rem; margin-bottom: 1.5rem; max-width: 100%; }
+      .hero-ctas         { justify-content: center; flex-wrap: wrap; }
+      .hero-ctas .btn    { flex: 1; min-width: 140px; justify-content: center; }
 
-      /* Stats row */
-      .hero-stats {
-        justify-content: center;
-        gap: 0;
-        flex-wrap: nowrap;
-        margin-top: 1.5rem;
-      }
-      .hero-stat {
-        padding-right: 1rem;
-        margin-right: 1rem;
-        text-align: center;
-      }
-      .hero-stat-num         { font-size: 1.25rem; }
-      .hero-stat-lbl         { font-size: .62rem; }
+      /* ZIP bar — full-width prominent */
+      .hero-zip-bar      { max-width: 100%; border-radius: 14px; margin-bottom: .5rem; box-shadow: 0 8px 36px rgba(0,0,0,.45); }
+      .hero-zip-input    { font-size: 1rem; padding: 1.05rem 0; }
+      .hero-zip-btn      { padding: 0 1.1rem; font-size: .88rem; min-width: 120px; }
+      .hero-zip-hint     { font-size: .68rem; text-align: center; }
 
-      /* CTA */
-      .hero-ctas             { justify-content: center; }
+      /* Stats */
+      .hero-stats        { justify-content: center; flex-wrap: wrap; gap: .25rem; padding-top: 1.5rem; margin-top: 1.5rem; }
+      .hero-stat         { padding: 0 1rem; margin: 0; text-align: center; flex: 1; min-width: 70px; }
+      .hero-stat-num     { font-size: 1.2rem; }
+      .hero-stat-lbl     { font-size: .6rem; }
 
-      /* Forms */
+      /* ── How It Works ── */
+      .steps             { grid-template-columns: 1fr; gap: 1px; border-radius: var(--radius-lg); }
+      .step              { padding: 1.75rem 1.25rem; text-align: center; }
+      .step-num          { margin: 0 auto 1rem; }
+
+      /* ── Services & Why ── */
+      .services-grid     { grid-template-columns: repeat(2, 1fr); gap: .85rem; }
+      .why-grid          { grid-template-columns: repeat(2, 1fr); gap: .85rem; }
+      .service-card      { padding: 1.5rem 1rem; }
+      .why-card          { padding: 1.5rem 1rem; }
+
+      /* ── Cities ── */
+      .regions-layout    { grid-template-columns: 1fr; gap: 1.5rem; }
+      .city-pill         { padding: .35rem .75rem; font-size: .78rem; }
+
+      /* ── Testimonials ── */
+      #testimonials .section-head + div,
+      .testimonials-wrap { flex-direction: column; align-items: stretch; }
+      .testimonial-card  { max-width: 100%; flex: none; }
+
+      /* ── Pricing ── */
+      .pricing-wrap      { flex-direction: column; align-items: stretch; gap: .85rem; }
+      .pricing-card      { max-width: 100%; }
+      .pricing-card.featured { transform: none; }
+
+      /* ── Quote Form ── */
+      .quote-card        { padding: 1.75rem 1.15rem; border-radius: var(--radius-lg); }
       .form-row,
-      .form-row.three        { grid-template-columns: 1fr; }
+      .form-row.three    { grid-template-columns: 1fr; }
+      .form-section-title { font-size: .62rem; margin-top: 1.25rem; }
+      .photo-drop        { padding: 1.25rem 1rem; }
 
-      /* Footer */
-      .footer-top            { grid-template-columns: 1fr; gap: 2rem; }
+      /* ── Shop Form ── */
+      .shop-form-card    { padding: 1.75rem 1.15rem; border-radius: var(--radius-lg); }
+
+      /* ── Footer ── */
+      .footer-top        { grid-template-columns: 1fr; gap: 1.75rem; }
+      #footer            { padding: 3rem 1.25rem 2rem; }
+      .footer-bottom     { flex-direction: column; text-align: center; gap: .5rem; }
+      .footer-legal      { margin-left: 0; display: flex; gap: 1rem; justify-content: center; }
+      .footer-legal a    { margin-left: 0; }
     }
 
     /* ── Small Mobile (≤ 420px) ─────────────────────────── */
     @media (max-width: 420px) {
-      .hero-headline         { font-size: clamp(2.6rem, 13vw, 3.5rem); }
+      .hero-headline     { font-size: clamp(2.4rem, 12.5vw, 3rem); }
       .services-grid,
-      .why-grid              { grid-template-columns: 1fr; }
-      .hero-zip-btn          { min-width: 110px; font-size: .82rem; padding: 0 1rem; }
-      .hero-stats            { flex-wrap: wrap; justify-content: center; gap: .5rem; }
-      .hero-stat             { border-right: none !important; margin-right: 0; padding-right: 0; }
+      .why-grid          { grid-template-columns: 1fr; gap: .75rem; }
+      .hero-zip-btn      { min-width: 100px; font-size: .8rem; }
+      .hero-stat         { border-right: none !important; }
+      .pricing-card      { padding: 1.5rem 1rem; }
     }
   </style>
 </head>
@@ -1118,11 +1193,9 @@
         <button class="lang-btn"        id="btnES" onclick="setLang('es')">ES</button>
       </div>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">
-        <!-- Moon: shown in dark mode -->
         <svg class="theme-icon-moon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
-        <!-- Sun: shown in light mode -->
         <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <circle cx="12" cy="12" r="5"/>
           <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -1133,9 +1206,35 @@
       </button>
       <a href="#quote" class="btn btn-red" style="padding:.45rem 1.1rem;font-size:.8rem;"
          data-en="Get Free Quotes" data-es="Cotizar Gratis">Get Free Quotes</a>
+      <!-- Hamburger — mobile only -->
+      <button class="hamburger" id="hamburger" aria-label="Open menu" onclick="toggleMobileNav()">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<!-- ═══════════════════════════════════════════════════ MOBILE NAV -->
+<div id="mobileNav" role="dialog" aria-label="Mobile navigation">
+  <a class="mobile-nav-link" href="#how-it-works" data-en="How It Works"  data-es="Cómo Funciona" onclick="closeMobileNav()">How It Works</a>
+  <a class="mobile-nav-link" href="#cities"       data-en="Cities"        data-es="Ciudades"       onclick="closeMobileNav()">Cities</a>
+  <a class="mobile-nav-link" href="#services"     data-en="Services"      data-es="Servicios"      onclick="closeMobileNav()">Services</a>
+  <a class="mobile-nav-link" href="#pricing"      data-en="For Shops"     data-es="Para Talleres"  onclick="closeMobileNav()">For Shops</a>
+  <div class="mobile-nav-actions">
+    <a href="#quote" class="btn btn-red" onclick="closeMobileNav()"
+       data-en="Get Free Quotes →" data-es="Cotizar Gratis →">Get Free Quotes →</a>
+    <div class="mobile-nav-controls">
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('en');closeMobileNav()">EN</button>
+        <button class="lang-btn"        onclick="setLang('es');closeMobileNav()">ES</button>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════ HERO -->
 <section id="hero">
@@ -1875,6 +1974,34 @@ const TEXAS_CITIES = {
 };
 
 // ── Theme Toggle ──────────────────────────────────────────────────────────────
+// ── Mobile Nav ────────────────────────────────────────────────────────────────
+function toggleMobileNav() {
+  const nav  = document.getElementById('mobileNav');
+  const btn  = document.getElementById('hamburger');
+  const open = nav.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  document.body.classList.toggle('nav-open', open);
+  btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+}
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.classList.remove('nav-open');
+}
+// Close on outside tap
+document.addEventListener('click', e => {
+  const nav = document.getElementById('mobileNav');
+  if (nav.classList.contains('open') &&
+      !nav.contains(e.target) &&
+      !document.getElementById('hamburger').contains(e.target)) {
+    closeMobileNav();
+  }
+});
+// Close on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeMobileNav();
+});
+
 function toggleTheme() {
   const html    = document.documentElement;
   const isLight = html.getAttribute('data-theme') === 'light';
