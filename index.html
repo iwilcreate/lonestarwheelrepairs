@@ -227,7 +227,7 @@
     [data-theme="light"] #footer .footer-legal a:hover   { color: #ffffff; }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
       background: var(--bg);
@@ -1000,6 +1000,8 @@
       background: var(--w06); border: 1px solid var(--border);
       border-radius: 9px; cursor: pointer; padding: 9px 8px;
       transition: var(--transition); flex-shrink: 0;
+      font-size: 0; line-height: 0;
+      -webkit-appearance: none; appearance: none;
     }
     .hamburger:hover { background: var(--surface-h); }
     .hamburger span {
@@ -1066,13 +1068,15 @@
 
       /* ── Nav ── */
       .nav-links         { display: none; }
-      .nav-inner         { padding: 0 1.25rem; height: 62px; gap: .75rem; }
-      .lang-toggle       { display: none; }
+      .nav-inner         { padding: 0 1.25rem; height: 62px; gap: .5rem; width: 100%; }
+      .nav-logo-text     { font-size: .7rem; }
+      .nav-right .lang-toggle { display: none; }
       .hamburger         { display: flex; }
       #mobileNav         { display: flex; }
       /* shrink nav CTA on mobile */
       .nav-right .btn-red { display: none; }
       .theme-toggle      { width: 32px; height: 32px; }
+      .nav-right         { gap: .5rem; }
 
       /* ── Sections ── */
       section            { padding: 3rem 1.15rem; }
@@ -2020,8 +2024,11 @@ let currentLang = 'en';
 function setLang(lang) {
   currentLang = lang;
   document.documentElement.lang = lang;
-  document.getElementById('btnEN').classList.toggle('active', lang === 'en');
-  document.getElementById('btnES').classList.toggle('active', lang === 'es');
+  // Update ALL lang buttons (nav bar + mobile drawer)
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    const btnLang = btn.textContent.trim().toLowerCase();
+    btn.classList.toggle('active', btnLang === lang);
+  });
   document.querySelectorAll('[data-en]').forEach(el => {
     const text = el.getAttribute('data-' + lang);
     if (text !== null) {
