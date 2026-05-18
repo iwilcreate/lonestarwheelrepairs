@@ -7,518 +7,1203 @@
   <meta name="description" content="Get fast quotes from verified wheel repair shops across Texas. Submit one request, hear from up to 5 local shops within 60 minutes." />
   <!-- GA4 placeholder: replace G-XXXXXXXXXX before launch -->
   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     /* ── Tokens ──────────────────────────────────────────── */
     :root {
-      --bg:       #06091a;
-      --bg2:      #0c1228;
-      --bg3:      #101830;
-      --red:      #e63030;
-      --red-h:    #ff3c3c;
-      --blue:     #2563eb;
-      --blue-glow:#3b82f6;
-      --gold:     #f59e0b;
-      --white:    #ffffff;
-      --w80:      rgba(255,255,255,.80);
-      --w55:      rgba(255,255,255,.55);
-      --w20:      rgba(255,255,255,.20);
-      --w10:      rgba(255,255,255,.10);
-      --w06:      rgba(255,255,255,.06);
-      --radius:   10px;
-      --gray-border: rgba(255,255,255,.12);
+      --bg:          #141c2e;
+      --bg2:         #1a2540;
+      --bg3:         #1f2d4d;
+      --surface:     rgba(255,255,255,.07);
+      --surface-h:   rgba(255,255,255,.12);
+      --red:         #e63030;
+      --red-h:       #ff4444;
+      --red-dim:     rgba(230,48,48,.18);
+      --red-glow:    rgba(230,48,48,.30);
+      --blue:        #2563eb;
+      --blue-glow:   #3b82f6;
+      --blue-dim:    rgba(59,130,246,.15);
+      --gold:        #f59e0b;
+      --white:       #ffffff;
+      --w90:         rgba(255,255,255,.92);
+      --w70:         rgba(255,255,255,.78);
+      --w45:         rgba(255,255,255,.58);
+      --w20:         rgba(255,255,255,.22);
+      --w10:         rgba(255,255,255,.12);
+      --w06:         rgba(255,255,255,.08);
+      --border:      rgba(255,255,255,.13);
+      --border-h:    rgba(255,255,255,.24);
+      --radius-sm:   8px;
+      --radius:      12px;
+      --radius-lg:   18px;
+      --radius-xl:   24px;
+      --ease:        cubic-bezier(.4,0,.2,1);
+      --transition:  .25s var(--ease);
     }
+
+    /* ── Light Mode Theme ───────────────────────────────── */
+    [data-theme="light"] {
+      --bg:        #ffffff;
+      --bg2:       #f5f7fc;
+      --bg3:       #eaecf5;
+      --surface:   rgba(0,0,0,.04);
+      --surface-h: rgba(0,0,0,.08);
+      --white:     #0d1628;
+      --w90:       rgba(13,22,40,.92);
+      --w70:       rgba(13,22,40,.75);
+      --w45:       rgba(13,22,40,.52);
+      --w20:       rgba(13,22,40,.20);
+      --w10:       rgba(13,22,40,.09);
+      --w06:       rgba(13,22,40,.05);
+      --border:    rgba(13,22,40,.10);
+      --border-h:  rgba(13,22,40,.20);
+    }
+
+    /* Nav */
+    [data-theme="light"] #nav {
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 1px 0 rgba(13,22,40,.08), 0 4px 20px rgba(13,22,40,.06);
+    }
+    [data-theme="light"] .nav-links a         { color: rgba(13,22,40,.58); }
+    [data-theme="light"] .nav-links a:hover   { color: #0d1628; background: rgba(13,22,40,.05); }
+    [data-theme="light"] .nav-logo-text       { color: #0d1628; }
+
+    /* Hero */
+    [data-theme="light"] #hero {
+      background: linear-gradient(160deg, #ffffff 0%, #f0f4ff 100%);
+    }
+    [data-theme="light"] #hero::before { opacity: 0; }
+    [data-theme="light"] #hero::after  { opacity: 0; }
+    [data-theme="light"] .hero-headline .line-white { color: #0d1628; }
+    [data-theme="light"] .hero-badge {
+      background: rgba(230,48,48,.07);
+      border-color: rgba(230,48,48,.18);
+      color: var(--red);
+    }
+    [data-theme="light"] .hero-stats       { border-top-color: rgba(13,22,40,.1); }
+    [data-theme="light"] .hero-stat        { border-right-color: rgba(13,22,40,.1); }
+    [data-theme="light"] .hero-stat-num    { color: #0d1628; }
+
+    /* Hero ZIP bar */
+    [data-theme="light"] .hero-zip-bar {
+      background: #ffffff;
+      border-color: rgba(13,22,40,.15);
+      box-shadow: 0 4px 24px rgba(13,22,40,.1);
+    }
+    [data-theme="light"] .hero-zip-bar:focus-within {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(230,48,48,.1), 0 4px 24px rgba(13,22,40,.1);
+    }
+    [data-theme="light"] .hero-zip-input   { color: #0d1628; }
+    [data-theme="light"] .hero-zip-hint    { color: rgba(13,22,40,.45); }
+
+    /* Floating map badge */
+    [data-theme="light"] .hero-badge-card-2 {
+      background: #ffffff;
+      border: 1px solid rgba(13,22,40,.1);
+      box-shadow: 0 8px 32px rgba(13,22,40,.12);
+      color: #0d1628;
+    }
+    [data-theme="light"] .hero-badge-card-2 .badge-num { color: #0d1628; }
+    [data-theme="light"] .hero-badge-card-2 .badge-lbl { color: rgba(13,22,40,.5); }
+
+    /* Texas map */
+    [data-theme="light"] .map-glow { background: radial-gradient(circle, rgba(37,99,235,.07) 0%, transparent 65%); width: 900px; height: 900px; }
+    [data-theme="light"] .texas-svg { filter: drop-shadow(0 4px 16px rgba(13,22,40,.1)); }
+    [data-theme="light"] .texas-svg path {
+      fill: rgba(37,99,235,.09);
+      stroke: #1e3a8a;
+      stroke-width: 1;
+    }
+    [data-theme="light"] .texas-svg text { fill: #1e3a8a !important; font-weight: 700 !important; }
+    [data-theme="light"] .texas-svg .city-dot-pulse { fill: #1e3a8a !important; }
+    [data-theme="light"] .texas-svg circle[fill="#e63030"],
+    [data-theme="light"] .texas-svg circle[fill="rgba(230,48,48,.95)"] { fill: var(--red) !important; }
+
+    /* Buttons */
+    [data-theme="light"] .btn-ghost {
+      background: rgba(13,22,40,.05);
+      color: #0d1628;
+      border-color: rgba(13,22,40,.18);
+    }
+    [data-theme="light"] .btn-ghost:hover { background: rgba(13,22,40,.09); }
+
+    /* Section backgrounds — alternating */
+    [data-theme="light"] #how-it-works  { background: #f5f7fc; }
+    [data-theme="light"] #services      { background: #ffffff; }
+    [data-theme="light"] #why-us        { background: #f5f7fc; }
+    [data-theme="light"] #cities        { background: #ffffff; }
+    [data-theme="light"] #testimonials  { background: #f5f7fc; }
+    [data-theme="light"] #pricing       { background: #ffffff; }
+    [data-theme="light"] #quote         { background: #f5f7fc; }
+    [data-theme="light"] #shop-apply    { background: #ffffff; }
+
+    /* Cards — white with soft shadows */
+    [data-theme="light"] .service-card,
+    [data-theme="light"] .why-card,
+    [data-theme="light"] .step-card,
+    [data-theme="light"] .testimonial-card,
+    [data-theme="light"] .pricing-card,
+    [data-theme="light"] .shop-form-card,
+    [data-theme="light"] .quote-card {
+      background: #ffffff;
+      border-color: rgba(13,22,40,.09);
+      box-shadow: 0 2px 12px rgba(13,22,40,.06);
+    }
+    [data-theme="light"] .service-card:hover,
+    [data-theme="light"] .why-card:hover {
+      background: #fafbff;
+      box-shadow: 0 8px 32px rgba(13,22,40,.11);
+      border-color: rgba(230,48,48,.2);
+    }
+    [data-theme="light"] .pricing-card.featured {
+      border-color: var(--red);
+      box-shadow: 0 8px 40px rgba(230,48,48,.15);
+    }
+    [data-theme="light"] .service-icon-wrap,
+    [data-theme="light"] .why-icon-wrap { background: #f5f7fc; border-color: rgba(13,22,40,.1); }
+
+    /* Steps connector line */
+    [data-theme="light"] .steps-connector { background: rgba(13,22,40,.12); }
+    [data-theme="light"] .step-num        { background: #f5f7fc; border-color: rgba(13,22,40,.15); color: #0d1628; }
+
+    /* Forms */
+    [data-theme="light"] input,
+    [data-theme="light"] select,
+    [data-theme="light"] textarea {
+      background: #ffffff;
+      border-color: rgba(13,22,40,.16);
+      color: #0d1628;
+    }
+    [data-theme="light"] input::placeholder,
+    [data-theme="light"] textarea::placeholder { color: rgba(13,22,40,.38); }
+    [data-theme="light"] input:focus,
+    [data-theme="light"] select:focus,
+    [data-theme="light"] textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+      background: #ffffff;
+    }
+    [data-theme="light"] select option    { background: #fff; color: #0d1628; }
+    [data-theme="light"] .form-section-title { color: rgba(13,22,40,.45); border-bottom-color: rgba(13,22,40,.1); }
+    [data-theme="light"] .photo-drop      {
+      background: #f9fafc;
+      border-color: rgba(13,22,40,.14);
+    }
+    [data-theme="light"] .photo-drop:hover { background: #f0f3ff; border-color: var(--blue); }
+
+    /* City pills */
+    [data-theme="light"] .city-pill       { background: #f0f2f9; color: #1e3a8a; border-color: rgba(30,58,138,.15); }
+    [data-theme="light"] .city-pill:hover { background: var(--red); color: #fff; border-color: var(--red); }
+    [data-theme="light"] .cities-group-label { color: rgba(13,22,40,.4); }
+
+    /* Testimonials */
+    [data-theme="light"] .testimonial-quote { color: rgba(13,22,40,.55); }
+
+    /* Pricing */
+    [data-theme="light"] .pricing-feature  { color: rgba(13,22,40,.55); }
+
+    /* ── Footer — Light Mode ────────────────────────────── */
+    [data-theme="light"] #footer {
+      background: #1a2540 !important;
+      border-top: none;
+    }
+    [data-theme="light"] #footer .nav-logo-text          { color: #ffffff; }
+    [data-theme="light"] #footer .nav-logo-text span     { color: var(--red); }
+    [data-theme="light"] #footer .footer-brand-desc      { color: rgba(255,255,255,.55); }
+    [data-theme="light"] #footer .footer-contact         { color: rgba(255,255,255,.52); }
+    [data-theme="light"] #footer .footer-contact a       { color: rgba(255,255,255,.65); }
+    [data-theme="light"] #footer .footer-contact a:hover { color: #ffffff; }
+    [data-theme="light"] #footer .footer-col h4          { color: rgba(255,255,255,.4); letter-spacing: .18em; }
+    [data-theme="light"] #footer .footer-col ul a        { color: rgba(255,255,255,.62); }
+    [data-theme="light"] #footer .footer-col ul a:hover  { color: #ffffff; }
+    [data-theme="light"] #footer .footer-bottom {
+      border-top-color: rgba(255,255,255,.1);
+      color: rgba(255,255,255,.38);
+    }
+    [data-theme="light"] #footer .footer-legal a         { color: rgba(255,255,255,.42); }
+    [data-theme="light"] #footer .footer-legal a:hover   { color: #ffffff; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
       background: var(--bg);
       color: var(--white);
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background .3s var(--ease), color .3s var(--ease);
     }
 
     /* ── Utility ─────────────────────────────────────────── */
     .hidden { display: none !important; }
+
     .btn {
-      display: inline-block; padding: .75rem 1.75rem;
-      border-radius: var(--radius); font-size: 1rem; font-weight: 700;
-      cursor: pointer; border: none; transition: .2s; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: .4rem; padding: .75rem 1.6rem;
+      border-radius: 50px; font-size: .9rem; font-weight: 600;
+      letter-spacing: .01em;
+      cursor: pointer; border: none;
+      transition: var(--transition); text-decoration: none;
+      white-space: nowrap;
     }
-    .btn-red { background: var(--red); color: var(--white); }
-    .btn-red:hover { background: var(--red-h); box-shadow: 0 0 20px rgba(230,48,48,.45); }
-    .btn-ghost { background: var(--w10); color: var(--white); border: 1.5px solid var(--w20); }
-    .btn-ghost:hover { background: var(--w20); }
+    .btn-red {
+      background: linear-gradient(135deg, #e63030 0%, #c42020 100%);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(230,48,48,.3), inset 0 1px 0 rgba(255,255,255,.15);
+    }
+    .btn-red:hover {
+      background: linear-gradient(135deg, #ff4444 0%, #e63030 100%);
+      box-shadow: 0 6px 24px rgba(230,48,48,.45), inset 0 1px 0 rgba(255,255,255,.2);
+      transform: translateY(-1px);
+    }
+    .btn-ghost {
+      background: var(--w06); color: var(--w90);
+      border: 1px solid var(--border-h);
+      backdrop-filter: blur(8px);
+    }
+    .btn-ghost:hover {
+      background: var(--w10); border-color: var(--w20);
+      transform: translateY(-1px);
+    }
+
     .section-label {
-      font-size: .72rem; font-weight: 700; letter-spacing: .15em;
-      text-transform: uppercase; color: var(--red); margin-bottom: .5rem;
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .7rem; font-weight: 700; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--red); margin-bottom: .6rem;
+    }
+    .section-label::before {
+      content: ''; width: 18px; height: 2px;
+      background: var(--red); border-radius: 2px; flex-shrink: 0;
     }
     .section-title {
-      font-size: clamp(1.7rem, 3.5vw, 2.4rem); font-weight: 800;
-      line-height: 1.2; color: var(--white); margin-bottom: 1rem;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800;
+      line-height: 1.15; color: var(--white); margin-bottom: 1rem;
+      letter-spacing: -.02em;
     }
-    .section-sub { font-size: 1rem; color: var(--w55); max-width: 600px; line-height: 1.6; }
-    input, select, textarea { font-family: inherit; font-size: .95rem; }
+    .section-sub {
+      font-size: .95rem; color: var(--w45); max-width: 580px;
+      line-height: 1.7; font-weight: 400;
+    }
+    input, select, textarea { font-family: inherit; font-size: .9rem; }
     a { color: inherit; }
 
-    /* ── Navigation ──────────────────────────────────────── */
+    /* ── Nav ─────────────────────────────────────────────── */
     #nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      background: rgba(6,9,26,.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--gray-border);
+      background: rgba(6,9,26,.75);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
     }
     .nav-inner {
       max-width: 1200px; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between;
-      gap: 1rem; padding: 0 2rem; height: 64px;
+      gap: 1.5rem; padding: 0 2rem; height: 68px;
     }
     .nav-logo {
-      display: flex; align-items: center; gap: .6rem;
+      display: flex; align-items: center; gap: .65rem;
       text-decoration: none; flex-shrink: 0;
     }
     .nav-logo-icon {
-      width: 36px; height: 36px; border-radius: 8px;
-      background: var(--red); display: flex; align-items: center;
-      justify-content: center; font-size: 1.1rem;
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--red) 0%, #b01818 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(230,48,48,.35);
     }
     .nav-logo-text {
-      font-size: .82rem; font-weight: 800; line-height: 1.25;
-      color: var(--red); letter-spacing: .04em; text-transform: uppercase;
+      font-size: .78rem; font-weight: 800; line-height: 1.3;
+      color: var(--white); letter-spacing: .05em; text-transform: uppercase;
     }
+    .nav-logo-text span { color: var(--red); }
     .nav-links {
-      display: flex; align-items: center; gap: .25rem; list-style: none;
+      display: flex; align-items: center; gap: .1rem; list-style: none;
     }
     .nav-links a {
-      text-decoration: none; font-size: .82rem; font-weight: 600;
-      color: var(--w55); padding: .5rem .8rem; border-radius: 7px;
-      transition: .15s; white-space: nowrap;
+      text-decoration: none; font-size: .82rem; font-weight: 500;
+      color: var(--w45); padding: .5rem .9rem; border-radius: 50px;
+      transition: var(--transition); white-space: nowrap; letter-spacing: .01em;
     }
-    .nav-links a:hover { color: var(--white); background: var(--w10); }
-    .nav-right { display: flex; align-items: center; gap: .75rem; }
+    .nav-links a:hover { color: var(--white); background: var(--w06); }
+    .nav-right { display: flex; align-items: center; gap: .85rem; }
     .lang-toggle {
-      display: flex; border: 1px solid var(--gray-border); border-radius: 7px; overflow: hidden;
+      display: flex; background: var(--w06);
+      border: 1px solid var(--border); border-radius: 50px; overflow: hidden;
+      padding: 3px;
     }
     .lang-btn {
-      padding: .3rem .7rem; font-size: .75rem; font-weight: 700;
+      padding: .25rem .75rem; font-size: .72rem; font-weight: 700;
       cursor: pointer; border: none; background: transparent;
-      color: var(--w55); transition: .15s;
+      color: var(--w45); transition: var(--transition);
+      border-radius: 50px; letter-spacing: .04em;
     }
-    .lang-btn.active { background: var(--red); color: var(--white); }
-    .lang-btn:hover:not(.active) { background: var(--w10); color: var(--white); }
+    .lang-btn.active {
+      background: var(--red); color: var(--white);
+      box-shadow: 0 2px 8px rgba(230,48,48,.4);
+    }
+    .lang-btn:hover:not(.active) { color: var(--white); background: var(--w10); }
+
+    /* ── Theme Toggle ───────────────────────────────────── */
+    .theme-toggle {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--w06); border: 1px solid var(--border);
+      color: var(--w70); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition); flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+      background: var(--surface-h); color: var(--white);
+      border-color: var(--border-h);
+      transform: rotate(15deg);
+    }
+    .theme-icon-sun  { display: none; }
+    [data-theme="light"] .theme-icon-moon { display: none; }
+    [data-theme="light"] .theme-icon-sun  { display: block; }
 
     /* ── Hero ────────────────────────────────────────────── */
     #hero {
       min-height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
       position: relative; overflow: hidden;
-      padding: 100px 2rem 5rem;
+      padding: 110px 2rem 5rem;
     }
-    /* animated starfield bg */
     #hero::before {
       content: '';
       position: absolute; inset: 0;
       background:
-        radial-gradient(ellipse 60% 60% at 70% 50%, rgba(37,99,235,.18) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(230,48,48,.10) 0%, transparent 60%);
+        radial-gradient(ellipse 65% 55% at 75% 50%, rgba(37,99,235,.15) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 45% at 15% 75%, rgba(230,48,48,.08) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 30% at 50% 10%, rgba(230,48,48,.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    /* subtle grid overlay */
+    #hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 75%);
       pointer-events: none;
     }
     .hero-inner {
       position: relative; z-index: 1;
       max-width: 1200px; margin: 0 auto; width: 100%;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+      display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 3rem; align-items: center;
     }
-    /* ── Hero Left ── */
-    .hero-left {}
     .hero-badge {
-      display: inline-flex; align-items: center; gap: .4rem;
-      background: rgba(230,48,48,.12); border: 1px solid rgba(230,48,48,.3);
-      border-radius: 20px; padding: .3rem 1rem;
-      font-size: .75rem; font-weight: 700; color: #ff6b6b;
-      text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1.5rem;
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: var(--red-dim);
+      border: 1px solid rgba(230,48,48,.25);
+      border-radius: 50px; padding: .35rem 1rem;
+      font-size: .72rem; font-weight: 600; color: #ff7070;
+      text-transform: uppercase; letter-spacing: .09em; margin-bottom: 1.75rem;
+      backdrop-filter: blur(8px);
     }
     .hero-headline {
-      font-size: clamp(3.5rem, 8vw, 7rem);
-      font-weight: 900; line-height: .95;
-      letter-spacing: -.02em;
+      font-size: clamp(3.8rem, 8.5vw, 7.5rem);
+      font-weight: 900; line-height: .92;
+      letter-spacing: -.03em;
       text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
     }
     .hero-headline .line-red { color: var(--red); }
     .hero-headline .line-white { color: var(--white); }
     .hero-sub {
-      font-size: 1.05rem; color: var(--w80);
-      font-weight: 600; margin-bottom: .6rem;
+      font-size: 1rem; color: var(--w90);
+      font-weight: 600; margin-bottom: .5rem; letter-spacing: -.01em;
     }
     .hero-desc {
-      font-size: .9rem; color: var(--w55); line-height: 1.65; margin-bottom: 2rem;
-      max-width: 440px;
+      font-size: .88rem; color: var(--w45); line-height: 1.75;
+      margin-bottom: 2.25rem; max-width: 420px; font-weight: 400;
     }
-    .hero-ctas { display: flex; gap: .9rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    /* Hero ZIP bar */
+    .hero-zip-bar {
+      display: flex; gap: 0; align-items: stretch;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: .75rem;
+      max-width: 460px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      transition: var(--transition);
+    }
+    .hero-zip-bar:focus-within {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(230,48,48,.15), 0 4px 24px rgba(0,0,0,.35);
+    }
+    .hero-zip-input-wrap {
+      display: flex; align-items: center; flex: 1;
+      padding: 0 1rem; gap: .6rem; min-width: 0;
+    }
+    .hero-zip-icon { color: var(--w45); flex-shrink: 0; }
+    .hero-zip-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: var(--white); font-size: 1rem; font-weight: 500;
+      font-family: inherit; padding: 1.05rem 0; min-width: 0;
+    }
+    .hero-zip-input::placeholder { color: var(--w45); }
+    .hero-zip-city {
+      font-size: .8rem; font-weight: 600; color: var(--red);
+      white-space: nowrap; transition: var(--transition);
+    }
+    .hero-zip-btn {
+      background: var(--red); color: var(--white);
+      border: none; cursor: pointer;
+      padding: 0 1.5rem; font-size: .9rem; font-weight: 700;
+      font-family: inherit; letter-spacing: -.01em;
+      transition: var(--transition); white-space: nowrap;
+      border-left: 1px solid rgba(255,255,255,.1);
+    }
+    .hero-zip-btn:hover { background: var(--red-h); }
+    .hero-zip-hint {
+      font-size: .72rem; color: var(--w45); margin-bottom: 2rem;
+      letter-spacing: .02em;
+    }
+    .hero-ctas { display: flex; gap: .85rem; flex-wrap: wrap; margin-bottom: 2.75rem; }
     .hero-stats {
-      display: flex; gap: 2rem; flex-wrap: wrap;
+      display: flex; gap: 0; flex-wrap: wrap;
       padding-top: 2rem;
-      border-top: 1px solid var(--gray-border);
+      border-top: 1px solid var(--border);
     }
+    .hero-stat {
+      padding-right: 2rem; margin-right: 2rem;
+      border-right: 1px solid var(--border);
+    }
+    .hero-stat:last-child { border-right: none; margin-right: 0; padding-right: 0; }
     .hero-stat-num {
-      font-size: 1.5rem; font-weight: 900; color: var(--white);
-      line-height: 1;
+      font-size: 1.6rem; font-weight: 800; color: var(--white);
+      line-height: 1; letter-spacing: -.02em;
     }
-    .hero-stat-lbl { font-size: .72rem; color: var(--w55); margin-top: .2rem; }
+    .hero-stat-lbl { font-size: .7rem; color: var(--w45); margin-top: .25rem; font-weight: 500; }
 
-    /* ── Hero Right — Map ── */
+    /* ── Hero Wheel Visual ───────────────────────────────── */
     .hero-right {
       display: flex; align-items: center; justify-content: center;
       position: relative;
     }
     .map-glow {
-      position: absolute;
-      width: 480px; height: 480px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(37,99,235,.35) 0%, transparent 65%);
+      position: absolute; width: 800px; height: 800px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,.2) 0%, transparent 65%);
       pointer-events: none;
     }
-    .map-wrap {
-      position: relative; z-index: 1;
-      width: 100%; max-width: 480px;
-    }
-    .map-svg {
+    .map-wrap { position: relative; z-index: 1; width: 100%; max-width: 100%; margin-top: -2.5rem; }
+    .texas-svg {
       width: 100%; height: auto;
-      filter: drop-shadow(0 0 30px rgba(59,130,246,.25));
+      filter: drop-shadow(0 0 28px rgba(255,255,255,.08));
     }
-    /* Pulsing city dots */
-    .city-dot-pulse {
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-    .city-dot-pulse:nth-child(2n)   { animation-delay: .4s; }
-    .city-dot-pulse:nth-child(3n)   { animation-delay: .8s; }
-    .city-dot-pulse:nth-child(4n)   { animation-delay: 1.2s; }
-    .city-dot-pulse:nth-child(5n)   { animation-delay: 1.6s; }
+    .city-dot-pulse { animation: pulse 2.8s ease-in-out infinite; }
+    .city-dot-pulse:nth-child(2n) { animation-delay: .6s; }
+    .city-dot-pulse:nth-child(3n) { animation-delay: 1.2s; }
+    .city-dot-pulse:nth-child(4n) { animation-delay: 1.8s; }
+    .city-dot-pulse:nth-child(5n) { animation-delay: 2.4s; }
     @keyframes pulse {
-      0%, 100% { opacity: .7; r: 4; }
-      50%       { opacity: 1;  r: 5.5; }
+      0%, 100% { opacity: .5; transform: scale(1); }
+      50%       { opacity: 1; transform: scale(1.35); }
     }
-
-    /* ── Quote Badge (top-right of map) ── */
     .hero-badge-card {
-      position: absolute; top: 0; right: 0;
-      background: var(--white); color: #0d1528;
-      border-radius: 14px; padding: 1rem 1.25rem;
-      box-shadow: 0 8px 40px rgba(0,0,0,.4);
-      text-align: center; min-width: 120px;
-      z-index: 3;
+      position: absolute; top: 8px; right: 0;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(12px);
+      color: #0d1528;
+      border-radius: var(--radius-lg); padding: 1rem 1.25rem;
+      box-shadow: 0 12px 48px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.2);
+      text-align: center; min-width: 116px; z-index: 3;
     }
-    .hero-badge-card .badge-icon { font-size: 1.6rem; margin-bottom: .3rem; }
-    .hero-badge-card .badge-num {
-      font-size: 1.4rem; font-weight: 900; color: #0d1528; line-height: 1;
+    .hero-badge-card-2 {
+      position: absolute; bottom: 24px; left: 0;
+      background: rgba(20,28,46,.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-h);
+      color: var(--white);
+      border-radius: var(--radius-lg); padding: 1rem 1.25rem;
+      box-shadow: 0 12px 48px rgba(0,0,0,.4);
+      text-align: center; min-width: 116px; z-index: 3;
     }
-    .hero-badge-card .badge-lbl {
-      font-size: .68rem; font-weight: 700; color: #4b5563;
-      text-transform: uppercase; letter-spacing: .06em; margin-top: .2rem;
+    .hero-badge-card-2 .badge-num  { font-size: 1.5rem; font-weight: 900; color: var(--white); line-height: 1; }
+    .hero-badge-card-2 .badge-lbl  {
+      font-size: .62rem; font-weight: 700; color: var(--w45);
+      text-transform: uppercase; letter-spacing: .07em; margin-top: .25rem;
+    }
+    .hero-badge-card .badge-icon { font-size: 1.5rem; margin-bottom: .3rem; }
+    .hero-badge-card .badge-num  { font-size: 1.5rem; font-weight: 900; color: #0d1528; line-height: 1; }
+    .hero-badge-card .badge-lbl  {
+      font-size: .62rem; font-weight: 700; color: #6b7280;
+      text-transform: uppercase; letter-spacing: .07em; margin-top: .25rem;
     }
 
-    /* ── Section Base (dark) ─────────────────────────────── */
-    .dark-section  { background: var(--bg); }
-    .dark2-section { background: var(--bg2); }
-    .dark3-section { background: var(--bg3); }
-    section { padding: 5rem 2rem; }
+    /* ── Section Shell ───────────────────────────────────── */
+    section { padding: 5.5rem 2rem; }
     .inner { max-width: 1140px; margin: 0 auto; }
-    .section-head { text-align: center; margin-bottom: 3rem; }
+    .section-head { text-align: center; margin-bottom: 3.5rem; }
+    .section-head .section-label { justify-content: center; }
     .section-head .section-sub { margin: 0 auto; }
 
     /* ── Cities ──────────────────────────────────────────── */
-    #cities { background: var(--bg2); }
-    .region-group { margin-bottom: 1.75rem; }
-    .region-name {
-      font-size: .68rem; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--w55);
-      margin-bottom: .65rem; padding-bottom: .3rem;
-      border-bottom: 1px solid var(--gray-border);
+    #cities {
+      background: var(--bg2);
+      position: relative;
+      overflow: hidden;
     }
-    .city-grid { display: flex; flex-wrap: wrap; gap: .5rem; }
+    #cities::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(230,48,48,.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cities-stats {
+      display: flex; justify-content: center; gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .cities-stat {
+      text-align: center;
+    }
+    .cities-stat-num {
+      font-size: 2rem; font-weight: 800; color: var(--white);
+      letter-spacing: -.03em; line-height: 1;
+      background: linear-gradient(135deg, var(--white), rgba(255,255,255,.6));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .cities-stat-label {
+      font-size: .72rem; font-weight: 600; color: var(--w45);
+      text-transform: uppercase; letter-spacing: .1em; margin-top: .3rem;
+    }
+    .cities-divider {
+      width: 1px; background: var(--border); align-self: stretch;
+    }
+    .regions-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .region-group {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.5rem 1.25rem;
+      transition: var(--transition);
+    }
+    .region-group:hover {
+      border-color: rgba(230,48,48,.2);
+      box-shadow: 0 8px 28px rgba(0,0,0,.25);
+    }
+    .region-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem; padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .region-name {
+      font-size: .65rem; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--red);
+    }
+    .region-count {
+      font-size: .65rem; font-weight: 600;
+      color: var(--w45); background: var(--surface);
+      border: 1px solid var(--border);
+      padding: .15rem .55rem; border-radius: 50px;
+    }
+    .city-grid { display: flex; flex-wrap: wrap; gap: .4rem; }
     .city-chip {
-      padding: .4rem 1rem; border-radius: 20px; cursor: pointer;
-      font-size: .82rem; font-weight: 600;
-      background: var(--w06); color: var(--w80);
-      border: 1px solid var(--gray-border);
-      transition: .15s; white-space: nowrap;
+      padding: .35rem .9rem; border-radius: 50px; cursor: pointer;
+      font-size: .78rem; font-weight: 500;
+      background: var(--surface); color: var(--w70);
+      border: 1px solid var(--border);
+      transition: var(--transition); white-space: nowrap;
     }
     .city-chip:hover {
       border-color: var(--red); color: var(--white);
-      background: rgba(230,48,48,.12);
-      box-shadow: 0 0 10px rgba(230,48,48,.2);
+      background: var(--red-dim);
+      box-shadow: 0 0 16px rgba(230,48,48,.2);
+      transform: translateY(-2px);
+    }
+    .city-chip.active {
+      background: var(--red); color: var(--white);
+      border-color: var(--red);
+      box-shadow: 0 0 20px rgba(230,48,48,.35);
     }
 
     /* ── Quote Form ──────────────────────────────────────── */
     #quote { background: var(--bg); }
     .form-card {
       background: var(--bg2);
-      border: 1px solid var(--gray-border);
-      border-radius: 16px; padding: 2.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 2.75rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,.3);
     }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; margin-bottom: 1.1rem; }
     .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
     .form-row.full  { grid-template-columns: 1fr; }
-    .form-group { display: flex; flex-direction: column; gap: .4rem; }
-    .form-group label { font-size: .78rem; font-weight: 700; color: var(--w80); }
+    .form-group { display: flex; flex-direction: column; gap: .45rem; }
+    .form-group label {
+      font-size: .73rem; font-weight: 600; color: var(--w70);
+      letter-spacing: .02em;
+    }
     .form-group label .req { color: var(--red); margin-left: .15rem; }
     .form-group input,
     .form-group select,
     .form-group textarea {
-      width: 100%; padding: .65rem .9rem;
-      border: 1px solid rgba(255,255,255,.15); border-radius: var(--radius);
-      background: rgba(255,255,255,.07); color: var(--white);
-      transition: border-color .15s;
+      width: 100%; padding: .75rem 1rem;
+      border: 1px solid var(--border-h); border-radius: var(--radius);
+      background: var(--surface); color: var(--white);
+      transition: var(--transition); outline: none;
     }
-    .form-group input::placeholder { color: var(--w55); }
+    .form-group input::placeholder { color: var(--w45); }
     .form-group select option { background: #0d1528; color: var(--white); }
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
-      outline: none; border-color: var(--blue-glow);
-      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+      border-color: var(--blue-glow);
+      background: var(--surface-h);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.12);
     }
     .form-group input.error,
-    .form-group select.error { border-color: var(--red); }
-    .field-error { font-size: .72rem; color: #ff6b6b; margin-top: .15rem; }
+    .form-group select.error {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(230,48,48,.1);
+    }
+    .field-error { font-size: .7rem; color: #ff6b6b; margin-top: .15rem; font-weight: 500; }
     .form-section-title {
-      font-size: .68rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .12em; color: var(--w55);
-      border-bottom: 1px solid var(--gray-border);
-      padding-bottom: .4rem; margin-bottom: .9rem; margin-top: 1.5rem;
+      font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--w45);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: .45rem; margin-bottom: 1rem; margin-top: 1.75rem;
     }
     .form-section-title:first-child { margin-top: 0; }
 
     /* Photo Upload */
     .photo-drop {
-      border: 1.5px dashed rgba(255,255,255,.18); border-radius: var(--radius);
-      padding: 1.5rem; text-align: center; cursor: pointer;
-      transition: .2s; background: var(--w06);
+      border: 1.5px dashed var(--border-h); border-radius: var(--radius);
+      padding: 1.75rem; text-align: center; cursor: pointer;
+      transition: var(--transition); background: var(--surface);
     }
     .photo-drop:hover, .photo-drop.drag-over {
       border-color: var(--blue-glow);
-      background: rgba(59,130,246,.08);
+      background: var(--blue-dim);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.08);
     }
-    .photo-drop-icon { font-size: 1.8rem; margin-bottom: .4rem; }
-    .photo-drop-text { font-size: .82rem; color: var(--w55); }
-    .photo-drop-text strong { color: var(--w80); }
-    .photo-previews { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .65rem; }
+    .photo-drop-icon { font-size: 2rem; margin-bottom: .5rem; opacity: .7; }
+    .photo-drop-text { font-size: .82rem; color: var(--w45); line-height: 1.6; }
+    .photo-drop-text strong { color: var(--w70); font-weight: 600; }
+    /* Desktop only — mobile swapped for buttons */
+    .photo-drop-desktop { display: block; }
+    /* Mobile tap buttons — hidden on desktop */
+    .photo-mobile-btns {
+      display: none;
+    }
+    .photo-mobile-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .45rem; padding: 1.25rem .75rem;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius); cursor: pointer;
+      color: var(--w70); font-family: inherit; font-weight: 600; font-size: .88rem;
+      min-height: 90px; transition: var(--transition); width: 100%;
+    }
+    .photo-mobile-btn:active { background: var(--blue-dim); border-color: var(--blue-glow); transform: scale(.97); }
+    .photo-btn-icon { font-size: 1.75rem; line-height: 1; }
+    .photo-count-badge {
+      display: none; font-size: .75rem; color: var(--w45); margin-top: .6rem;
+      text-align: center; font-weight: 500;
+    }
+    .photo-count-badge.has-photos { color: var(--blue-glow); font-weight: 700; }
+    .photo-previews { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
     .photo-thumb {
-      position: relative; width: 68px; height: 68px;
-      border-radius: 8px; overflow: hidden;
-      border: 1px solid var(--gray-border);
+      position: relative; width: 72px; height: 72px;
+      border-radius: var(--radius-sm); overflow: hidden;
+      border: 1px solid var(--border-h);
     }
     .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .photo-thumb button {
-      position: absolute; top: 2px; right: 2px;
-      background: rgba(0,0,0,.65); color: #fff;
+      position: absolute; top: 3px; right: 3px;
+      background: rgba(0,0,0,.7); color: #fff;
       border: none; border-radius: 50%; width: 18px; height: 18px;
       font-size: 10px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
     }
     #photoInput { display: none; }
 
-    .form-submit-row { text-align: center; margin-top: 1.5rem; }
-    .form-submit-row .btn { width: 100%; font-size: 1.05rem; padding: .9rem; }
-    .form-note { font-size: .73rem; color: var(--w55); margin-top: .6rem; }
+    .form-submit-row { text-align: center; margin-top: 1.75rem; }
+    .form-submit-row .btn { width: 100%; font-size: 1rem; padding: 1rem; border-radius: var(--radius); }
+    .form-note { font-size: .71rem; color: var(--w45); margin-top: .7rem; font-weight: 500; }
+    /* ToS consent checkbox */
+    .tos-consent {
+      display: flex; align-items: flex-start; gap: .65rem;
+      margin-bottom: 1.1rem; text-align: left;
+    }
+    .tos-consent input[type="checkbox"] {
+      width: 18px; height: 18px; min-width: 18px;
+      accent-color: var(--red); margin-top: 2px; cursor: pointer;
+    }
+    .tos-consent label {
+      font-size: .78rem; color: var(--w70); line-height: 1.55; cursor: pointer;
+    }
+    .tos-consent label a {
+      color: var(--red); text-decoration: underline; text-underline-offset: 2px;
+    }
+    .tos-consent label a:hover { color: var(--red-h); }
+    .tos-consent.error label { color: var(--red); }
 
     /* Confirmation */
-    #confirmation {
-      max-width: 540px; margin: 0 auto;
-      text-align: center; padding: 3rem 1rem;
-    }
-    .confirm-icon { font-size: 3.5rem; margin-bottom: .75rem; }
-    .confirm-title { font-size: 1.75rem; font-weight: 800; margin-bottom: .6rem; }
-    .confirm-sub { font-size: .95rem; color: var(--w55); line-height: 1.65; margin-bottom: 1.25rem; }
+    #confirmation { max-width: 540px; margin: 0 auto; text-align: center; padding: 3.5rem 1rem; }
+    .confirm-icon { font-size: 3.5rem; margin-bottom: .9rem; }
+    .confirm-title { font-size: 1.85rem; font-weight: 800; margin-bottom: .65rem; letter-spacing: -.02em; }
+    .confirm-sub { font-size: .92rem; color: var(--w45); line-height: 1.75; margin-bottom: 1.4rem; }
     .confirm-box {
-      background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25);
-      border-radius: var(--radius); padding: 1rem 1.5rem;
-      font-size: .88rem; color: #86efac; line-height: 1.6; margin-bottom: 1.5rem;
+      background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.2);
+      border-radius: var(--radius); padding: 1.1rem 1.5rem;
+      font-size: .87rem; color: #86efac; line-height: 1.7; margin-bottom: 1.75rem;
     }
 
     /* ── How It Works ────────────────────────────────────── */
     #how-it-works { background: var(--bg3); text-align: center; }
-    .steps { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem; }
-    .step { flex: 1 1 200px; max-width: 240px; }
-    .step-num {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: var(--red); color: var(--white);
-      font-size: 1.25rem; font-weight: 900;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto .8rem;
-      box-shadow: 0 0 20px rgba(230,48,48,.35);
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; margin-top: 3rem;
+      background: var(--border);
+      border-radius: var(--radius-xl); overflow: hidden;
     }
-    .step-title { font-size: .95rem; font-weight: 800; margin-bottom: .35rem; }
-    .step-desc { font-size: .84rem; color: var(--w55); line-height: 1.6; }
+    .step {
+      background: var(--bg2); padding: 2.5rem 2rem;
+      transition: var(--transition); position: relative;
+    }
+    .step:hover { background: var(--surface-h); }
+    .step-num {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--red) 0%, #a01010 100%);
+      color: var(--white); font-size: 1.1rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 6px 20px rgba(230,48,48,.3);
+    }
+    .step-title { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; letter-spacing: -.01em; }
+    .step-desc { font-size: .84rem; color: var(--w45); line-height: 1.7; }
 
     /* ── Services ────────────────────────────────────────── */
     #services { background: var(--bg2); }
     .services-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 1rem; margin-top: 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 3rem;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .service-card {
-      background: var(--w06); border: 1px solid var(--gray-border);
-      border-radius: var(--radius); padding: 1.5rem 1.2rem;
-      text-align: center; transition: .2s;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem 1.75rem;
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      opacity: 0; transition: var(--transition);
     }
     .service-card:hover {
-      border-color: rgba(230,48,48,.4);
-      background: rgba(230,48,48,.06);
+      background: var(--surface-h);
+      border-color: rgba(230,48,48,.25);
       transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(230,48,48,.1);
+      box-shadow: 0 12px 32px rgba(0,0,0,.35);
     }
-    .service-icon { font-size: 1.9rem; margin-bottom: .55rem; }
-    .service-name { font-size: .9rem; font-weight: 700; margin-bottom: .3rem; }
-    .service-desc { font-size: .78rem; color: var(--w55); line-height: 1.55; }
+    .service-card:hover::before { opacity: 1; }
+    .service-card:hover .service-icon-wrap { background: var(--red-dim); border-color: rgba(230,48,48,.3); }
+    .service-icon-wrap {
+      width: 60px; height: 60px; border-radius: 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.1rem; font-size: 1.75rem;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    .service-name { font-size: .95rem; font-weight: 700; margin-bottom: .4rem; letter-spacing: -.01em; }
+    .service-desc { font-size: .8rem; color: var(--w45); line-height: 1.65; }
 
     /* ── Why Us ──────────────────────────────────────────── */
     #why-us { background: var(--bg); }
     .why-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 1.25rem; margin-top: 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 3rem;
+      max-width: 1080px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .why-card {
-      background: var(--w06); border: 1px solid var(--gray-border);
-      border-radius: var(--radius); padding: 1.5rem; transition: .2s;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem 1.75rem;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
     }
-    .why-card:hover { border-color: rgba(59,130,246,.35); background: rgba(59,130,246,.06); }
-    .why-icon { font-size: 1.7rem; margin-bottom: .5rem; }
-    .why-title { font-size: .9rem; font-weight: 700; margin-bottom: .3rem; }
-    .why-desc { font-size: .82rem; color: var(--w55); line-height: 1.6; }
+    .why-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--blue-glow), transparent);
+      opacity: 0; transition: var(--transition);
+    }
+    .why-card:hover {
+      background: rgba(59,130,246,.05);
+      border-color: rgba(59,130,246,.25);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.35);
+    }
+    .why-card:hover::before { opacity: 1; }
+    .why-icon-wrap {
+      width: 60px; height: 60px; border-radius: 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.75rem; margin-bottom: 1.1rem;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    .why-card:hover .why-icon-wrap { background: var(--blue-dim); border-color: rgba(59,130,246,.2); }
+    .why-title { font-size: .95rem; font-weight: 700; margin-bottom: .4rem; letter-spacing: -.01em; }
+    .why-desc { font-size: .8rem; color: var(--w45); line-height: 1.65; }
 
     /* ── Testimonials ────────────────────────────────────── */
     #testimonials { background: var(--bg3); text-align: center; }
     .testimonials-grid {
       display: flex; gap: 1.25rem; flex-wrap: wrap;
-      justify-content: center; margin-top: 2.5rem;
+      justify-content: center; margin-top: 3rem;
     }
     .testimonial-card {
-      background: var(--w06); border: 1px solid var(--gray-border);
-      border-radius: var(--radius); padding: 1.75rem;
-      max-width: 320px; flex: 1 1 280px; text-align: left;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 2rem;
+      max-width: 340px; flex: 1 1 290px; text-align: left;
+      transition: var(--transition);
+      box-shadow: 0 4px 24px rgba(0,0,0,.15);
     }
-    .stars { color: var(--gold); font-size: .95rem; margin-bottom: .5rem; }
+    .testimonial-card:hover {
+      border-color: var(--border-h);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.25);
+    }
+    .stars { color: var(--gold); font-size: .9rem; margin-bottom: .75rem; letter-spacing: .1em; }
     .testimonial-text {
-      font-size: .85rem; color: var(--w80); line-height: 1.65;
-      margin-bottom: .9rem; font-style: italic;
+      font-size: .87rem; color: var(--w70); line-height: 1.7;
+      margin-bottom: 1.1rem; font-style: italic;
     }
-    .testimonial-author { font-size: .8rem; font-weight: 700; }
-    .testimonial-location { font-size: .74rem; color: var(--w55); }
+    .testimonial-divider {
+      height: 1px; background: var(--border); margin-bottom: 1rem;
+    }
+    .testimonial-author { font-size: .82rem; font-weight: 700; letter-spacing: -.01em; }
+    .testimonial-location { font-size: .73rem; color: var(--w45); margin-top: .15rem; }
 
     /* ── Pricing ─────────────────────────────────────────── */
     #pricing { background: var(--bg2); text-align: center; }
     .pricing-grid {
-      display: flex; gap: 1.1rem; justify-content: center;
-      flex-wrap: wrap; margin-top: 2.5rem;
+      display: flex; gap: 1.25rem; justify-content: center;
+      flex-wrap: wrap; margin-top: 3rem; align-items: stretch;
     }
     .pricing-card {
-      flex: 1 1 220px; max-width: 255px;
-      border-radius: 14px; padding: 2rem 1.4rem;
-      border: 1px solid var(--gray-border);
-      background: var(--w06); position: relative; text-align: center;
-      transition: .2s;
+      flex: 1 1 220px; max-width: 258px;
+      border-radius: var(--radius-lg); padding: 2rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg3); position: relative; text-align: center;
+      transition: var(--transition);
+      display: flex; flex-direction: column;
     }
-    .pricing-card:hover { transform: translateY(-3px); }
+    .pricing-card:hover {
+      border-color: var(--border-h);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,.25);
+    }
     .pricing-card.featured {
-      border-color: var(--red);
-      background: rgba(230,48,48,.07);
-      box-shadow: 0 0 30px rgba(230,48,48,.18);
+      border-color: rgba(230,48,48,.4);
+      background: rgba(230,48,48,.04);
+      box-shadow: 0 0 0 1px rgba(230,48,48,.15), 0 20px 60px rgba(230,48,48,.1);
     }
+    .pricing-card.featured:hover { transform: translateY(-4px); }
     .pricing-badge {
-      position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
-      background: var(--red); color: var(--white);
-      font-size: .68rem; font-weight: 800;
-      padding: .2rem .9rem; border-radius: 20px; white-space: nowrap;
-      letter-spacing: .05em; text-transform: uppercase;
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--red) 0%, #c01010 100%);
+      color: var(--white); font-size: .65rem; font-weight: 700;
+      padding: .25rem 1rem; border-radius: 50px; white-space: nowrap;
+      letter-spacing: .07em; text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(230,48,48,.4);
     }
     .pricing-tier {
-      font-size: .7rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--w55); margin-bottom: .5rem;
+      font-size: .65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--w45); margin-bottom: .6rem;
     }
-    .pricing-price { font-size: 2.4rem; font-weight: 900; line-height: 1; }
-    .pricing-price span { font-size: .85rem; font-weight: 600; color: var(--w55); }
-    .pricing-lead { font-size: .82rem; color: var(--w55); margin-top: .3rem; margin-bottom: .9rem; }
-    .pricing-divider { border: none; border-top: 1px solid var(--gray-border); margin: .9rem 0; }
+    .pricing-price { font-size: 2.6rem; font-weight: 900; line-height: 1; letter-spacing: -.03em; }
+    .pricing-price span { font-size: .82rem; font-weight: 500; color: var(--w45); }
+    .pricing-lead { font-size: .8rem; color: var(--w45); margin-top: .35rem; margin-bottom: 1rem; }
+    .pricing-divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
     .pricing-features {
       list-style: none; text-align: left; font-size: .82rem;
-      color: var(--w80); line-height: 1.6; margin-bottom: 1.4rem;
+      color: var(--w70); line-height: 1.6; margin-bottom: 1.5rem; flex: 1;
     }
     .pricing-features li {
-      display: flex; gap: .45rem; align-items: flex-start; padding: .2rem 0;
+      display: flex; gap: .5rem; align-items: flex-start; padding: .28rem 0;
     }
-    .pricing-features li::before { content: "✓"; color: var(--red); font-weight: 700; flex-shrink: 0; }
-    .pricing-cta { display: block; }
+    .pricing-features li::before {
+      content: "✓"; color: var(--red); font-weight: 800;
+      flex-shrink: 0; font-size: .8rem; margin-top: .1rem;
+    }
+    .pricing-cta { display: block; margin-top: auto; }
 
     /* ── Shop Application ────────────────────────────────── */
     #shop-apply { background: var(--bg); }
     .shop-form-card {
-      background: var(--bg2); border: 1px solid var(--gray-border);
-      border-radius: 16px; padding: 2.5rem; margin-top: 2rem;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 2.75rem; margin-top: 2.5rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,.3);
     }
-    .shop-form-card .form-group label { color: var(--w80); }
+    .shop-form-card .form-group label { color: var(--w70); }
     .shop-form-card .form-group input,
     .shop-form-card .form-group select {
-      background: rgba(255,255,255,.07);
-      border-color: rgba(255,255,255,.15); color: var(--white);
+      background: var(--surface);
+      border-color: var(--border-h); color: var(--white);
     }
-    .shop-form-card .form-group input::placeholder { color: var(--w55); }
+    .shop-form-card .form-group input::placeholder { color: var(--w45); }
     .shop-form-card .form-group select option { background: #0c1228; }
 
     /* ── Footer ──────────────────────────────────────────── */
     #footer {
       background: #030610;
-      padding: 3.5rem 2rem 1.5rem;
-      border-top: 1px solid var(--gray-border);
+      padding: 4rem 2rem 2rem;
+      border-top: 1px solid var(--border);
     }
     .footer-inner { max-width: 1140px; margin: 0 auto; }
     .footer-top {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 2.5rem; margin-bottom: 3rem;
+      display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 3.5rem;
     }
-    .footer-brand-desc { font-size: .85rem; color: var(--w55); line-height: 1.65; margin-top: .75rem; }
-    .footer-contact { margin-top: .75rem; font-size: .82rem; color: var(--w55); line-height: 2; }
-    .footer-contact a { text-decoration: none; }
+    .footer-brand-desc {
+      font-size: .84rem; color: var(--w45); line-height: 1.75;
+      margin-top: .85rem; max-width: 280px;
+    }
+    .footer-contact { margin-top: .85rem; font-size: .82rem; color: var(--w45); line-height: 2.1; }
+    .footer-contact a { text-decoration: none; transition: var(--transition); }
     .footer-contact a:hover { color: var(--white); }
     .footer-col h4 {
-      font-size: .78rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--w80); margin-bottom: .9rem;
+      font-size: .68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--w70); margin-bottom: 1.1rem;
     }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .45rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
     .footer-col ul a {
-      text-decoration: none; font-size: .82rem; color: var(--w55); transition: .15s;
+      text-decoration: none; font-size: .83rem; color: var(--w45);
+      transition: var(--transition); display: inline-flex; align-items: center;
     }
-    .footer-col ul a:hover { color: var(--white); }
+    .footer-col ul a:hover { color: var(--white); padding-left: 3px; }
     .footer-bottom {
-      border-top: 1px solid var(--gray-border); padding-top: 1.5rem;
+      border-top: 1px solid var(--border); padding-top: 1.75rem;
       display: flex; justify-content: space-between; align-items: center;
       flex-wrap: wrap; gap: .75rem;
-      font-size: .78rem; color: var(--w55);
+      font-size: .76rem; color: var(--w45);
     }
-    .footer-legal a { margin-left: 1.25rem; text-decoration: none; color: var(--w55); }
+    .footer-legal a {
+      margin-left: 1.5rem; text-decoration: none; color: var(--w45);
+      transition: var(--transition);
+    }
     .footer-legal a:hover { color: var(--white); }
 
     /* ── WhatsApp Float ──────────────────────────────────── */
     #whatsapp-float {
-      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 300;
+      position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 300;
       background: #25d366; color: #fff; border-radius: 50%;
       width: 54px; height: 54px;
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 20px rgba(37,211,102,.4);
-      text-decoration: none; transition: .2s;
+      text-decoration: none; transition: var(--transition);
     }
-    #whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,.55); }
+    #whatsapp-float:hover {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 8px 32px rgba(37,211,102,.55);
+    }
 
     /* ── Responsive ──────────────────────────────────────── */
-    @media (max-width: 900px) {
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-right { display: none; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
+    /* ── Hamburger Menu ─────────────────────────────────── */
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center;
+      gap: 5px; width: 38px; height: 38px;
+      background: var(--w06); border: 1px solid var(--border);
+      border-radius: 9px; cursor: pointer; padding: 9px 8px;
+      transition: var(--transition); flex-shrink: 0;
+      font-size: 0; line-height: 0;
+      -webkit-appearance: none; appearance: none;
     }
+    .hamburger:hover { background: var(--surface-h); }
+    .hamburger span {
+      display: block; width: 100%; height: 2px;
+      background: var(--w70); border-radius: 2px;
+      transition: var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    #mobileNav {
+      display: none; position: fixed;
+      top: 62px; left: 0; right: 0; z-index: 198;
+      background: rgba(8,12,26,.97);
+      backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.25rem 1.5rem;
+      flex-direction: column; gap: .2rem;
+      transform: translateY(-110%);
+      transition: transform .32s cubic-bezier(.4,0,.2,1);
+    }
+    [data-theme="light"] #mobileNav {
+      background: rgba(255,255,255,.97);
+    }
+    #mobileNav.open { transform: translateY(0); }
+    .mobile-nav-link {
+      display: block; padding: .9rem 1rem;
+      color: var(--w70); text-decoration: none;
+      font-size: .98rem; font-weight: 600;
+      border-radius: 10px; transition: var(--transition);
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-nav-link:last-of-type { border-bottom: none; }
+    .mobile-nav-link:hover,
+    .mobile-nav-link:active { background: var(--w06); color: var(--white); }
+    .mobile-nav-actions {
+      display: flex; gap: .75rem; margin-top: 1rem;
+      padding-top: 1rem; border-top: 1px solid var(--border);
+      align-items: center;
+    }
+    .mobile-nav-actions .btn { flex: 1; justify-content: center; padding: .85rem; font-size: .92rem; }
+    .mobile-nav-controls {
+      display: flex; gap: .6rem; align-items: center;
+    }
+
+    /* Body scroll lock when nav open */
+    body.nav-open { overflow: hidden; }
+
+    /* ── Tablet (≤ 900px) ───────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner        { grid-template-columns: 1fr; }
+      .hero-right        { display: none; }
+      .footer-top        { grid-template-columns: 1fr 1fr; }
+      .steps             { grid-template-columns: 1fr 1fr; gap: 1px; }
+      .services-grid     { grid-template-columns: repeat(2, 1fr); }
+      .why-grid          { grid-template-columns: repeat(2, 1fr); }
+      .regions-layout    { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── Mobile (≤ 680px) ───────────────────────────────── */
     @media (max-width: 680px) {
-      .form-row, .form-row.three { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
-      .footer-top { grid-template-columns: 1fr; }
-      section { padding: 3.5rem 1.25rem; }
+
+      /* ── Nav ── */
+      .nav-links         { display: none; }
+      .nav-inner         { padding: 0 1.25rem; height: 62px; gap: .5rem; width: 100%; }
+      .nav-logo-text     { font-size: .7rem; }
+      .nav-right .lang-toggle { display: none; }
+      .hamburger         { display: flex; }
+      #mobileNav         { display: flex; }
+      /* shrink nav CTA on mobile */
+      .nav-right .btn-red { display: none; }
+      .theme-toggle      { width: 32px; height: 32px; }
+      .nav-right         { gap: .5rem; }
+
+      /* ── Sections ── */
+      section            { padding: 3rem 1.15rem; }
+      .section-head      { margin-bottom: 0; }
+      .section-title     { font-size: clamp(1.55rem, 7vw, 2rem); }
+      .section-sub       { font-size: .88rem; }
+      .inner             { padding-left: 1.15rem; padding-right: 1.15rem; }
+
+      /* ── Hero ── */
+      #hero              { min-height: 100svh; padding: 86px 1.15rem 3rem; text-align: center; }
+      .hero-left         { display: flex; flex-direction: column; align-items: center; }
+      .hero-badge        { font-size: .65rem; margin-bottom: 1.25rem; }
+      .hero-headline     { font-size: clamp(2.8rem, 13vw, 4.2rem); margin-bottom: 1rem; }
+      .hero-sub          { font-size: .9rem; }
+      .hero-desc         { font-size: .83rem; margin-bottom: 1.5rem; max-width: 100%; }
+      .hero-ctas         { justify-content: center; flex-wrap: wrap; }
+      .hero-ctas .btn    { flex: 1; min-width: 140px; justify-content: center; }
+
+      /* ZIP bar — full-width prominent */
+      .hero-zip-bar      { max-width: 100%; border-radius: 14px; margin-bottom: .5rem; box-shadow: 0 8px 36px rgba(0,0,0,.45); }
+      .hero-zip-input    { font-size: 1rem; padding: 1.05rem 0; }
+      .hero-zip-btn      { padding: 0 1.1rem; font-size: .88rem; min-width: 120px; }
+      .hero-zip-hint     { font-size: .68rem; text-align: center; }
+
+      /* Stats */
+      .hero-stats        { justify-content: center; flex-wrap: wrap; gap: .25rem; padding-top: 1.5rem; margin-top: 1.5rem; }
+      .hero-stat         { padding: 0 1rem; margin: 0; text-align: center; flex: 1; min-width: 70px; }
+      .hero-stat-num     { font-size: 1.2rem; }
+      .hero-stat-lbl     { font-size: .6rem; }
+
+      /* ── How It Works ── */
+      .steps             { grid-template-columns: 1fr; gap: 1px; border-radius: var(--radius-lg); }
+      .step              { padding: 1.75rem 1.25rem; text-align: center; }
+      .step-num          { margin: 0 auto 1rem; }
+
+      /* ── Services & Why ── */
+      .services-grid     { grid-template-columns: repeat(2, 1fr); gap: .85rem; }
+      .why-grid          { grid-template-columns: repeat(2, 1fr); gap: .85rem; }
+      .service-card      { padding: 1.5rem 1rem; }
+      .why-card          { padding: 1.5rem 1rem; }
+
+      /* ── Cities ── */
+      .regions-layout    { grid-template-columns: 1fr; gap: 1.5rem; }
+      .city-pill         { padding: .35rem .75rem; font-size: .78rem; }
+
+      /* ── Testimonials ── */
+      #testimonials .section-head + div,
+      .testimonials-wrap { flex-direction: column; align-items: stretch; }
+      .testimonial-card  { max-width: 100%; flex: none; }
+
+      /* ── Pricing ── */
+      .pricing-wrap      { flex-direction: column; align-items: stretch; gap: .85rem; }
+      .pricing-card      { max-width: 100%; }
+      .pricing-card.featured { transform: none; }
+
+      /* ── Quote Form ── */
+      .quote-card        { padding: 1.75rem 1.15rem; border-radius: var(--radius-lg); }
+      .form-row,
+      .form-row.three    { grid-template-columns: 1fr; }
+      .form-section-title { font-size: .62rem; margin-top: 1.25rem; }
+      /* Photo upload — mobile overhaul */
+      .photo-drop        { padding: 1rem; cursor: default; border-radius: var(--radius); }
+      .photo-drop:hover  { background: var(--surface); border-color: var(--border-h);
+                           box-shadow: none; }
+      .photo-drop-desktop { display: none; }
+      .photo-mobile-btns  { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+      .photo-count-badge  { display: block; }
+      .photo-thumb        { width: 90px; height: 90px; }
+      .photo-thumb button { width: 26px; height: 26px; font-size: .75rem; top: -5px; right: -5px; }
+
+      /* ── Shop Form ── */
+      .shop-form-card    { padding: 1.75rem 1.15rem; border-radius: var(--radius-lg); }
+
+      /* ── Footer ── */
+      .footer-top        { grid-template-columns: 1fr; gap: 1.75rem; }
+      #footer            { padding: 3rem 1.25rem 2rem; }
+      .footer-bottom     { flex-direction: column; text-align: center; gap: .5rem; }
+      .footer-legal      { margin-left: 0; display: flex; gap: 1rem; justify-content: center; }
+      .footer-legal a    { margin-left: 0; }
+    }
+
+    /* ── Small Mobile (≤ 420px) ─────────────────────────── */
+    @media (max-width: 420px) {
+      .hero-headline     { font-size: clamp(2.4rem, 12.5vw, 3rem); }
+      .services-grid,
+      .why-grid          { grid-template-columns: 1fr; gap: .75rem; }
+      .hero-zip-btn      { min-width: 100px; font-size: .8rem; }
+      .hero-stat         { border-right: none !important; }
+      .pricing-card      { padding: 1.5rem 1rem; }
     }
   </style>
 </head>
@@ -528,7 +1213,22 @@
 <nav id="nav">
   <div class="nav-inner">
     <a href="#" class="nav-logo">
-      <div class="nav-logo-icon">🔧</div>
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 38 38" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer tire -->
+          <circle cx="19" cy="19" r="17" stroke="white" stroke-width="2.5" fill="none"/>
+          <!-- Rim ring -->
+          <circle cx="19" cy="19" r="11.5" stroke="white" stroke-width="1.8" fill="none"/>
+          <!-- Hub -->
+          <circle cx="19" cy="19" r="3.2" fill="white"/>
+          <!-- 5 spokes -->
+          <line x1="19" y1="15.8" x2="19"   y2="7.5"  stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(72 19 19)"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(144 19 19)"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(216 19 19)"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(288 19 19)"/>
+        </svg>
+      </div>
       <div class="nav-logo-text">Lone Star<br>Wheel Repairs</div>
     </a>
     <ul class="nav-links">
@@ -542,11 +1242,49 @@
         <button class="lang-btn active" id="btnEN" onclick="setLang('en')">EN</button>
         <button class="lang-btn"        id="btnES" onclick="setLang('es')">ES</button>
       </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()">
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
       <a href="#quote" class="btn btn-red" style="padding:.45rem 1.1rem;font-size:.8rem;"
          data-en="Get Free Quotes" data-es="Cotizar Gratis">Get Free Quotes</a>
+      <!-- Hamburger — mobile only -->
+      <button class="hamburger" id="hamburger" aria-label="Open menu" onclick="toggleMobileNav()">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<!-- ═══════════════════════════════════════════════════ MOBILE NAV -->
+<div id="mobileNav" role="dialog" aria-label="Mobile navigation">
+  <a class="mobile-nav-link" href="#how-it-works" data-en="How It Works"  data-es="Cómo Funciona" onclick="closeMobileNav()">How It Works</a>
+  <a class="mobile-nav-link" href="#cities"       data-en="Cities"        data-es="Ciudades"       onclick="closeMobileNav()">Cities</a>
+  <a class="mobile-nav-link" href="#services"     data-en="Services"      data-es="Servicios"      onclick="closeMobileNav()">Services</a>
+  <a class="mobile-nav-link" href="#pricing"      data-en="For Shops"     data-es="Para Talleres"  onclick="closeMobileNav()">For Shops</a>
+  <div class="mobile-nav-actions">
+    <a href="#quote" class="btn btn-red" onclick="closeMobileNav()"
+       data-en="Get Free Quotes →" data-es="Cotizar Gratis →">Get Free Quotes →</a>
+    <div class="mobile-nav-controls">
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('en');closeMobileNav()">EN</button>
+        <button class="lang-btn"        onclick="setLang('es');closeMobileNav()">ES</button>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════ HERO -->
 <section id="hero">
@@ -573,27 +1311,44 @@
         Submit one free request and hear back from up to 5 verified local shops within 60 minutes — no account needed, completely free for vehicle owners.
       </p>
 
-      <div class="hero-ctas">
-        <a href="#quote" class="btn btn-red" style="font-size:1rem;padding:.85rem 2rem;"
-           data-en="Get My Free Quotes →" data-es="Obtener Mis Cotizaciones →">Get My Free Quotes →</a>
+      <!-- ZIP Quick-Find Bar -->
+      <div class="hero-zip-bar">
+        <div class="hero-zip-input-wrap">
+          <svg class="hero-zip-icon" viewBox="0 0 20 20" fill="none" width="16" height="16">
+            <path d="M10 2C7.24 2 5 4.24 5 7c0 4.25 5 11 5 11s5-6.75 5-11c0-2.76-2.24-5-5-5zm0 6.75A1.75 1.75 0 1 1 10 5.25a1.75 1.75 0 0 1 0 3.5z" fill="currentColor"/>
+          </svg>
+          <input type="text" id="heroZip" class="hero-zip-input"
+            placeholder="Enter ZIP code..."
+            maxlength="5" inputmode="numeric"
+            onkeydown="return restrictDigits(event)"
+            oninput="this.value=this.value.replace(/\D/g,''); handleHeroZip(this.value)"
+            data-en-placeholder="Enter ZIP code..."
+            data-es-placeholder="Ingresa tu código postal..."/>
+          <div class="hero-zip-city" id="heroZipCity"></div>
+        </div>
+        <button class="hero-zip-btn" onclick="heroZipGo()" data-en="Find My Shops →" data-es="Buscar Talleres →">Find My Shops →</button>
+      </div>
+      <div class="hero-zip-hint" data-en="Free · No account needed · Results in 60 min" data-es="Gratis · Sin cuenta · Resultados en 60 min">Free · No account needed · Results in 60 min</div>
+
+      <div class="hero-ctas" style="margin-top:1.5rem;">
         <a href="#shop-apply" class="btn btn-ghost"
            data-en="Join as a Shop" data-es="Unirme como Taller">Join as a Shop</a>
       </div>
 
       <div class="hero-stats">
-        <div>
+        <div class="hero-stat">
           <div class="hero-stat-num">500+</div>
           <div class="hero-stat-lbl" data-en="Partner Shops" data-es="Talleres Asociados">Partner Shops</div>
         </div>
-        <div>
+        <div class="hero-stat">
           <div class="hero-stat-num">4.9★</div>
           <div class="hero-stat-lbl" data-en="Avg. Rating" data-es="Calificación">Avg. Rating</div>
         </div>
-        <div>
+        <div class="hero-stat">
           <div class="hero-stat-num">&lt;60 min</div>
           <div class="hero-stat-lbl" data-en="Response Time" data-es="Tiempo de Respuesta">Response Time</div>
         </div>
-        <div>
+        <div class="hero-stat">
           <div class="hero-stat-num">Free</div>
           <div class="hero-stat-lbl" data-en="For Owners" data-es="Para Propietarios">For Owners</div>
         </div>
@@ -605,137 +1360,84 @@
       <div class="map-glow"></div>
       <div class="map-wrap">
 
-        <!-- Quality badge -->
+        <!-- Rating badge -->
         <div class="hero-badge-card">
           <div class="badge-icon">⭐</div>
           <div class="badge-num">4.9</div>
           <div class="badge-lbl" data-en="Verified Shops" data-es="Talleres Verificados">Verified Shops</div>
         </div>
 
-        <!-- Texas SVG Map -->
-        <svg class="map-svg" viewBox="0 0 480 520" xmlns="http://www.w3.org/2000/svg">
+        <!-- Response time badge -->
+        <div class="hero-badge-card-2">
+          <div class="badge-num">&lt;60<span style="font-size:.85rem;font-weight:600"> min</span></div>
+          <div class="badge-lbl" data-en="Shop Response" data-es="Respuesta">Shop Response</div>
+        </div>
+
+        <!-- Real Texas SVG — US Census / Albers USA projection 960×593 -->
+        <svg class="texas-svg" viewBox="278 325 264 270" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <!-- Glow filter for dots -->
-            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-              <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
+            <filter id="dotGlow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="1.8" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
-            <!-- Subtle glow for state outline -->
-            <filter id="stateglow" x="-5%" y="-5%" width="110%" height="110%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
-              <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
+            <filter id="stateGlow" x="-5%" y="-5%" width="110%" height="110%">
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
-            <!-- Radial gradient fill for the state -->
-            <radialGradient id="stateFill" cx="55%" cy="45%" r="55%">
-              <stop offset="0%"   stop-color="#1d3b82" stop-opacity=".55"/>
-              <stop offset="100%" stop-color="#0a1a4a" stop-opacity=".35"/>
-            </radialGradient>
           </defs>
 
-          <!-- State outline (simplified Texas shape, clockwise from NW panhandle) -->
+          <!-- Texas state outline — real geographic path from US Census data -->
           <path
-            d="M 95,22 L 276,22 L 276,118 L 390,118
-               L 400,162 L 406,208 L 402,254 L 392,292
-               L 374,328 L 350,360 L 316,384 L 280,406
-               L 242,422 L 204,428 L 166,416 L 134,394
-               L 108,362 L 84,322 L 66,278
-               L 52,232 L 47,188 L 50,156
-               L 60,134 L 74,122 L 95,118 Z"
-            fill="url(#stateFill)"
-            stroke="#3b82f6"
-            stroke-width="1.5"
-            filter="url(#stateglow)"
-            opacity=".9"
+            d="M361.46423,330.57358L384.15502,331.65952L415.24771,332.80264L412.9131,356.25844L412.61634,374.41196L412.68444,376.49375L417.02827,380.31218L419.01492,381.75934L420.19913,381.19965L420.5725,379.38193L421.71282,381.18555L423.82446,381.22945L423.82146,379.78236L425.4914,380.74963L426.6301,381.1585L426.27083,385.12615L430.35902,385.21965L433.28434,386.41682L437.23908,386.9422L439.62046,389.02118L441.74456,386.94501L445.4695,387.55992L447.69041,390.78486L448.76537,391.10582L448.6049,393.07109L450.81851,393.86338L453.14866,391.80858L455.28168,392.4235L457.51106,392.459L458.44413,394.89444L464.77222,397.00889L466.36527,396.24196L467.85474,392.06425L468.19546,392.06425L469.10195,392.14585L470.331,394.21448L474.26088,394.87976L477.59788,396.00264L481.02351,397.19861L482.86409,396.22361L483.57785,393.70877L488.03107,393.75297L489.83981,394.68375L492.63906,392.57724L493.7427,392.62144L494.59374,394.22651L498.64846,394.22651L500.16733,392.19789L502.0347,392.60513L503.98073,395.00841L507.5013,397.05256L510.36006,397.86237L511.87368,398.66221L514.32038,400.65953L517.36342,399.33174L520.05451,400.47062L520.61832,406.57656L520.57852,416.27873L521.26438,425.81274L521.96656,429.41785L524.64189,433.83771L525.54007,438.78844L529.75602,444.32646L529.95204,447.4714L530.69841,448.25724L529.96834,456.63731L527.09624,461.64381L528.62921,463.79668L527.99913,466.13476L527.32956,473.53908L525.82524,476.87708L526.12012,480.37943L520.45524,481.96461L510.59395,486.49111L509.62399,488.43103L507.03742,490.37096L504.93584,491.8259L503.64255,492.6342L497.98444,497.969L495.23621,500.07059L489.90141,503.30379L484.2433,505.7287L477.93854,509.12357L476.16028,510.57852L470.3405,514.13505L466.94563,514.78169L463.06578,520.27814L459.02427,520.60147L458.0543,522.54139L460.31755,524.48132L458.8626,529.97777L457.56932,534.50427L456.4377,538.38412L455.6294,542.91061L456.4377,545.33552L458.21596,552.28692L459.18593,558.43001L460.96419,561.17824L459.99423,562.63319L456.92268,564.57311L451.26456,560.69326L445.76811,559.56164L444.47482,560.04662L441.24161,559.39998L437.03844,556.32843L431.86531,555.19681L424.26726,551.80194L422.16568,547.92208L420.87239,541.45567L417.63919,539.51574L416.99254,537.25249L417.63919,536.60585L417.96251,533.21098L416.66922,532.56434L416.02258,531.59438L417.31586,527.22954L415.69926,524.9663L412.46605,523.67301L409.07118,519.30818L405.51465,512.6801L401.31148,510.09353L401.47314,508.15361L396.13834,495.86741L395.33004,491.66424L393.55178,489.72432L393.39012,488.26937L387.40868,482.93458L384.82211,479.86303L384.82211,478.7314L382.23554,476.62982L375.4458,475.49819L368.00942,474.85155L364.93787,472.58831L360.41138,474.36657L356.85485,475.82152L354.5916,479.05472L353.62164,482.77292L349.25681,488.91601L346.8319,491.34092L344.24533,490.37096L342.46707,489.23933L340.52714,488.59269L336.64729,486.32945L336.64729,485.6828L334.86903,483.74288L329.69589,481.64129L322.25951,473.88159L319.99626,469.19344L319.99626,461.11041L316.76305,454.64399L316.27807,451.89577L314.66147,450.9258L313.52984,448.82422L308.51837,446.72263L307.22509,445.10603L300.11202,437.18466L298.81874,433.95145L294.13058,431.6882L292.67563,427.32333L290.08904,424.41346L288.14913,423.9285L287.4999,419.25086L295.50177,419.93675L324.53676,422.6802L353.57184,424.28056L355.80537,404.81874L359.69192,349.26372L361.29231,330.5164Z
+             M461.6934,560.20774L461.12759,553.09466L458.37935,545.90074L457.81353,538.86849L459.34931,530.62378L462.66337,523.75319L466.13907,518.33754L469.29147,514.78099L469.93811,515.02349L465.16911,521.65159L460.80427,528.19887L458.7835,534.82696L458.46018,540.00012L459.34931,546.14324L461.93589,553.33716L462.42087,558.5103L462.58253,559.96526L461.6934,560.20774Z"
+            fill="rgba(59,130,246,.1)"
+            stroke="rgba(255,255,255,.82)"
+            stroke-width="0.9"
+            stroke-linejoin="round"
+            filter="url(#stateGlow)"
           />
 
-          <!-- ── City dots — (cx,cy) approximate positions in this viewBox ── -->
-          <!-- Houston -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="370" cy="336" r="4.5" fill="#ffffff"/>
-          </g>
-          <text x="378" y="340" font-size="9" fill="rgba(255,255,255,.65)" font-family="sans-serif">Houston</text>
+          <!-- ── City dots (Albers USA coordinates) ── -->
 
-          <!-- Dallas -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="330" cy="190" r="4" fill="#ffffff"/>
-          </g>
-          <text x="338" y="194" font-size="9" fill="rgba(255,255,255,.65)" font-family="sans-serif">Dallas</text>
+          <!-- Houston (95.37°W 29.76°N) -->
+          <circle class="city-dot-pulse" cx="497" cy="479" r="2.8" fill="#e63030" filter="url(#dotGlow)"/>
+          <text x="500" y="477.5" font-size="6.5" fill="rgba(255,255,255,.85)" font-family="sans-serif" font-weight="600">Houston</text>
 
-          <!-- San Antonio -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="272" cy="362" r="4" fill="#ffffff"/>
-          </g>
-          <text x="280" y="366" font-size="8" fill="rgba(255,255,255,.65)" font-family="sans-serif">S.Antonio</text>
+          <!-- Dallas (96.80°W 32.78°N) -->
+          <circle class="city-dot-pulse" cx="470" cy="412" r="2.8" fill="#ffffff" filter="url(#dotGlow)"/>
+          <text x="473" y="410.5" font-size="6.5" fill="rgba(255,255,255,.85)" font-family="sans-serif" font-weight="600">Dallas</text>
 
-          <!-- Austin -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="290" cy="316" r="4" fill="#ff6b6b"/>
-          </g>
-          <text x="298" y="320" font-size="9" fill="rgba(255,150,150,.75)" font-family="sans-serif">Austin</text>
+          <!-- Fort Worth (97.33°W 32.72°N) -->
+          <circle class="city-dot-pulse" cx="460" cy="413" r="2" fill="rgba(255,255,255,.7)" filter="url(#dotGlow)"/>
 
-          <!-- Fort Worth -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="308" cy="192" r="3.5" fill="#ffffff"/>
-          </g>
+          <!-- Austin (97.75°W 30.27°N) -->
+          <circle class="city-dot-pulse" cx="453" cy="467" r="2.8" fill="#e63030" filter="url(#dotGlow)"/>
+          <text x="456" y="465.5" font-size="6.5" fill="rgba(230,48,48,.95)" font-family="sans-serif" font-weight="700">Austin</text>
 
-          <!-- El Paso -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="58" cy="204" r="3.5" fill="#ffffff"/>
-          </g>
-          <text x="44" y="198" font-size="8" fill="rgba(255,255,255,.6)" font-family="sans-serif">El Paso</text>
+          <!-- San Antonio (98.49°W 29.42°N) -->
+          <circle class="city-dot-pulse" cx="439" cy="486" r="2.5" fill="#ffffff" filter="url(#dotGlow)"/>
+          <text x="442" y="484.5" font-size="5.8" fill="rgba(255,255,255,.8)" font-family="sans-serif">S.Antonio</text>
 
-          <!-- Lubbock -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="170" cy="172" r="3.5" fill="#ffffff"/>
-          </g>
-          <text x="148" y="168" font-size="8" fill="rgba(255,255,255,.55)" font-family="sans-serif">Lubbock</text>
+          <!-- El Paso (106.49°W 31.76°N) -->
+          <circle class="city-dot-pulse" cx="291" cy="435" r="2.5" fill="#ffffff" filter="url(#dotGlow)"/>
+          <text x="294" y="433.5" font-size="5.8" fill="rgba(255,255,255,.75)" font-family="sans-serif">El Paso</text>
 
-          <!-- Amarillo -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="182" cy="86" r="3.5" fill="#ffffff"/>
-          </g>
-          <text x="158" y="82" font-size="8" fill="rgba(255,255,255,.55)" font-family="sans-serif">Amarillo</text>
+          <!-- Amarillo (101.83°W 35.22°N) -->
+          <circle class="city-dot-pulse" cx="377" cy="358" r="2.5" fill="#ffffff" filter="url(#dotGlow)"/>
+          <text x="358" y="356.5" font-size="5.8" fill="rgba(255,255,255,.7)" font-family="sans-serif">Amarillo</text>
 
-          <!-- Corpus Christi -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="322" cy="400" r="3.5" fill="#ffffff"/>
-          </g>
+          <!-- Lubbock (101.87°W 33.58°N) -->
+          <circle class="city-dot-pulse" cx="376" cy="394" r="2.2" fill="rgba(255,255,255,.7)" filter="url(#dotGlow)"/>
+          <text x="358" y="392.5" font-size="5.8" fill="rgba(255,255,255,.65)" font-family="sans-serif">Lubbock</text>
 
-          <!-- Midland -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="148" cy="274" r="3" fill="#ffffff"/>
-          </g>
+          <!-- Corpus Christi (97.40°W 27.80°N) -->
+          <circle class="city-dot-pulse" cx="459" cy="522" r="2.2" fill="rgba(255,255,255,.75)" filter="url(#dotGlow)"/>
 
-          <!-- Waco -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="314" cy="252" r="3" fill="#ffffff"/>
-          </g>
+          <!-- Laredo (99.50°W 27.50°N) -->
+          <circle class="city-dot-pulse" cx="420" cy="529" r="2" fill="rgba(255,255,255,.65)" filter="url(#dotGlow)"/>
 
-          <!-- McAllen -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="276" cy="418" r="3" fill="#ffffff"/>
-          </g>
-
-          <!-- Laredo -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="226" cy="402" r="3" fill="#ffffff"/>
-          </g>
-
-          <!-- Tyler -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="370" cy="256" r="3" fill="#ffffff"/>
-          </g>
-
-          <!-- Beaumont -->
-          <g filter="url(#glow)">
-            <circle class="city-dot-pulse" cx="393" cy="308" r="3" fill="#ffffff"/>
-          </g>
+          <!-- Midland (102.08°W 31.99°N) -->
+          <circle class="city-dot-pulse" cx="373" cy="429" r="2" fill="rgba(255,255,255,.6)" filter="url(#dotGlow)"/>
         </svg>
       </div>
     </div>
@@ -753,7 +1455,23 @@
         Click your city — we'll pre-fill your quote form automatically.
       </p>
     </div>
-    <div id="cityRegions"></div>
+    <div class="cities-stats">
+      <div class="cities-stat">
+        <div class="cities-stat-num" id="totalCitiesCount">100+</div>
+        <div class="cities-stat-label" data-en="Cities Covered" data-es="Ciudades">Cities Covered</div>
+      </div>
+      <div class="cities-divider"></div>
+      <div class="cities-stat">
+        <div class="cities-stat-num">7</div>
+        <div class="cities-stat-label" data-en="Metro Regions" data-es="Regiones">Metro Regions</div>
+      </div>
+      <div class="cities-divider"></div>
+      <div class="cities-stat">
+        <div class="cities-stat-num">254</div>
+        <div class="cities-stat-label" data-en="Texas Counties" data-es="Condados">Texas Counties</div>
+      </div>
+    </div>
+    <div class="regions-layout" id="cityRegions"></div>
   </div>
 </section>
 
@@ -781,14 +1499,14 @@
             </div>
             <div class="form-group">
               <label><span data-en="Phone Number" data-es="Teléfono">Phone Number</span><span class="req">*</span></label>
-              <input type="tel" id="phone" placeholder="(512) 555-0100" autocomplete="tel"/>
+              <input type="tel" id="phone" placeholder="(512) 555-0100" autocomplete="tel" inputmode="numeric" maxlength="14" onkeydown="return restrictPhone(event)" oninput="formatPhone(this)" onblur="validatePhoneField('phone','err-phone')"/>
               <div class="field-error" id="err-phone"></div>
             </div>
           </div>
           <div class="form-row full">
             <div class="form-group">
               <label><span data-en="Email Address" data-es="Correo Electrónico">Email Address</span><span class="req">*</span></label>
-              <input type="email" id="email" placeholder="john@example.com" autocomplete="email"/>
+              <input type="email" id="email" placeholder="john@example.com" autocomplete="email" onblur="validateEmailField('email','err-email')"/>
               <div class="field-error" id="err-email"></div>
             </div>
           </div>
@@ -796,14 +1514,14 @@
           <div class="form-section-title" data-en="YOUR LOCATION" data-es="TU UBICACIÓN">YOUR LOCATION</div>
           <div class="form-row">
             <div class="form-group">
+              <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
+              <input type="text" id="zip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,''); if(this.value.length===5) lookupZip(this.value,'city','err-zip')"/>
+              <div class="field-error" id="err-zip"></div>
+            </div>
+            <div class="form-group">
               <label><span data-en="City" data-es="Ciudad">City</span><span class="req">*</span></label>
               <input type="text" id="city" placeholder="Austin"/>
               <div class="field-error" id="err-city"></div>
-            </div>
-            <div class="form-group">
-              <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
-              <input type="text" id="zip" placeholder="78701" maxlength="5"/>
-              <div class="field-error" id="err-zip"></div>
             </div>
           </div>
 
@@ -867,22 +1585,46 @@
             </div>
           </div>
 
-          <div class="form-section-title" data-en="PHOTOS (OPTIONAL)" data-es="FOTOS (OPCIONAL)">PHOTOS (OPTIONAL)</div>
+          <div class="form-section-title" data-en="PHOTOS OF DAMAGE*" data-es="FOTOS DEL DAÑO*">PHOTOS OF DAMAGE<span class="req">*</span></div>
           <div class="form-row full">
             <div class="form-group">
               <div class="photo-drop" id="photoDrop">
-                <div class="photo-drop-icon">📷</div>
-                <div class="photo-drop-text">
-                  <strong data-en="Click to upload or drag & drop" data-es="Haz clic o arrastra">Click to upload or drag &amp; drop</strong><br>
-                  <span data-en="JPG, PNG, HEIC · up to 10MB · max 6 photos" data-es="JPG, PNG, HEIC · máx 10MB · 6 fotos">JPG, PNG, HEIC · up to 10MB · max 6 photos</span>
+                <!-- Desktop: drag & drop zone -->
+                <div class="photo-drop-desktop">
+                  <div class="photo-drop-icon">📷</div>
+                  <div class="photo-drop-text">
+                    <strong data-en="Click to upload or drag & drop" data-es="Haz clic o arrastra">Click to upload or drag &amp; drop</strong><br>
+                    <span data-en="JPG, PNG, HEIC · up to 10MB · max 6 photos · at least 1 required" data-es="JPG, PNG, HEIC · máx 10MB · 6 fotos · mínimo 1 requerida">JPG, PNG, HEIC · up to 10MB · max 6 photos · at least 1 required</span>
+                  </div>
                 </div>
+                <!-- Mobile: two large tap buttons -->
+                <div class="photo-mobile-btns">
+                  <button type="button" class="photo-mobile-btn" onclick="document.getElementById('photoCameraInput').click()">
+                    <span class="photo-btn-icon">📸</span>
+                    <span data-en="Take Photo" data-es="Tomar Foto">Take Photo</span>
+                  </button>
+                  <button type="button" class="photo-mobile-btn" onclick="document.getElementById('photoInput').click()">
+                    <span class="photo-btn-icon">🖼️</span>
+                    <span data-en="Choose from Gallery" data-es="Elegir de Galería">Choose from Gallery</span>
+                  </button>
+                </div>
+                <div class="photo-count-badge" id="photoCountBadge" data-en="0 / 6 photos added" data-es="0 / 6 fotos añadidas">0 / 6 photos added</div>
                 <div class="photo-previews" id="photoPreviews"></div>
               </div>
+              <div class="field-error" id="err-photos"></div>
               <input type="file" id="photoInput" accept="image/jpeg,image/png,image/heic,image/heif" multiple/>
+              <input type="file" id="photoCameraInput" accept="image/*" capture="environment"/>
             </div>
           </div>
 
           <div class="form-submit-row">
+            <div class="tos-consent" id="tosConsentWrap">
+              <input type="checkbox" id="tosCheckbox" />
+              <label for="tosCheckbox">
+                <span data-en="I agree to the " data-es="Acepto los ">I agree to the </span><a href="terms.html" target="_blank" data-en="Terms of Service" data-es="Términos de Servicio">Terms of Service</a><span data-en=" and consent to be contacted by up to 5 local wheel repair shops regarding my request." data-es=" y doy mi consentimiento para ser contactado por hasta 5 talleres locales sobre mi solicitud."> and consent to be contacted by up to 5 local wheel repair shops regarding my request.</span>
+              </label>
+            </div>
+            <div class="field-error" id="err-tos"></div>
             <button type="submit" class="btn btn-red" id="submitBtn"
               data-en="Send My Request to Local Shops →"
               data-es="Enviar Mi Solicitud a Talleres Locales →">
@@ -950,32 +1692,32 @@
     </div>
     <div class="services-grid">
       <div class="service-card">
-        <div class="service-icon">🔧</div>
+        <div class="service-icon-wrap">🔧</div>
         <div class="service-name" data-en="Curb Rash Repair" data-es="Raspón de Bordo">Curb Rash Repair</div>
         <div class="service-desc" data-en="Smooth out scuffs and scratches from curb contact on alloy or steel wheels." data-es="Elimina raspones de rines de aleación o acero por contacto con el bordo.">Smooth out scuffs and scratches from curb contact.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">⚙️</div>
+        <div class="service-icon-wrap">⚙️</div>
         <div class="service-name" data-en="Bent Rim Straightening" data-es="Enderezado de Rin Doblado">Bent Rim Straightening</div>
         <div class="service-desc" data-en="Hydraulic straightening restores bent rims to factory spec." data-es="El enderezado hidráulico restaura los rines a su especificación de fábrica.">Hydraulic straightening restores bent rims to factory spec.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">🔩</div>
+        <div class="service-icon-wrap">🔩</div>
         <div class="service-name" data-en="Cracked Wheel Welding" data-es="Soldadura de Rin Agrietado">Cracked Wheel Welding</div>
         <div class="service-desc" data-en="TIG welding repairs cracks in alloy wheels for structural integrity." data-es="Soldadura TIG repara grietas en rines de aleación.">TIG welding repairs cracks in alloy wheels.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">🎨</div>
+        <div class="service-icon-wrap">🎨</div>
         <div class="service-name" data-en="Wheel Painting & Refinishing" data-es="Pintura y Reacabado">Wheel Painting &amp; Refinishing</div>
         <div class="service-desc" data-en="Custom colors, powder coating, and OEM color-match refinishing." data-es="Colores personalizados, pintura en polvo y reacabado en color OEM.">Custom colors, powder coat, and OEM color-match.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">✨</div>
+        <div class="service-icon-wrap">✨</div>
         <div class="service-name" data-en="Chrome & Polish Repair" data-es="Cromo y Pulido">Chrome &amp; Polish Repair</div>
         <div class="service-desc" data-en="Restore mirror finish on chrome wheels — pitting, flaking, and oxidation." data-es="Restaura el acabado espejo en rines cromados.">Restore mirror finish — pitting, flaking, oxidation.</div>
       </div>
       <div class="service-card">
-        <div class="service-icon">🚘</div>
+        <div class="service-icon-wrap">🚘</div>
         <div class="service-name" data-en="All Vehicle Types" data-es="Todo Tipo de Vehículos">All Vehicle Types</div>
         <div class="service-desc" data-en="Cars, trucks, SUVs, vans, and luxury vehicles. OEM and aftermarket." data-es="Autos, camionetas, SUVs y vehículos de lujo. OEM y aftermarket.">Cars, trucks, SUVs, vans &amp; luxury vehicles.</div>
       </div>
@@ -992,34 +1734,49 @@
     </div>
     <div class="why-grid">
       <div class="why-card">
-        <div class="why-icon">🎯</div>
+        <div class="why-icon-wrap">🎯</div>
         <div class="why-title" data-en="Local, Verified Shops" data-es="Talleres Verificados">Local, Verified Shops</div>
         <div class="why-desc" data-en="Every shop is reviewed and verified before receiving leads." data-es="Cada taller es revisado y verificado.">Every shop is reviewed and verified before receiving leads.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">⚡</div>
+        <div class="why-icon-wrap">⚡</div>
         <div class="why-title" data-en="60-Minute Guarantee" data-es="Garantía de 60 Minutos">60-Minute Guarantee</div>
         <div class="why-desc" data-en="Shops commit to contacting you within 60 minutes." data-es="Los talleres se comprometen a contactarte en 60 minutos.">Shops commit to contacting you within 60 minutes.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">💬</div>
+        <div class="why-icon-wrap">💬</div>
         <div class="why-title" data-en="English & Spanish" data-es="Inglés y Español">English &amp; Spanish</div>
         <div class="why-desc" data-en="Fully bilingual platform — switch languages anytime with the toggle above." data-es="Plataforma completamente bilingüe.">Fully bilingual — switch languages anytime above.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">🆓</div>
+        <div class="why-icon-wrap">🆓</div>
         <div class="why-title" data-en="Always Free for You" data-es="Siempre Gratis Para Ti">Always Free for You</div>
         <div class="why-desc" data-en="Vehicle owners never pay. Shops subscribe to be in the network." data-es="Los propietarios nunca pagan. Los talleres se suscriben.">Vehicle owners never pay. Shops subscribe to be in the network.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">📍</div>
+        <div class="why-icon-wrap">📍</div>
         <div class="why-title" data-en="Statewide Coverage" data-es="Cobertura Estatal">Statewide Coverage</div>
         <div class="why-desc" data-en="From El Paso to Beaumont — every corner of Texas covered." data-es="Desde El Paso hasta Beaumont — todo Texas cubierto.">From El Paso to Beaumont — every corner of Texas.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">🛡️</div>
+        <div class="why-icon-wrap">🛡️</div>
         <div class="why-title" data-en="Fraud Protection" data-es="Protección Contra Fraude">Fraud Protection</div>
         <div class="why-desc" data-en="Duplicate submissions and bad actors are silently filtered." data-es="Solicitudes duplicadas y actores maliciosos son filtrados.">Duplicate submissions and bad actors are silently filtered.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon-wrap">🎨</div>
+        <div class="why-title" data-en="OEM Color Matching" data-es="Igualación de Color OEM">OEM Color Matching</div>
+        <div class="why-desc" data-en="Factory-matched finishes using your vehicle's exact paint code — invisible repairs, every time." data-es="Acabados con el código de pintura exacto de fábrica — reparaciones invisibles.">Factory-matched finishes using your vehicle's exact paint code — invisible repairs, every time.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon-wrap">🏢</div>
+        <div class="why-title" data-en="We Work With Dealerships" data-es="Trabajamos con Concesionarios">We Work With Dealerships</div>
+        <div class="why-desc" data-en="Our network shops handle fleet repairs, pre-sale refurb, and dealer lot work across Texas." data-es="Nuestros talleres manejan flotas, reacondicionamiento previo a la venta y trabajo en concesionarios.">Our network shops handle fleet repairs, pre-sale refurb, and dealer lot work across Texas.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon-wrap">🚐</div>
+        <div class="why-title" data-en="Mobile Repair Available" data-es="Reparación Móvil Disponible">Mobile Repair Available</div>
+        <div class="why-desc" data-en="Select shops come to you — get wheel repair at your home, office, or dealership lot." data-es="Algunos talleres van a ti — repara tus rines en casa, trabajo o concesionario.">Select shops come to you — get wheel repair at your home, office, or dealership lot.</div>
       </div>
     </div>
   </div>
@@ -1039,6 +1796,7 @@
            data-es='"Llené el formulario en 2 minutos, 3 talleres me llamaron en 45 minutos. ¡Terminado el mismo día!"'>
           "Filled out the form in 2 minutes, had 3 shops call me within 45 minutes. Best price was $120 — done same day!"
         </p>
+        <div class="testimonial-divider"></div>
         <div class="testimonial-author">Marcus T.</div>
         <div class="testimonial-location">Austin, TX</div>
       </div>
@@ -1048,6 +1806,7 @@
            data-es='"Tenía dos rines doblados. Recibí 4 cotizaciones en menos de una hora. El servicio en español fue excelente."'>
           "Tenía dos rines doblados. Recibí 4 cotizaciones en menos de una hora. El servicio en español fue excelente."
         </p>
+        <div class="testimonial-divider"></div>
         <div class="testimonial-author">Alejandro R.</div>
         <div class="testimonial-location">San Antonio, TX</div>
       </div>
@@ -1057,6 +1816,7 @@
            data-es='"En una hora tenía 5 cotizaciones. Ahorré cientos comparado con el distribuidor."'>
           "Within an hour I had 5 quotes ranging from $85 to $200. Saved hundreds compared to the dealership."
         </p>
+        <div class="testimonial-divider"></div>
         <div class="testimonial-author">Brenda K.</div>
         <div class="testimonial-location">Houston, TX</div>
       </div>
@@ -1157,21 +1917,25 @@
         <div class="form-row">
           <div class="form-group">
             <label><span data-en="Phone" data-es="Teléfono">Phone</span><span class="req">*</span></label>
-            <input type="tel" id="shopPhone" placeholder="(512) 555-0200"/>
+            <input type="tel" id="shopPhone" placeholder="(512) 555-0200" inputmode="numeric" onkeydown="return restrictPhone(event)" oninput="this.value=this.value.replace(/[^\d\s\(\)\-\+]/g,'')" onblur="validatePhoneField('shopPhone','err-shopPhone')"/>
+            <div class="field-error" id="err-shopPhone"></div>
           </div>
           <div class="form-group">
             <label><span data-en="Email" data-es="Correo">Email</span><span class="req">*</span></label>
-            <input type="email" id="shopEmail" placeholder="owner@myshop.com"/>
+            <input type="email" id="shopEmail" placeholder="owner@myshop.com" onblur="validateEmailField('shopEmail','err-shopEmail')"/>
+            <div class="field-error" id="err-shopEmail"></div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label><span data-en="City" data-es="Ciudad">City</span><span class="req">*</span></label>
-            <input type="text" id="shopCity" placeholder="Austin"/>
+            <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
+            <input type="text" id="shopZip" placeholder="78701" maxlength="5" inputmode="numeric" onkeydown="return restrictDigits(event)" oninput="this.value=this.value.replace(/\D/g,''); if(this.value.length===5) lookupZip(this.value,'shopCity','err-shopZip')"/>
+            <div class="field-error" id="err-shopZip"></div>
           </div>
           <div class="form-group">
-            <label><span data-en="ZIP Code" data-es="Código Postal">ZIP Code</span><span class="req">*</span></label>
-            <input type="text" id="shopZip" placeholder="78701" maxlength="5"/>
+            <label><span data-en="City" data-es="Ciudad">City</span><span class="req">*</span></label>
+            <input type="text" id="shopCity" placeholder="Austin"/>
+            <div class="field-error" id="err-shopCity"></div>
           </div>
         </div>
         <div class="form-row">
@@ -1215,7 +1979,22 @@
     <div class="footer-top">
       <div>
         <a href="#" class="nav-logo" style="margin-bottom:.25rem;">
-          <div class="nav-logo-icon">🔧</div>
+          <div class="nav-logo-icon">
+        <svg viewBox="0 0 38 38" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer tire -->
+          <circle cx="19" cy="19" r="17" stroke="white" stroke-width="2.5" fill="none"/>
+          <!-- Rim ring -->
+          <circle cx="19" cy="19" r="11.5" stroke="white" stroke-width="1.8" fill="none"/>
+          <!-- Hub -->
+          <circle cx="19" cy="19" r="3.2" fill="white"/>
+          <!-- 5 spokes -->
+          <line x1="19" y1="15.8" x2="19"   y2="7.5"  stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(72 19 19)"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(144 19 19)"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(216 19 19)"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(288 19 19)"/>
+        </svg>
+      </div>
           <div class="nav-logo-text">Lone Star<br>Wheel Repairs</div>
         </a>
         <p class="footer-brand-desc" data-en="Connecting Texas vehicle owners with trusted local wheel repair shops since 2026." data-es="Conectando propietarios con talleres verificados en Texas desde 2026.">
@@ -1255,8 +2034,8 @@
     <div class="footer-bottom">
       <span data-en="© 2026 LoneStarWheelRepairs.com — All rights reserved." data-es="© 2026 LoneStarWheelRepairs.com — Todos los derechos reservados.">© 2026 LoneStarWheelRepairs.com — All rights reserved.</span>
       <div class="footer-legal">
-        <a href="/privacy" data-en="Privacy" data-es="Privacidad">Privacy</a>
-        <a href="/terms"   data-en="Terms"   data-es="Términos">Terms</a>
+        <a href="/privacy"     data-en="Privacy"          data-es="Privacidad">Privacy</a>
+        <a href="terms.html"  data-en="Terms of Service" data-es="Términos de Servicio">Terms of Service</a>
       </div>
     </div>
   </div>
@@ -1282,13 +2061,58 @@ const TEXAS_CITIES = {
   "South Texas":   ["Brownsville","Edinburg","Harlingen","Mission","Pharr","Port Isabel","Weslaco"]
 };
 
+// ── Theme Toggle ──────────────────────────────────────────────────────────────
+// ── Mobile Nav ────────────────────────────────────────────────────────────────
+function toggleMobileNav() {
+  const nav  = document.getElementById('mobileNav');
+  const btn  = document.getElementById('hamburger');
+  const open = nav.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  document.body.classList.toggle('nav-open', open);
+  btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+}
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.classList.remove('nav-open');
+}
+// Close on outside tap
+document.addEventListener('click', e => {
+  const nav = document.getElementById('mobileNav');
+  if (nav.classList.contains('open') &&
+      !nav.contains(e.target) &&
+      !document.getElementById('hamburger').contains(e.target)) {
+    closeMobileNav();
+  }
+});
+// Close on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeMobileNav();
+});
+
+function toggleTheme() {
+  const html    = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  const next    = isLight ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('lswr_theme', next);
+}
+// Restore saved theme on load
+(function() {
+  const saved = localStorage.getItem('lswr_theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+
 // ── Language ──────────────────────────────────────────────────────────────────
 let currentLang = 'en';
 function setLang(lang) {
   currentLang = lang;
   document.documentElement.lang = lang;
-  document.getElementById('btnEN').classList.toggle('active', lang === 'en');
-  document.getElementById('btnES').classList.toggle('active', lang === 'es');
+  // Update ALL lang buttons (nav bar + mobile drawer)
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    const btnLang = btn.textContent.trim().toLowerCase();
+    btn.classList.toggle('active', btnLang === lang);
+  });
   document.querySelectorAll('[data-en]').forEach(el => {
     const text = el.getAttribute('data-' + lang);
     if (text !== null) {
@@ -1309,13 +2133,24 @@ function setLang(lang) {
 function renderCities() {
   const container = document.getElementById('cityRegions');
   container.innerHTML = '';
+  let totalCities = 0;
   for (const [region, cities] of Object.entries(TEXAS_CITIES)) {
+    totalCities += cities.length;
     const group = document.createElement('div');
     group.className = 'region-group';
+
+    const header = document.createElement('div');
+    header.className = 'region-header';
     const label = document.createElement('div');
     label.className = 'region-name';
     label.textContent = region;
-    group.appendChild(label);
+    const count = document.createElement('div');
+    count.className = 'region-count';
+    count.textContent = cities.length + ' cities';
+    header.appendChild(label);
+    header.appendChild(count);
+    group.appendChild(header);
+
     const grid = document.createElement('div');
     grid.className = 'city-grid';
     cities.forEach(city => {
@@ -1323,14 +2158,19 @@ function renderCities() {
       chip.className = 'city-chip';
       chip.type = 'button';
       chip.textContent = city;
-      chip.addEventListener('click', () => selectCity(city));
+      chip.addEventListener('click', () => selectCity(city, chip));
       grid.appendChild(chip);
     });
     group.appendChild(grid);
     container.appendChild(group);
   }
+  const countEl = document.getElementById('totalCitiesCount');
+  if (countEl) countEl.textContent = totalCities + '+';
 }
-function selectCity(city) {
+function selectCity(city, chipEl) {
+  // Clear previous active chip
+  document.querySelectorAll('.city-chip.active').forEach(c => c.classList.remove('active'));
+  if (chipEl) chipEl.classList.add('active');
   document.getElementById('city').value = city;
   document.getElementById('quote').scrollIntoView({ behavior: 'smooth', block: 'start' });
   setTimeout(() => document.getElementById('firstName').focus(), 600);
@@ -1348,31 +2188,63 @@ async function loadYears() {
     sel.appendChild(opt);
   }
 }
-async function loadMakes(year) {
-  const makeSel = document.getElementById('vehicleMake');
+const APPROVED_MAKES = [
+  // American
+  "Buick","Cadillac","Chevrolet","Chrysler","Dodge","Ford","GMC",
+  "Jeep","Lincoln","Lucid","RAM","Rivian","Tesla",
+  // Japanese
+  "Acura","Honda","INFINITI","Lexus","Mazda","Mitsubishi",
+  "Nissan","Subaru","Toyota",
+  // Korean
+  "Genesis","Hyundai","Kia",
+  // German
+  "Audi","BMW","Mercedes-Benz","MINI","Porsche","Volkswagen",
+  // European
+  "Alfa Romeo","Aston Martin","Bentley","Ferrari","FIAT",
+  "Jaguar","Lamborghini","Land Rover","Lotus",
+  "Maserati","McLaren","Polestar","Rolls-Royce","Volvo"
+].sort();
+
+function loadMakes(year) {
+  const makeSel  = document.getElementById('vehicleMake');
   const modelSel = document.getElementById('vehicleModel');
-  makeSel.innerHTML = '<option value="">Loading...</option>';
-  makeSel.disabled = true;
+  makeSel.innerHTML  = '<option value="">-- Select Make --</option>';
   modelSel.innerHTML = '<option value="">-- Select Make First --</option>';
-  modelSel.disabled = true;
-  try {
-    const res  = await fetch(`${NHTSA}/GetMakesForVehicleType/car?modelyear=${year}&format=json`);
-    const data = await res.json();
-    const makes = (data.Results || []).map(m => m.MakeName).sort();
-    makeSel.innerHTML = '<option value="">-- Select Make --</option>';
-    if (makes.length === 0) populateFallbackMakes(makeSel);
-    else makes.forEach(make => {
-      const opt = document.createElement('option');
-      opt.value = make; opt.textContent = make;
-      makeSel.appendChild(opt);
-    });
-    makeSel.disabled = false;
-  } catch { populateFallbackMakes(makeSel); makeSel.disabled = false; }
+  modelSel.disabled  = true;
+  APPROVED_MAKES.forEach(make => {
+    const opt = document.createElement('option');
+    opt.value = make; opt.textContent = make;
+    makeSel.appendChild(opt);
+  });
+  makeSel.disabled = false;
 }
-function populateFallbackMakes(sel) {
-  const common = ["Acura","Audi","BMW","Buick","Cadillac","Chevrolet","Chrysler","Dodge","Ford","GMC","Honda","Hyundai","Infiniti","Jeep","Kia","Lexus","Lincoln","Mazda","Mercedes-Benz","Nissan","RAM","Subaru","Tesla","Toyota","Volkswagen","Volvo"];
-  sel.innerHTML = '<option value="">-- Select Make --</option>';
-  common.forEach(make => { const opt = document.createElement('option'); opt.value = make; opt.textContent = make; sel.appendChild(opt); });
+
+// ── Input restriction helpers ─────────────────────────────────────────────────
+function restrictDigits(e) {
+  // Allow: backspace, delete, tab, escape, enter, arrows, home, end, ctrl/cmd+A/C/V/X
+  const allowed = [8,9,13,27,46,37,38,39,40,35,36];
+  if (allowed.includes(e.keyCode)) return true;
+  if ((e.ctrlKey||e.metaKey) && [65,67,86,88].includes(e.keyCode)) return true;
+  // Block anything that isn't a digit
+  if (e.key && e.key.length === 1 && !/\d/.test(e.key)) { e.preventDefault(); return false; }
+  return true;
+}
+function restrictPhone(e) {
+  const allowed = [8,9,13,27,46,37,38,39,40,35,36];
+  if (allowed.includes(e.keyCode)) return true;
+  if ((e.ctrlKey||e.metaKey) && [65,67,86,88].includes(e.keyCode)) return true;
+  if (e.key && e.key.length === 1 && !/[\d]/.test(e.key)) { e.preventDefault(); return false; }
+  // Block input once 10 digits are already entered
+  const digits = e.target.value.replace(/\D/g,'');
+  if (digits.length >= 10 && e.key && /\d/.test(e.key)) { e.preventDefault(); return false; }
+  return true;
+}
+function formatPhone(input) {
+  const digits = input.value.replace(/\D/g,'').slice(0, 10);
+  if (digits.length === 0)       input.value = '';
+  else if (digits.length <= 3)   input.value = '(' + digits;
+  else if (digits.length <= 6)   input.value = '(' + digits.slice(0,3) + ') ' + digits.slice(3);
+  else                           input.value = '(' + digits.slice(0,3) + ') ' + digits.slice(3,6) + '-' + digits.slice(6);
 }
 async function loadModels(year, make) {
   const modelSel = document.getElementById('vehicleModel');
@@ -1404,13 +2276,19 @@ document.getElementById('vehicleMake').addEventListener('change', e => {
 
 // ── Photo Upload ──────────────────────────────────────────────────────────────
 let uploadedPhotos = [];
-const photoDrop  = document.getElementById('photoDrop');
-const photoInput = document.getElementById('photoInput');
-photoDrop.addEventListener('click', () => photoInput.click());
+const photoDrop    = document.getElementById('photoDrop');
+const photoInput   = document.getElementById('photoInput');
+const photoCamInput = document.getElementById('photoCameraInput');
+// Desktop: click anywhere on drop zone opens gallery picker
+photoDrop.addEventListener('click', e => {
+  if (window.innerWidth > 680 && !e.target.closest('button') && !e.target.closest('.photo-thumb'))
+    photoInput.click();
+});
 photoDrop.addEventListener('dragover',  e => { e.preventDefault(); photoDrop.classList.add('drag-over'); });
 photoDrop.addEventListener('dragleave', () => photoDrop.classList.remove('drag-over'));
 photoDrop.addEventListener('drop', e => { e.preventDefault(); photoDrop.classList.remove('drag-over'); handleFiles(Array.from(e.dataTransfer.files)); });
 photoInput.addEventListener('change', () => handleFiles(Array.from(photoInput.files)));
+photoCamInput.addEventListener('change', () => handleFiles(Array.from(photoCamInput.files)));
 function handleFiles(files) {
   files.forEach(file => {
     if (uploadedPhotos.length >= 6) return;
@@ -1431,6 +2309,24 @@ function renderPreviews() {
     thumb.innerHTML = `<img src="${photo.url}" alt="Photo ${i+1}"><button type="button" onclick="removePhoto(${i})">✕</button>`;
     container.appendChild(thumb);
   });
+  // Update count badge
+  const badge = document.getElementById('photoCountBadge');
+  if (badge) {
+    const n = uploadedPhotos.length;
+    const enText = n === 0 ? '0 / 6 photos added' : `${n} / 6 photo${n > 1 ? 's' : ''} added`;
+    const esText = n === 0 ? '0 / 6 fotos añadidas' : `${n} / 6 foto${n > 1 ? 's' : ''} añadida${n > 1 ? 's' : ''}`;
+    badge.setAttribute('data-en', enText);
+    badge.setAttribute('data-es', esText);
+    badge.textContent = currentLang === 'es' ? esText : enText;
+    badge.classList.toggle('has-photos', n > 0);
+  }
+  // Clear error state once a photo is added
+  if (uploadedPhotos.length > 0) {
+    const drop = document.getElementById('photoDrop');
+    const err  = document.getElementById('err-photos');
+    if (drop) drop.classList.remove('error');
+    if (err)  err.textContent = '';
+  }
 }
 function removePhoto(i) { uploadedPhotos.splice(i, 1); renderPreviews(); }
 
@@ -1480,19 +2376,88 @@ function validateQuoteForm() {
   if (!mo)                                               { showError('vehicleModel','model','Select model','Selecciona modelo'); v=false; }
   if (!wh)                                               { showError('wheelCount','wheels','Select wheel count','Selecciona cantidad'); v=false; }
   if (!rt)                                               { showError('repairType','repairType','Select repair type','Selecciona tipo'); v=false; }
+  if (uploadedPhotos.length === 0) {
+    const photoEl = document.getElementById('photoDrop');
+    const photoErr = document.getElementById('err-photos');
+    if (photoEl)  photoEl.classList.add('error');
+    if (photoErr) photoErr.textContent = currentLang === 'es' ? 'Se requiere al menos 1 foto del daño' : 'At least 1 photo of the damage is required';
+    v = false;
+  }
+  const tosBox  = document.getElementById('tosCheckbox');
+  const tosWrap = document.getElementById('tosConsentWrap');
+  const tosErr  = document.getElementById('err-tos');
+  if (tosBox && !tosBox.checked) {
+    if (tosWrap) tosWrap.classList.add('error');
+    if (tosErr)  tosErr.textContent = currentLang === 'es' ? 'Debes aceptar los Términos de Servicio' : 'You must agree to the Terms of Service';
+    v = false;
+  } else {
+    if (tosWrap) tosWrap.classList.remove('error');
+    if (tosErr)  tosErr.textContent = '';
+  }
   return v;
 }
 
 // ── Quote Submit ──────────────────────────────────────────────────────────────
-document.getElementById('quoteForm').addEventListener('submit', function(e) {
+document.getElementById('quoteForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   if (!validateQuoteForm()) return;
-  isDuplicate(document.getElementById('phone').value.trim(), document.getElementById('email').value.trim());
-  if (typeof gtag === 'function') gtag('event', 'quote_submitted', { city: document.getElementById('city').value, repair_type: document.getElementById('repairType').value });
-  document.getElementById('quoteFormWrap').classList.add('hidden');
-  document.getElementById('confirmation').classList.remove('hidden');
-  document.getElementById('quote').scrollIntoView({ behavior: 'smooth' });
-  setLang(currentLang);
+
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  isDuplicate(phone, email);
+
+  // ── Collect form data ──────────────────────────────────────
+  const payload = {
+    name:         document.getElementById('firstName').value.trim(),
+    phone,
+    email,
+    city:         document.getElementById('city').value.trim(),
+    zip:          document.getElementById('zip').value.trim(),
+    vehicle_year: document.getElementById('vehicleYear').value,
+    vehicle_make: document.getElementById('vehicleMake').value,
+    vehicle_model:document.getElementById('vehicleModel').value,
+    wheel_count:  document.getElementById('wheelCount').value,
+    repair_type:  document.getElementById('repairType').value,
+    damage_desc:  document.getElementById('damageDesc').value.trim(),
+    photos_count: uploadedPhotos.length,
+    language:     currentLang === 'es' ? 'Spanish' : 'English',
+    submitted_at: new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }) + ' CST'
+  };
+
+  // ── Disable button while sending ───────────────────────────
+  const btn = document.getElementById('submitBtn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = currentLang === 'es' ? 'Enviando...' : 'Sending...';
+
+  try {
+    const res = await fetch('https://formspree.io/f/mzdybzwq', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body:    JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      // GA4 event
+      if (typeof gtag === 'function') gtag('event', 'quote_submitted', {
+        city: payload.city, repair_type: payload.repair_type
+      });
+      // Show confirmation
+      document.getElementById('quoteFormWrap').classList.add('hidden');
+      document.getElementById('confirmation').classList.remove('hidden');
+      document.getElementById('quote').scrollIntoView({ behavior: 'smooth' });
+      setLang(currentLang);
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (err) {
+    alert(currentLang === 'es'
+      ? 'Hubo un error al enviar. Por favor intenta de nuevo.'
+      : 'There was an error submitting. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
 });
 function resetForm() {
   document.getElementById('quoteForm').reset();
@@ -1517,6 +2482,119 @@ document.getElementById('shopForm').addEventListener('submit', function(e) {
   document.getElementById('shopConfirmation').classList.remove('hidden');
   setLang(currentLang);
   if (typeof gtag === 'function') gtag('event', 'shop_application_submitted', { tier: document.getElementById('shopTier').value });
+});
+
+// ── Real-time field validation ────────────────────────────────────────────────
+function validatePhoneField(fieldId, errId) {
+  const field = document.getElementById(fieldId);
+  const errEl = document.getElementById(errId);
+  const val   = field.value.trim();
+  const digits = val.replace(/\D/g, '');
+  if (!val) {
+    field.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+    return;
+  }
+  if (digits.length < 10 || digits.length > 11) {
+    field.classList.add('error');
+    if (errEl) errEl.textContent = currentLang === 'es'
+      ? 'Ingresa un número de teléfono válido (10 dígitos)'
+      : 'Enter a valid phone number (10 digits)';
+  } else {
+    field.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+    // Auto-format as (XXX) XXX-XXXX
+    const d = digits.slice(-10);
+    field.value = `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
+  }
+}
+
+function validateEmailField(fieldId, errId) {
+  const field = document.getElementById(fieldId);
+  const errEl = document.getElementById(errId);
+  const val   = field.value.trim();
+  if (!val) {
+    field.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+    return;
+  }
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val);
+  if (!valid) {
+    field.classList.add('error');
+    if (errEl) errEl.textContent = currentLang === 'es'
+      ? 'Ingresa un correo electrónico válido'
+      : 'Enter a valid email address';
+  } else {
+    field.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+  }
+}
+
+// ── ZIP → City auto-lookup (zippopotam.us free API) ───────────────────────────
+async function lookupZip(zip, cityFieldId, errId) {
+  const cityField = document.getElementById(cityFieldId);
+  const errEl     = document.getElementById(errId);
+  try {
+    const res  = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    if (!res.ok) throw new Error('not found');
+    const data = await res.json();
+    const city = data.places[0]['place name'];
+    cityField.value = city;
+    cityField.classList.remove('error');
+    if (errEl) errEl.textContent = '';
+  } catch {
+    if (errEl) errEl.textContent = currentLang === 'es'
+      ? 'Código postal no encontrado'
+      : 'ZIP code not found — please enter your city manually';
+  }
+}
+
+// ── Hero ZIP bar ──────────────────────────────────────────────────────────────
+let heroZipResolved = '';
+async function handleHeroZip(zip) {
+  const cityEl = document.getElementById('heroZipCity');
+  if (zip.length < 5) { cityEl.textContent = ''; heroZipResolved = ''; return; }
+  try {
+    const res  = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const city = data.places[0]['place name'];
+    heroZipResolved = city;
+    cityEl.textContent = '📍 ' + city;
+  } catch {
+    heroZipResolved = '';
+    cityEl.textContent = '❌ Not found';
+  }
+}
+function heroZipGo() {
+  const zip = document.getElementById('heroZip').value.trim();
+  if (zip.length === 5 && heroZipResolved) {
+    document.getElementById('zip').value   = zip;
+    document.getElementById('city').value  = heroZipResolved;
+    document.getElementById('quote').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => document.getElementById('firstName').focus(), 650);
+  } else if (zip.length === 5) {
+    // Lookup hasn't resolved yet — trigger and go
+    fetch(`https://api.zippopotam.us/us/${zip}`)
+      .then(r => r.json())
+      .then(data => {
+        const city = data.places[0]['place name'];
+        document.getElementById('zip').value  = zip;
+        document.getElementById('city').value = city;
+        document.getElementById('quote').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => document.getElementById('firstName').focus(), 650);
+      })
+      .catch(() => {
+        document.getElementById('heroZipCity').textContent = '❌ ZIP not found';
+      });
+  } else {
+    document.getElementById('heroZip').focus();
+  }
+}
+// Allow Enter key on hero ZIP input
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('heroZip');
+  if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') heroZipGo(); });
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────────

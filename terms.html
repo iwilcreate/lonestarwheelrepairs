@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — Lone Star Wheel Repairs</title>
+  <meta name="description" content="Terms of Service for LoneStarWheelRepairs.com — Texas wheel repair referral network." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #141c2e;
+      --bg2:       #1a2540;
+      --bg3:       #1f2d4d;
+      --surface:   rgba(255,255,255,.07);
+      --red:       #e63030;
+      --red-h:     #ff4444;
+      --white:     #ffffff;
+      --w90:       rgba(255,255,255,.92);
+      --w70:       rgba(255,255,255,.78);
+      --w45:       rgba(255,255,255,.55);
+      --w20:       rgba(255,255,255,.22);
+      --w10:       rgba(255,255,255,.12);
+      --border:    rgba(255,255,255,.13);
+      --radius:    12px;
+      --radius-lg: 18px;
+      --ease:      cubic-bezier(.4,0,.2,1);
+      --transition:.25s var(--ease);
+    }
+    [data-theme="light"] {
+      --bg:      #ffffff;
+      --bg2:     #f5f7fc;
+      --bg3:     #eaecf5;
+      --surface: rgba(0,0,0,.04);
+      --white:   #0d1628;
+      --w90:     rgba(13,22,40,.92);
+      --w70:     rgba(13,22,40,.75);
+      --w45:     rgba(13,22,40,.52);
+      --w20:     rgba(13,22,40,.18);
+      --w10:     rgba(13,22,40,.09);
+      --border:  rgba(13,22,40,.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--white);
+      -webkit-font-smoothing: antialiased;
+      transition: background .3s var(--ease), color .3s var(--ease);
+    }
+
+    /* ── Nav ── */
+    #nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(20,28,46,.92); backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="light"] #nav {
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 1px 0 rgba(13,22,40,.08), 0 4px 20px rgba(13,22,40,.06);
+    }
+    .nav-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px; gap: 1rem;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: .65rem;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .nav-logo-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--red) 0%, #b01818 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-text {
+      font-size: .76rem; font-weight: 800; line-height: 1.3;
+      color: var(--white); letter-spacing: .05em; text-transform: uppercase;
+    }
+    [data-theme="light"] .nav-logo-text { color: #0d1628; }
+    .nav-logo-text span { color: var(--red); }
+    .nav-back {
+      display: flex; align-items: center; gap: .4rem;
+      text-decoration: none; font-size: .82rem; font-weight: 600;
+      color: var(--w45); transition: var(--transition);
+    }
+    .nav-back:hover { color: var(--white); }
+    .nav-back svg { transition: transform var(--transition); }
+    .nav-back:hover svg { transform: translateX(-3px); }
+
+    /* Theme toggle */
+    .theme-toggle {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--surface); border: 1px solid var(--border);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--w70); transition: var(--transition); flex-shrink: 0;
+    }
+    .theme-toggle:hover { background: var(--surface); color: var(--white); }
+    .theme-icon-sun  { display: none; }
+    .theme-icon-moon { display: block; }
+    [data-theme="light"] .theme-icon-sun  { display: block; }
+    [data-theme="light"] .theme-icon-moon { display: none; }
+
+    /* ── Hero Banner ── */
+    .tos-hero {
+      background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+    }
+    [data-theme="light"] .tos-hero { background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 100%); }
+    .tos-label {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .68rem; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--red);
+      background: rgba(230,48,48,.1); border: 1px solid rgba(230,48,48,.2);
+      border-radius: 50px; padding: .3rem .85rem; margin-bottom: 1rem;
+    }
+    .tos-title {
+      font-size: clamp(2rem, 5vw, 3rem); font-weight: 900;
+      color: var(--white); letter-spacing: -.02em; line-height: 1.1;
+      margin-bottom: .75rem;
+    }
+    .tos-title span { color: var(--red); }
+    .tos-meta { font-size: .82rem; color: var(--w45); }
+    .tos-meta a { color: var(--w45); text-decoration: underline; text-underline-offset: 3px; }
+    .tos-meta a:hover { color: var(--white); }
+
+    /* ── Content ── */
+    .tos-wrap {
+      max-width: 780px; margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    /* Table of Contents */
+    .tos-toc {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: var(--radius); padding: 1.5rem 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .tos-toc h2 {
+      font-size: .7rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 1rem;
+    }
+    .tos-toc ol {
+      padding-left: 1.2rem; display: grid;
+      grid-template-columns: 1fr 1fr; gap: .3rem .5rem;
+    }
+    .tos-toc li { font-size: .8rem; color: var(--w70); line-height: 1.5; }
+    .tos-toc a { color: var(--w70); text-decoration: none; transition: var(--transition); }
+    .tos-toc a:hover { color: var(--red); }
+    @media (max-width: 560px) { .tos-toc ol { grid-template-columns: 1fr; } }
+
+    /* Sections */
+    .tos-section { margin-bottom: 2.75rem; scroll-margin-top: 80px; }
+    .tos-section-header {
+      display: flex; align-items: center; gap: .75rem;
+      margin-bottom: 1.1rem; padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .tos-section-num {
+      font-size: .68rem; font-weight: 800; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--red);
+      background: rgba(230,48,48,.1); border: 1px solid rgba(230,48,48,.18);
+      border-radius: 6px; padding: .2rem .55rem; flex-shrink: 0;
+    }
+    .tos-section-title {
+      font-size: 1.05rem; font-weight: 700; color: var(--white);
+      letter-spacing: -.01em;
+    }
+    .tos-body { font-size: .88rem; color: var(--w70); line-height: 1.8; }
+    .tos-body p { margin-bottom: .85rem; }
+    .tos-body p:last-child { margin-bottom: 0; }
+    .tos-body ul, .tos-body ol { padding-left: 1.4rem; margin-bottom: .85rem; }
+    .tos-body li { margin-bottom: .35rem; }
+    .tos-body strong { color: var(--w90); font-weight: 600; }
+    .tos-body a { color: var(--red); text-underline-offset: 2px; }
+    .tos-body a:hover { color: var(--red-h); }
+
+    /* Sub-sections */
+    .tos-sub { margin-top: 1.1rem; }
+    .tos-sub-title {
+      font-size: .82rem; font-weight: 700; color: var(--w90);
+      margin-bottom: .4rem;
+    }
+
+    /* Callout boxes */
+    .tos-callout {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-left: 3px solid var(--red); border-radius: var(--radius);
+      padding: 1.1rem 1.25rem; margin: 1rem 0;
+      font-size: .84rem; color: var(--w70); line-height: 1.7;
+    }
+    .tos-callout strong { color: var(--white); }
+
+    /* ALL-CAPS legal sections */
+    .tos-legal {
+      font-size: .78rem; color: var(--w45); line-height: 1.75;
+      text-transform: uppercase; letter-spacing: .01em;
+    }
+
+    /* Contact block */
+    .tos-contact {
+      background: linear-gradient(135deg, var(--bg2), var(--bg3));
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 1.75rem; text-align: center; margin-top: 1rem;
+    }
+    .tos-contact p { font-size: .88rem; color: var(--w70); margin-bottom: .35rem; }
+    .tos-contact a {
+      color: var(--red); font-weight: 600; font-size: .95rem;
+      text-decoration: none;
+    }
+    .tos-contact a:hover { color: var(--red-h); text-decoration: underline; }
+
+    /* ── Footer ── */
+    #footer {
+      background: #1a2540; border-top: 1px solid var(--border);
+      padding: 2rem; text-align: center;
+    }
+    .footer-note {
+      font-size: .76rem; color: rgba(255,255,255,.35);
+    }
+    .footer-note a { color: rgba(255,255,255,.45); text-decoration: none; }
+    .footer-note a:hover { color: #fff; }
+
+    @media (max-width: 680px) {
+      .nav-inner  { padding: 0 1.25rem; height: 58px; }
+      .tos-hero   { padding: 2.5rem 1.25rem 2rem; }
+      .tos-wrap   { padding: 2rem 1.25rem 4rem; }
+      .tos-title  { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 38 38" width="22" height="22" fill="none">
+          <circle cx="19" cy="19" r="17" stroke="white" stroke-width="2.5" fill="none"/>
+          <circle cx="19" cy="19" r="11.5" stroke="white" stroke-width="1.8" fill="none"/>
+          <circle cx="19" cy="19" r="3.2" fill="white"/>
+          <line x1="19" y1="15.8" x2="19" y2="7.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(72 19 19)"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(144 19 19)"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(216 19 19)"/>
+          <line x1="19" y1="15.8" x2="26.5" y2="11.1" stroke="white" stroke-width="1.8" stroke-linecap="round" transform="rotate(288 19 19)"/>
+        </svg>
+      </div>
+      <div class="nav-logo-text">Lone Star<br>Wheel Repairs</div>
+    </a>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="index.html" class="nav-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Back to Site
+      </a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<div class="tos-hero">
+  <div class="tos-label">Legal</div>
+  <h1 class="tos-title">Terms of <span>Service</span></h1>
+  <p class="tos-meta">Effective Date: May 18, 2026 &nbsp;·&nbsp; <a href="index.html">LoneStarWheelRepairs.com</a></p>
+</div>
+
+<!-- ── Content ── -->
+<div class="tos-wrap">
+
+  <!-- Table of Contents -->
+  <div class="tos-toc">
+    <h2>Table of Contents</h2>
+    <ol>
+      <li><a href="#s1">Acceptance of Terms</a></li>
+      <li><a href="#s2">Description of Services</a></li>
+      <li><a href="#s3">Eligibility</a></li>
+      <li><a href="#s4">User Accounts</a></li>
+      <li><a href="#s5">Vehicle Owner Terms</a></li>
+      <li><a href="#s6">Partner Shop Terms</a></li>
+      <li><a href="#s7">Prohibited Conduct</a></li>
+      <li><a href="#s8">Intellectual Property</a></li>
+      <li><a href="#s9">Privacy</a></li>
+      <li><a href="#s10">Disclaimer of Warranties</a></li>
+      <li><a href="#s11">Limitation of Liability</a></li>
+      <li><a href="#s12">Indemnification</a></li>
+      <li><a href="#s13">Third-Party Services</a></li>
+      <li><a href="#s14">Modifications</a></li>
+      <li><a href="#s15">Governing Law</a></li>
+      <li><a href="#s16">Severability</a></li>
+      <li><a href="#s17">Entire Agreement</a></li>
+      <li><a href="#s18">Contact Information</a></li>
+    </ol>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="tos-section" id="s1">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 01</span>
+      <h2 class="tos-section-title">Acceptance of Terms</h2>
+    </div>
+    <div class="tos-body">
+      <p>By accessing or using LoneStarWheelRepairs.com (the <strong>"Site"</strong>) or any services offered through the Site (collectively, the <strong>"Services"</strong>), you agree to be bound by these Terms of Service (<strong>"Terms"</strong>). If you do not agree to these Terms, you must not use the Site or Services.</p>
+      <p>These Terms constitute a legally binding agreement between you (<strong>"User," "you,"</strong> or <strong>"your"</strong>) and Lone Star Wheel Repairs (<strong>"Company," "we," "us,"</strong> or <strong>"our"</strong>). Your continued use of the Site following any updates to these Terms constitutes your acceptance of the revised Terms.</p>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="tos-section" id="s2">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 02</span>
+      <h2 class="tos-section-title">Description of Services</h2>
+    </div>
+    <div class="tos-body">
+      <p>Lone Star Wheel Repairs operates an online lead generation and referral platform that connects vehicle owners in Texas who require wheel and rim repair services with independent, third-party wheel repair businesses (<strong>"Partner Shops"</strong>).</p>
+      <div class="tos-callout">
+        <strong>The Company does NOT:</strong> perform any wheel or rim repair work; employ or directly supervise Partner Shops; guarantee the quality, timeliness, or outcome of any repair; or act as an agent or representative of any Partner Shop.<br><br>
+        <strong>The Company DOES:</strong> accept and process service requests from vehicle owners; forward those requests to up to five (5) Partner Shops in the user's geographic area; and maintain a network of Partner Shops who have agreed to platform participation standards.
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="tos-section" id="s3">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 03</span>
+      <h2 class="tos-section-title">Eligibility</h2>
+    </div>
+    <div class="tos-body">
+      <p>To use the Services, you must:</p>
+      <ul>
+        <li>Be at least 18 years of age</li>
+        <li>Be a resident of or located within the State of Texas at the time of your service request</li>
+        <li>Have the legal authority to authorize vehicle repair on the vehicle described in your request</li>
+        <li>Provide accurate and truthful information in all submissions</li>
+      </ul>
+      <p>By using the Services, you represent and warrant that you meet all of the above eligibility requirements.</p>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="tos-section" id="s4">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 04</span>
+      <h2 class="tos-section-title">User Accounts and Registration</h2>
+    </div>
+    <div class="tos-body">
+      <p>Vehicle owners are not required to create an account to submit a service request. However, by submitting a request, you consent to be contacted by Partner Shops via the phone number and/or email address you provide.</p>
+      <p>Partner Shops wishing to receive leads must register for a business account and agree to a separate Shop Subscriber Agreement in addition to these Terms.</p>
+    </div>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="tos-section" id="s5">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 05</span>
+      <h2 class="tos-section-title">Vehicle Owner Terms</h2>
+    </div>
+    <div class="tos-body">
+      <div class="tos-sub">
+        <p class="tos-sub-title">5.1 &nbsp;Free Service</p>
+        <p>Submission of wheel repair requests through the Site is provided at no cost to vehicle owners.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">5.2 &nbsp;Accuracy of Information</p>
+        <p>You agree to provide accurate, complete, and current information in your service request, including but not limited to: your name, contact information, vehicle year, make, model, ZIP code, city, description of damage, and photographs of the damage.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">5.3 &nbsp;Photo Submissions</p>
+        <p>By uploading photographs to the Site, you grant Lone Star Wheel Repairs a non-exclusive, royalty-free license to share those photographs with Partner Shops for the sole purpose of facilitating a repair quote. Photos will not be used for marketing without your separate consent.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">5.4 &nbsp;Contact Consent</p>
+        <p>By submitting a service request, you expressly consent to be contacted by up to five (5) Partner Shops via phone call, text message, and/or email regarding your repair request. Standard message and data rates may apply for SMS communications.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">5.5 &nbsp;No Obligation</p>
+        <p>Submission of a request does not obligate you to accept any quote or engage any Partner Shop. You are free to decline any or all quotes received.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">5.6 &nbsp;One Request Per Incident</p>
+        <p>Submitting multiple requests for the same damage incident is prohibited and may result in your request being disqualified without notice.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="tos-section" id="s6">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 06</span>
+      <h2 class="tos-section-title">Partner Shop Terms</h2>
+    </div>
+    <div class="tos-body">
+      <div class="tos-sub">
+        <p class="tos-sub-title">6.1 &nbsp;Subscription Requirement</p>
+        <p>Partner Shops must maintain an active subscription to receive leads through the platform. Subscription terms, pricing, and billing are governed by the Shop Subscriber Agreement.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">6.2 &nbsp;Response Commitment</p>
+        <p>Partner Shops agree to make a good-faith effort to contact vehicle owners within sixty (60) minutes of receiving a lead during normal business hours.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">6.3 &nbsp;Accurate Representation</p>
+        <p>Partner Shops agree not to misrepresent their services, pricing, qualifications, certifications, or geographic service area.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">6.4 &nbsp;Prohibited Conduct by Shops</p>
+        <p>Partner Shops may not: resell or redistribute leads; contact vehicle owners for purposes unrelated to the submitted repair request; use lead data to build marketing lists; or engage in any deceptive, fraudulent, or harassing conduct toward vehicle owners.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">6.5 &nbsp;Lead Quality Disputes</p>
+        <p>If a Partner Shop believes a lead is fraudulent, duplicate, or otherwise invalid, they may submit a dispute within 48 hours of receipt per the process described in the Shop Subscriber Agreement.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 7 -->
+  <div class="tos-section" id="s7">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 07</span>
+      <h2 class="tos-section-title">Prohibited Conduct</h2>
+    </div>
+    <div class="tos-body">
+      <p>You agree not to:</p>
+      <ul>
+        <li>Submit false, misleading, or fraudulent service requests</li>
+        <li>Submit multiple requests for the same damage event</li>
+        <li>Use the Site to solicit or collect information from other users</li>
+        <li>Attempt to reverse-engineer, scrape, or extract data from the Site</li>
+        <li>Use automated bots, scripts, or crawlers on the Site</li>
+        <li>Upload content that is obscene, defamatory, or violates any third-party rights</li>
+        <li>Attempt to gain unauthorized access to any portion of the Site or its systems</li>
+        <li>Use the Site for any purpose that violates applicable law</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Section 8 -->
+  <div class="tos-section" id="s8">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 08</span>
+      <h2 class="tos-section-title">Intellectual Property</h2>
+    </div>
+    <div class="tos-body">
+      <p>All content on the Site, including but not limited to text, graphics, logos, button icons, images, data compilations, and software, is the property of Lone Star Wheel Repairs or its content suppliers and is protected by United States and international copyright laws.</p>
+      <p>You may not reproduce, duplicate, copy, sell, resell, or exploit any portion of the Site without express written permission from the Company.</p>
+    </div>
+  </div>
+
+  <!-- Section 9 -->
+  <div class="tos-section" id="s9">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 09</span>
+      <h2 class="tos-section-title">Privacy</h2>
+    </div>
+    <div class="tos-body">
+      <p>Your use of the Site is also governed by our Privacy Policy, which is incorporated into these Terms by reference. By using the Site, you consent to the data practices described in the Privacy Policy. We collect name, contact information, vehicle details, ZIP code, and photos solely to facilitate the referral service.</p>
+    </div>
+  </div>
+
+  <!-- Section 10 -->
+  <div class="tos-section" id="s10">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 10</span>
+      <h2 class="tos-section-title">Disclaimer of Warranties</h2>
+    </div>
+    <div class="tos-body">
+      <p class="tos-legal">The Site and Services are provided on an "as is" and "as available" basis without warranties of any kind, either express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
+      <p class="tos-legal">Lone Star Wheel Repairs does not warrant that: the Site will be uninterrupted or error-free; any Partner Shop will respond within any particular time frame; any repair quote will be accurate or competitive; or Partner Shops are licensed, insured, or qualified.</p>
+    </div>
+  </div>
+
+  <!-- Section 11 -->
+  <div class="tos-section" id="s11">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 11</span>
+      <h2 class="tos-section-title">Limitation of Liability</h2>
+    </div>
+    <div class="tos-body">
+      <p class="tos-legal">To the fullest extent permitted by applicable law, Lone Star Wheel Repairs shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of the Site or Services, including but not limited to: loss of data or profits; damage to your vehicle by a Partner Shop; personal injury arising from a repair service; or unauthorized access to your personal information.</p>
+      <p class="tos-legal">In no event shall the Company's total liability to you exceed fifty dollars ($50.00) or the amount paid by you to the Company in the twelve (12) months preceding the claim, whichever is greater.</p>
+    </div>
+  </div>
+
+  <!-- Section 12 -->
+  <div class="tos-section" id="s12">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 12</span>
+      <h2 class="tos-section-title">Indemnification</h2>
+    </div>
+    <div class="tos-body">
+      <p>You agree to indemnify, defend, and hold harmless Lone Star Wheel Repairs and its officers, directors, employees, agents, and successors from and against any claims, liabilities, damages, losses, and expenses (including reasonable attorney's fees) arising out of or in any way connected with:</p>
+      <ul>
+        <li>Your access to or use of the Services</li>
+        <li>Your violation of these Terms</li>
+        <li>Your submission of inaccurate or false information</li>
+        <li>Any dispute between you and a Partner Shop</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Section 13 -->
+  <div class="tos-section" id="s13">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 13</span>
+      <h2 class="tos-section-title">Third-Party Services</h2>
+    </div>
+    <div class="tos-body">
+      <p>The Site may integrate with or reference third-party services, including but not limited to payment processors, form submission services, and map/location providers. Lone Star Wheel Repairs is not responsible for the practices, content, or availability of any third-party services. Your use of third-party services is governed by their respective terms and privacy policies.</p>
+    </div>
+  </div>
+
+  <!-- Section 14 -->
+  <div class="tos-section" id="s14">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 14</span>
+      <h2 class="tos-section-title">Modifications to the Site and Terms</h2>
+    </div>
+    <div class="tos-body">
+      <p>Lone Star Wheel Repairs reserves the right to modify, suspend, or discontinue any aspect of the Site or Services at any time without notice. We may also revise these Terms at any time. The most current version will always be posted on the Site with the effective date. Your continued use after changes are posted constitutes acceptance of the revised Terms.</p>
+    </div>
+  </div>
+
+  <!-- Section 15 -->
+  <div class="tos-section" id="s15">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 15</span>
+      <h2 class="tos-section-title">Governing Law and Dispute Resolution</h2>
+    </div>
+    <div class="tos-body">
+      <div class="tos-sub">
+        <p class="tos-sub-title">15.1 &nbsp;Governing Law</p>
+        <p>These Terms shall be governed by and construed in accordance with the laws of the State of Texas, without regard to its conflict of law principles.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">15.2 &nbsp;Jurisdiction</p>
+        <p>Any legal action or proceeding arising under these Terms shall be brought exclusively in the state or federal courts located in Texas, and you hereby consent to personal jurisdiction and venue in such courts.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">15.3 &nbsp;Informal Resolution</p>
+        <p>Before filing any formal legal claim, you agree to contact us at <a href="mailto:info@lonestarwheelrepairs.com">info@lonestarwheelrepairs.com</a> and attempt to resolve the dispute informally for at least thirty (30) days.</p>
+      </div>
+      <div class="tos-sub">
+        <p class="tos-sub-title">15.4 &nbsp;Waiver of Class Action</p>
+        <p class="tos-legal">To the extent permitted by law, you waive any right to bring claims as a class, collective, or representative action.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 16 -->
+  <div class="tos-section" id="s16">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 16</span>
+      <h2 class="tos-section-title">Severability</h2>
+    </div>
+    <div class="tos-body">
+      <p>If any provision of these Terms is found to be unenforceable or invalid under applicable law, that provision shall be modified to the minimum extent necessary to make it enforceable, and the remaining provisions shall continue in full force and effect.</p>
+    </div>
+  </div>
+
+  <!-- Section 17 -->
+  <div class="tos-section" id="s17">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 17</span>
+      <h2 class="tos-section-title">Entire Agreement</h2>
+    </div>
+    <div class="tos-body">
+      <p>These Terms, together with the Privacy Policy and (for Partner Shops) the Shop Subscriber Agreement, constitute the entire agreement between you and Lone Star Wheel Repairs with respect to the Services and supersede all prior agreements, understandings, and communications.</p>
+    </div>
+  </div>
+
+  <!-- Section 18 -->
+  <div class="tos-section" id="s18">
+    <div class="tos-section-header">
+      <span class="tos-section-num">§ 18</span>
+      <h2 class="tos-section-title">Contact Information</h2>
+    </div>
+    <div class="tos-body">
+      <p>If you have questions about these Terms, please contact us:</p>
+      <div class="tos-contact">
+        <p><strong>Lone Star Wheel Repairs</strong></p>
+        <p>Email: <a href="mailto:info@lonestarwheelrepairs.com">info@lonestarwheelrepairs.com</a></p>
+        <p style="margin-top:.5rem;">Website: <a href="https://lonestarwheelrepairs.com">LoneStarWheelRepairs.com</a></p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tos-wrap -->
+
+<!-- ── Footer ── -->
+<footer id="footer">
+  <p class="footer-note">
+    © 2026 LoneStarWheelRepairs.com — All rights reserved. &nbsp;·&nbsp;
+    <a href="index.html">Back to Site</a>
+  </p>
+</footer>
+
+<script>
+  // Theme toggle (syncs with main site via localStorage)
+  function toggleTheme() {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('lswr_theme', next);
+  }
+  (function() {
+    const saved = localStorage.getItem('lswr_theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  })();
+</script>
+
+</body>
+</html>
