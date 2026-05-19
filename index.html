@@ -2429,11 +2429,19 @@ document.getElementById('quoteForm').addEventListener('submit', async function(e
   btn.textContent = currentLang === 'es' ? 'Enviando...' : 'Sending...';
 
   try {
-    const res = await fetch('https://formspree.io/f/mzdybzwq', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body:    JSON.stringify(payload)
-    });
+    // Fire Formspree (email backup) and our SMS API in parallel
+    const [res] = await Promise.all([
+      fetch('https://formspree.io/f/mzdybzwq', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body:    JSON.stringify(payload)
+      }),
+      fetch('/api/submit', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
+      }).catch(err => console.warn('[SMS] dispatch failed:', err))
+    ]);
 
     if (res.ok) {
       // GA4 event
