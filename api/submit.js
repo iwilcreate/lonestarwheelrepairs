@@ -1,11 +1,11 @@
 // api/submit.js — Vercel Serverless Function
-// Receives lead JSON from the quote form and dispatches SMS to shops via Twilio.
-// Runs alongside Formspree (which handles email backup).
+// 1. Saves lead to Supabase (leads + lead_assignments tables)
+// 2. Dispatches SMS to shops via Twilio
 
 const twilio = require('twilio');
+const { createClient } = require('@supabase/supabase-js');
 
 module.exports = async function handler(req, res) {
-  // CORS — allow the site to call this endpoint
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -19,10 +19,66 @@ module.exports = async function handler(req, res) {
       city, zip,
       vehicle_year, vehicle_make, vehicle_model,
       wheel_count, repair_type, damage_desc,
+      photos_count, language,
       submitted_at
     } = req.body || {};
 
-    // ── Build SMS message ────────────────────────────────────────
+    // ── 1. Save lead to Supabase ────────────────────────────
+    const supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+
+    let leadId = null;
+
+    const { data: lead, error: leadError } = await supabase
+      .from('leads')
+      .insert({
+        name, phone, email,
+        city, zip,
+        vehicle_year, vehicle_make, vehicle_model,
+        wheel_count, repair_type, damage_desc,
+        photos_count: photos_count || 0,
+        language:     language || 'English'
+      })
+      .select('id')
+      .single();
+
+    if (leadError) {
+      console.error('[submit] Supabase lead insert error:', leadError.message);
+    } else {
+      leadId = lead.id;
+    }
+
+    // ── 2. Assign lead to all active shops ──────────────────
+    if (leadId) {
+      const { data: shops, error: shopsError } = await supabase
+        .from('shops')
+        .select('id')
+        .eq('active', true);
+
+      if (shopsError) {
+        console.error('[submit] Supabase shops fetch error:', shopsError.message);
+      } else if (shops && shops.length > 0) {
+        const assignments = shops.slice(0, 5).map(s => ({
+          lead_id: leadId,
+          shop_id: s.id,
+          status:  'new'
+        }));
+
+        const { error: assignError } = await supabase
+          .from('lead_assignments')
+          .insert(assignments);
+
+        if (assignError) {
+          console.error('[submit] Supabase assignment insert error:', assignError.message);
+        } else {
+          console.log(`[submit] Lead ${leadId} assigned to ${assignments.length} shop(s)`);
+        }
+      }
+    }
+
+    // ── 3. Build SMS message ────────────────────────────────
     const location = city ? `${city}, TX` : zip ? `ZIP ${zip}, TX` : 'Texas';
     const vehicle  = [vehicle_year, vehicle_make, vehicle_model].filter(Boolean).join(' ') || 'Not specified';
     const wheels   = wheel_count ? `${wheel_count} wheel(s)` : '';
@@ -41,87 +97,54 @@ module.exports = async function handler(req, res) {
       ``,
       `⏰ ${submitted_at || new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' })} CST`,
       ``,
-      `Reply to the customer directly to claim this lead.`,
-      `─ lonestarwheelrepairs.com ─`
-    ].filter(line => line !== null).join('\n');
+      `Reply to customer directly to claim this lead.`,
+      `─ lonestarwheelrepairs.com/dashboard ─`
+    ].filter(l => l !== null).join('\n');
 
-    // ── Load shop phone numbers ──────────────────────────────────
-    // Set SHOP_PHONE_NUMBERS in Vercel env vars as a comma-separated list:
-    //   e.g.  +12145550001,+17135550002,+12105550003
-    // You can also use SHOP_NUMBERS_JSON for city-specific routing (see README comment below).
-    let shopNumbers = [];
+    // ── 4. Send SMS via Twilio ──────────────────────────────
+    let shopNumbers = (process.env.SHOP_PHONE_NUMBERS || '')
+      .split(',').map(n => n.trim()).filter(Boolean);
 
-    // Option A: flat comma-separated list (easiest to start)
-    const flat = (process.env.SHOP_PHONE_NUMBERS || '').split(',').map(n => n.trim()).filter(Boolean);
-    if (flat.length) {
-      shopNumbers = flat;
-    }
-
-    // Option B: JSON map keyed by city slug — overrides Option A if present
-    // Format: { "dallas": ["+12145550001"], "houston": ["+17135550002"], "default": ["+12145550001"] }
     if (process.env.SHOP_NUMBERS_JSON) {
       try {
         const registry = JSON.parse(process.env.SHOP_NUMBERS_JSON);
         const key = (city || '').toLowerCase().replace(/[^a-z]/g, '_').replace(/_+/g, '_');
-        shopNumbers = registry[key] || registry['default'] || flat;
-      } catch (parseErr) {
-        console.warn('SHOP_NUMBERS_JSON parse error — falling back to SHOP_PHONE_NUMBERS');
+        shopNumbers = registry[key] || registry['default'] || shopNumbers;
+      } catch (e) {
+        console.warn('[submit] SHOP_NUMBERS_JSON parse error — using SHOP_PHONE_NUMBERS');
       }
     }
 
-    // Cap at 5 shops per lead
     shopNumbers = shopNumbers.slice(0, 5);
 
-    if (!shopNumbers.length) {
-      console.warn('No shop numbers configured. Set SHOP_PHONE_NUMBERS in Vercel env vars.');
-      return res.status(200).json({ success: true, sent: 0, warning: 'No shop numbers configured' });
+    if (shopNumbers.length > 0 && process.env.TWILIO_ACCOUNT_SID) {
+      const twilioClient = twilio(
+        process.env.TWILIO_ACCOUNT_SID,
+        process.env.TWILIO_AUTH_TOKEN
+      );
+
+      const results = await Promise.allSettled(
+        shopNumbers.map(to =>
+          twilioClient.messages.create({
+            body: smsBody,
+            from: process.env.TWILIO_PHONE_NUMBER,
+            to
+          })
+        )
+      );
+
+      const sent   = results.filter(r => r.status === 'fulfilled').length;
+      const failed = results.filter(r => r.status === 'rejected').length;
+      console.log(`[submit] SMS: ${sent} sent, ${failed} failed`);
+    } else if (!process.env.TWILIO_ACCOUNT_SID) {
+      console.warn('[submit] Twilio not configured — SMS skipped');
     }
 
-    // ── Send SMS via Twilio ──────────────────────────────────────
-    const client = twilio(
-      process.env.TWILIO_ACCOUNT_SID,
-      process.env.TWILIO_AUTH_TOKEN
-    );
-
-    const results = await Promise.allSettled(
-      shopNumbers.map(to =>
-        client.messages.create({
-          body: smsBody,
-          from: process.env.TWILIO_PHONE_NUMBER,
-          to
-        })
-      )
-    );
-
-    const sent   = results.filter(r => r.status === 'fulfilled').length;
-    const failed = results.filter(r => r.status === 'rejected').map(r => r.reason?.message);
-
-    console.log(`[submit] SMS sent: ${sent}/${shopNumbers.length}`, failed.length ? `Errors: ${failed}` : '');
-
-    return res.status(200).json({ success: true, sent, failed: failed.length });
+    return res.status(200).json({ success: true, lead_id: leadId });
 
   } catch (err) {
-    // Never block the user's form submission because of an SMS error
     console.error('[submit] Unhandled error:', err.message);
-    return res.status(200).json({ success: true, sms_error: err.message });
+    // Never block the user's form submission
+    return res.status(200).json({ success: true, error: err.message });
   }
 };
-
-/*
-──────────────────────────────────────────────
-  CITY-BASED ROUTING (future upgrade)
-──────────────────────────────────────────────
-  When you have multiple shops per city, set SHOP_NUMBERS_JSON:
-
-  {
-    "dallas":      ["+12145550001", "+12145550002"],
-    "houston":     ["+17135550001", "+17135550002"],
-    "san_antonio": ["+12105550001"],
-    "austin":      ["+15125550001"],
-    "default":     ["+12145550001"]   <- fallback for other cities
-  }
-
-  Lone Star sends the lead to shops in the matching city only.
-  "default" is used when no city match is found.
-──────────────────────────────────────────────
-*/

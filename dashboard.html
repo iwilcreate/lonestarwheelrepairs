@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shop Dashboard — Lone Star Wheel Repairs</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+:root {
+  --navy:      #0d1321;
+  --surface:   #141c2e;
+  --surface2:  #1a2540;
+  --border:    rgba(255,255,255,.08);
+  --red:       #e63030;
+  --red-dim:   rgba(230,48,48,.15);
+  --white:     #ffffff;
+  --w70:       rgba(255,255,255,.70);
+  --w45:       rgba(255,255,255,.45);
+  --w20:       rgba(255,255,255,.20);
+  --green:     #22c55e;
+  --green-dim: rgba(34,197,94,.15);
+  --yellow:    #f59e0b;
+  --yellow-dim:rgba(245,158,11,.15);
+  --blue:      #3b82f6;
+  --blue-dim:  rgba(59,130,246,.15);
+  --purple:    #a855f7;
+  --purple-dim:rgba(168,85,247,.15);
+  --radius:    10px;
+  --transition:all .2s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.hidden { display: none !important; }
+
+/* ── Login ─────────────────────────────────────────────────── */
+#loginScreen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: radial-gradient(ellipse at 50% 0%, rgba(230,48,48,.12) 0%, transparent 70%), var(--navy);
+}
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.4);
+}
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+.login-logo-icon {
+  width: 44px; height: 44px;
+  background: var(--red);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+}
+.login-logo-text { font-size: 1rem; font-weight: 700; line-height: 1.2; }
+.login-logo-text span { display: block; color: var(--w45); font-weight: 400; font-size: .78rem; }
+.login-title { font-size: 1.4rem; font-weight: 700; margin-bottom: .4rem; }
+.login-sub { color: var(--w45); font-size: .88rem; margin-bottom: 2rem; }
+.field-group { margin-bottom: 1.1rem; }
+.field-group label { display: block; font-size: .82rem; font-weight: 600; color: var(--w70); margin-bottom: .45rem; }
+.field-group input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: .75rem 1rem;
+  color: var(--white);
+  font-size: .95rem;
+  font-family: inherit;
+  outline: none;
+  transition: var(--transition);
+}
+.field-group input:focus { border-color: var(--red); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .75rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: inherit; font-weight: 700; font-size: .95rem;
+  cursor: pointer; border: none; text-decoration: none;
+  transition: var(--transition);
+}
+.btn-primary { background: var(--red); color: #fff; width: 100%; padding: .9rem; }
+.btn-primary:hover { background: #c72626; }
+.btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+.btn-ghost { background: transparent; color: var(--w70); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--surface2); color: var(--white); }
+.login-error {
+  background: var(--red-dim);
+  border: 1px solid rgba(230,48,48,.3);
+  border-radius: var(--radius);
+  padding: .7rem 1rem;
+  color: #ff7070;
+  font-size: .85rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Dashboard Layout ──────────────────────────────────────── */
+#dashboardScreen { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* Header */
+.dash-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.dash-header-left { display: flex; align-items: center; gap: 1rem; }
+.dash-header-logo {
+  display: flex; align-items: center; gap: .6rem;
+  text-decoration: none; color: var(--white);
+}
+.dash-header-logo-icon {
+  width: 32px; height: 32px;
+  background: var(--red);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.dash-header-logo-text { font-weight: 700; font-size: .9rem; }
+.dash-divider { width: 1px; height: 24px; background: var(--border); }
+.dash-shop-name { color: var(--w70); font-size: .88rem; }
+.dash-header-right { display: flex; align-items: center; gap: .75rem; }
+.dash-user { font-size: .82rem; color: var(--w45); }
+.btn-logout {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--w70);
+  padding: .4rem .9rem;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-logout:hover { background: var(--surface2); color: var(--white); }
+
+/* Main */
+.dash-main { flex: 1; padding: 1.75rem 1.5rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+
+/* Stats */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+}
+.stat-label { font-size: .78rem; font-weight: 600; color: var(--w45); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .5rem; }
+.stat-value { font-size: 2rem; font-weight: 800; line-height: 1; }
+.stat-value.green { color: var(--green); }
+.stat-value.red   { color: var(--red); }
+.stat-value.blue  { color: var(--blue); }
+.stat-sub { font-size: .78rem; color: var(--w45); margin-top: .35rem; }
+
+/* Filter tabs */
+.filter-row {
+  display: flex;
+  gap: .5rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.filter-tab {
+  padding: .45rem 1rem;
+  border-radius: 20px;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--w70);
+  font-family: inherit;
+  transition: var(--transition);
+}
+.filter-tab:hover { background: var(--surface2); color: var(--white); }
+.filter-tab.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+/* Lead cards */
+.leads-grid { display: flex; flex-direction: column; gap: .85rem; }
+.lead-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  transition: var(--transition);
+}
+.lead-card:hover { border-color: var(--w20); }
+.lead-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.lead-card-left { flex: 1; }
+.lead-meta {
+  display: flex; align-items: center; gap: .6rem;
+  margin-bottom: .6rem; flex-wrap: wrap;
+}
+.lead-location { font-size: .82rem; color: var(--w45); }
+.lead-time { font-size: .78rem; color: var(--w45); }
+.lead-customer { font-size: 1rem; font-weight: 700; margin-bottom: .25rem; }
+.lead-contact { font-size: .85rem; color: var(--w70); margin-bottom: .25rem; }
+.lead-contact a { color: var(--blue); text-decoration: none; }
+.lead-contact a:hover { text-decoration: underline; }
+.lead-vehicle { font-size: .88rem; color: var(--w70); }
+.lead-damage { font-size: .85rem; color: var(--w70); margin-top: .2rem; }
+.lead-damage em { color: var(--white); font-style: normal; font-weight: 600; }
+.lead-quote { font-size: .82rem; color: var(--w45); margin-top: .3rem; font-style: italic; }
+
+/* Status badge */
+.status-badge {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .3rem .75rem;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.status-new       { background: var(--blue-dim);   color: #60a5fa; border: 1px solid rgba(59,130,246,.3); }
+.status-contacted { background: var(--yellow-dim); color: #fbbf24; border: 1px solid rgba(245,158,11,.3); }
+.status-quoted    { background: var(--purple-dim); color: #c084fc; border: 1px solid rgba(168,85,247,.3); }
+.status-won       { background: var(--green-dim);  color: #4ade80; border: 1px solid rgba(34,197,94,.3); }
+.status-lost      { background: rgba(255,255,255,.06); color: var(--w45); border: 1px solid var(--border); }
+
+/* Status selector */
+.lead-card-actions {
+  display: flex; align-items: center; gap: .75rem;
+  padding-top: .9rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.status-select {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--white);
+  font-family: inherit;
+  font-size: .85rem;
+  padding: .45rem .75rem;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+}
+.status-select:focus { border-color: var(--red); }
+.notes-input {
+  flex: 1;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--white);
+  font-family: inherit;
+  font-size: .85rem;
+  padding: .45rem .75rem;
+  outline: none;
+  transition: var(--transition);
+  min-width: 150px;
+}
+.notes-input::placeholder { color: var(--w45); }
+.notes-input:focus { border-color: var(--red); }
+.btn-save {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--w70);
+  font-family: inherit;
+  font-size: .82rem;
+  font-weight: 600;
+  padding: .45rem 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.btn-save:hover { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-save.saved { background: var(--green-dim); border-color: rgba(34,197,94,.3); color: #4ade80; }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--w45);
+}
+.empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+.empty-state h3 { font-size: 1.1rem; color: var(--w70); margin-bottom: .5rem; }
+
+/* Loading */
+.loading {
+  display: flex; align-items: center; justify-content: center;
+  padding: 4rem;
+  color: var(--w45);
+  gap: .75rem;
+}
+.spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--red);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Section header */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.section-title { font-size: 1.1rem; font-weight: 700; }
+.lead-count { font-size: .82rem; color: var(--w45); }
+
+/* Responsive */
+@media (max-width: 700px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .dash-user { display: none; }
+  .lead-card-top { flex-direction: column; }
+  .notes-input { min-width: 100%; }
+}
+@media (max-width: 420px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .dash-main { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ LOGIN ═══════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🔧</div>
+      <div class="login-logo-text">
+        Lone Star Wheel Repairs
+        <span>Shop Partner Portal</span>
+      </div>
+    </div>
+    <h1 class="login-title">Welcome back</h1>
+    <p class="login-sub">Sign in to view your leads and track conversions.</p>
+    <div id="loginError" class="login-error hidden"></div>
+    <div class="field-group">
+      <label for="loginEmail">Email address</label>
+      <input type="email" id="loginEmail" placeholder="shop@example.com" autocomplete="email"/>
+    </div>
+    <div class="field-group">
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+    <button class="btn btn-primary" id="loginBtn" onclick="handleLogin()">Sign In</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════ DASHBOARD ══════════════════════ -->
+<div id="dashboardScreen" class="hidden">
+
+  <!-- Header -->
+  <header class="dash-header">
+    <div class="dash-header-left">
+      <a class="dash-header-logo" href="/">
+        <div class="dash-header-logo-icon">🔧</div>
+        <div class="dash-header-logo-text">Lone Star Wheel Repairs</div>
+      </a>
+      <div class="dash-divider"></div>
+      <span class="dash-shop-name" id="headerShopName">Shop Dashboard</span>
+    </div>
+    <div class="dash-header-right">
+      <span class="dash-user" id="headerUserEmail"></span>
+      <button class="btn-logout" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="dash-main">
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Leads</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-sub">All time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">This Month</div>
+        <div class="stat-value blue" id="statMonth">—</div>
+        <div class="stat-sub" id="statMonthLabel">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Jobs Won</div>
+        <div class="stat-value green" id="statWon">—</div>
+        <div class="stat-sub">Marked as won</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Win Rate</div>
+        <div class="stat-value" id="statRate">—</div>
+        <div class="stat-sub">Won ÷ total leads</div>
+      </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="filter-row">
+      <button class="filter-tab active" onclick="setFilter('all', this)">All</button>
+      <button class="filter-tab" onclick="setFilter('new', this)">🆕 New</button>
+      <button class="filter-tab" onclick="setFilter('contacted', this)">📞 Contacted</button>
+      <button class="filter-tab" onclick="setFilter('quoted', this)">💬 Quoted</button>
+      <button class="filter-tab" onclick="setFilter('won', this)">✅ Won</button>
+      <button class="filter-tab" onclick="setFilter('lost', this)">❌ Lost</button>
+    </div>
+
+    <!-- Lead list -->
+    <div class="section-header">
+      <span class="section-title">Leads</span>
+      <span class="lead-count" id="leadCountLabel"></span>
+    </div>
+
+    <div id="leadsContainer">
+      <div class="loading"><div class="spinner"></div> Loading leads…</div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── Supabase init ─────────────────────────────────────────────
+const SUPABASE_URL  = 'https://mhrkjrzriekkcwyrxzov.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ocmtqcnpyaWVra2N3eXJ4em92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyOTU3ODYsImV4cCI6MjA5NDg3MTc4Nn0.rPTRluOhr2fhTogvZfOzSYo-VujmRIWThZAxDb_SOe8';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// ── State ─────────────────────────────────────────────────────
+let allAssignments = [];
+let currentFilter  = 'all';
+let currentShop    = null;
+
+// ── Auth ──────────────────────────────────────────────────────
+async function handleLogin() {
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn      = document.getElementById('loginBtn');
+  const errEl    = document.getElementById('loginError');
+
+  errEl.classList.add('hidden');
+  btn.disabled  = true;
+  btn.textContent = 'Signing in…';
+
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    errEl.textContent = error.message;
+    errEl.classList.remove('hidden');
+    btn.disabled  = false;
+    btn.textContent = 'Sign In';
+  }
+  // onAuthStateChange handles the rest
+}
+
+async function handleLogout() {
+  await sb.auth.signOut();
+}
+
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('dashboardScreen').classList.remove('hidden');
+    document.getElementById('headerUserEmail').textContent = session.user.email;
+    await loadShopProfile(session.user.id);
+    await loadLeads(session.user.id);
+  } else {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('dashboardScreen').classList.add('hidden');
+    document.getElementById('loginBtn').disabled  = false;
+    document.getElementById('loginBtn').textContent = 'Sign In';
+    allAssignments = [];
+  }
+});
+
+// ── Load shop profile ─────────────────────────────────────────
+async function loadShopProfile(userId) {
+  const { data } = await sb.from('shops').select('*').eq('id', userId).single();
+  currentShop = data;
+  if (data?.name) {
+    document.getElementById('headerShopName').textContent = data.name;
+  }
+}
+
+// ── Load leads ────────────────────────────────────────────────
+async function loadLeads(userId) {
+  document.getElementById('leadsContainer').innerHTML =
+    '<div class="loading"><div class="spinner"></div> Loading leads…</div>';
+
+  const { data, error } = await sb
+    .from('lead_assignments')
+    .select(`
+      id, status, notes, assigned_at, updated_at,
+      leads (
+        id, name, phone, email,
+        city, zip,
+        vehicle_year, vehicle_make, vehicle_model,
+        wheel_count, repair_type, damage_desc,
+        submitted_at
+      )
+    `)
+    .eq('shop_id', userId)
+    .order('assigned_at', { ascending: false });
+
+  if (error) {
+    document.getElementById('leadsContainer').innerHTML =
+      '<div class="empty-state"><div class="empty-state-icon">⚠️</div><h3>Error loading leads</h3><p>' + error.message + '</p></div>';
+    return;
+  }
+
+  allAssignments = data || [];
+  updateStats();
+  renderLeads();
+}
+
+// ── Stats ─────────────────────────────────────────────────────
+function updateStats() {
+  const total   = allAssignments.length;
+  const won     = allAssignments.filter(a => a.status === 'won').length;
+  const rate    = total > 0 ? Math.round((won / total) * 100) : 0;
+
+  const now     = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const thisMonth  = allAssignments.filter(a => new Date(a.assigned_at) >= monthStart).length;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statMonth').textContent = thisMonth;
+  document.getElementById('statWon').textContent   = won;
+  document.getElementById('statRate').textContent  = rate + '%';
+
+  const rateEl = document.getElementById('statRate');
+  rateEl.className = 'stat-value ' + (rate >= 50 ? 'green' : rate >= 25 ? 'yellow' : '');
+
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('statMonthLabel').textContent = months[now.getMonth()] + ' ' + now.getFullYear();
+}
+
+// ── Filter ────────────────────────────────────────────────────
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderLeads();
+}
+
+// ── Render leads ──────────────────────────────────────────────
+function renderLeads() {
+  const container = document.getElementById('leadsContainer');
+  const filtered  = currentFilter === 'all'
+    ? allAssignments
+    : allAssignments.filter(a => a.status === currentFilter);
+
+  document.getElementById('leadCountLabel').textContent =
+    filtered.length + ' lead' + (filtered.length !== 1 ? 's' : '');
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📭</div>
+        <h3>${currentFilter === 'all' ? 'No leads yet' : 'No ' + currentFilter + ' leads'}</h3>
+        <p>${currentFilter === 'all'
+          ? 'Leads will appear here as customers submit quote requests.'
+          : 'Change the filter above to see other leads.'}</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(a => renderLeadCard(a)).join('');
+}
+
+function statusLabel(s) {
+  const map = { new:'🆕 New', contacted:'📞 Contacted', quoted:'💬 Quoted', won:'✅ Won', lost:'❌ Lost' };
+  return map[s] || s;
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + 'h ago';
+  const d = Math.floor(h / 24);
+  return d + 'd ago';
+}
+
+function renderLeadCard(a) {
+  const lead    = a.leads || {};
+  const vehicle = [lead.vehicle_year, lead.vehicle_make, lead.vehicle_model].filter(Boolean).join(' ') || 'Vehicle not specified';
+  const repair  = [lead.repair_type, lead.wheel_count ? lead.wheel_count + ' wheel(s)' : ''].filter(Boolean).join(' — ') || 'Repair not specified';
+  const loc     = lead.city ? lead.city + ', TX' : lead.zip ? 'ZIP ' + lead.zip : 'Texas';
+  const phone   = lead.phone || '';
+  const phoneFmt = phone ? `<a href="tel:${phone.replace(/\D/g,'')}">` + phone + '</a>' : 'N/A';
+  const email   = lead.email || '';
+  const emailFmt = email ? `<a href="mailto:${email}">${email}</a>` : 'N/A';
+
+  return `
+<div class="lead-card" id="card-${a.id}">
+  <div class="lead-card-top">
+    <div class="lead-card-left">
+      <div class="lead-meta">
+        <span class="status-badge status-${a.status}">${statusLabel(a.status)}</span>
+        <span class="lead-location">📍 ${loc}</span>
+        <span class="lead-time">${timeAgo(a.assigned_at)}</span>
+      </div>
+      <div class="lead-customer">${lead.name || 'Customer'}</div>
+      <div class="lead-contact">📞 ${phoneFmt} &nbsp;·&nbsp; ✉️ ${emailFmt}</div>
+      <div class="lead-vehicle">🚗 ${vehicle}</div>
+      <div class="lead-damage">🔧 <em>${repair}</em></div>
+      ${lead.damage_desc ? `<div class="lead-quote">"${lead.damage_desc}"</div>` : ''}
+    </div>
+  </div>
+  <div class="lead-card-actions">
+    <select class="status-select" id="sel-${a.id}" onchange="onStatusChange('${a.id}', this)">
+      <option value="new"       ${a.status==='new'       ?'selected':''}>🆕 New</option>
+      <option value="contacted" ${a.status==='contacted' ?'selected':''}>📞 Contacted</option>
+      <option value="quoted"    ${a.status==='quoted'    ?'selected':''}>💬 Quoted</option>
+      <option value="won"       ${a.status==='won'       ?'selected':''}>✅ Won</option>
+      <option value="lost"      ${a.status==='lost'      ?'selected':''}>❌ Lost</option>
+    </select>
+    <input class="notes-input" id="notes-${a.id}"
+      placeholder="Add notes…"
+      value="${(a.notes || '').replace(/"/g,'&quot;')}"/>
+    <button class="btn-save" id="save-${a.id}" onclick="saveStatus('${a.id}')">Save</button>
+  </div>
+</div>`;
+}
+
+// ── Status change ─────────────────────────────────────────────
+function onStatusChange(assignmentId, sel) {
+  // Update badge immediately for UX
+  const card  = document.getElementById('card-' + assignmentId);
+  const badge = card.querySelector('.status-badge');
+  badge.className = 'status-badge status-' + sel.value;
+  badge.textContent = statusLabel(sel.value);
+}
+
+async function saveStatus(assignmentId) {
+  const sel    = document.getElementById('sel-' + assignmentId);
+  const notes  = document.getElementById('notes-' + assignmentId).value;
+  const saveBtn = document.getElementById('save-' + assignmentId);
+
+  saveBtn.textContent = 'Saving…';
+  saveBtn.disabled    = true;
+
+  const { error } = await sb
+    .from('lead_assignments')
+    .update({ status: sel.value, notes })
+    .eq('id', assignmentId);
+
+  if (error) {
+    saveBtn.textContent = 'Error';
+    saveBtn.disabled    = false;
+    setTimeout(() => { saveBtn.textContent = 'Save'; }, 2000);
+    return;
+  }
+
+  // Update local state
+  const a = allAssignments.find(x => x.id === assignmentId);
+  if (a) { a.status = sel.value; a.notes = notes; }
+
+  saveBtn.textContent = '✓ Saved';
+  saveBtn.classList.add('saved');
+  setTimeout(() => {
+    saveBtn.textContent = 'Save';
+    saveBtn.classList.remove('saved');
+    saveBtn.disabled    = false;
+    updateStats();
+  }, 1500);
+}
+
+// ── Keyboard shortcut: Enter to login ────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !document.getElementById('loginScreen').classList.contains('hidden')) {
+    handleLogin();
+  }
+});
+</script>
+</body>
+</html>
