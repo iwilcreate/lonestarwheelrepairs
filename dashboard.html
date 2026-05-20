@@ -508,30 +508,43 @@ async function loadLeads(userId) {
   document.getElementById('leadsContainer').innerHTML =
     '<div class="loading"><div class="spinner"></div> Loading leads…</div>';
 
-  const { data, error } = await sb
-    .from('lead_assignments')
-    .select(`
-      id, status, notes, assigned_at, updated_at,
-      leads (
-        id, name, phone, email,
-        city, zip,
-        vehicle_year, vehicle_make, vehicle_model,
-        wheel_count, repair_type, damage_desc,
-        submitted_at
-      )
-    `)
-    .eq('shop_id', userId)
-    .order('assigned_at', { ascending: false });
+  try {
+    // Step 1: fetch assignments for this shop
+    const { data: assignments, error: aErr } = await sb
+      .from('lead_assignments')
+      .select('id, status, notes, assigned_at, updated_at, lead_id')
+      .eq('shop_id', userId)
+      .order('assigned_at', { ascending: false });
 
-  if (error) {
+    if (aErr) throw aErr;
+
+    if (!assignments || assignments.length === 0) {
+      allAssignments = [];
+      updateStats();
+      renderLeads();
+      return;
+    }
+
+    // Step 2: fetch the actual lead details using the lead IDs
+    const leadIds = assignments.map(a => a.lead_id);
+    const { data: leads, error: lErr } = await sb
+      .from('leads')
+      .select('id, name, phone, email, city, zip, vehicle_year, vehicle_make, vehicle_model, wheel_count, repair_type, damage_desc, submitted_at')
+      .in('id', leadIds);
+
+    if (lErr) throw lErr;
+
+    // Step 3: merge leads into assignments
+    const leadsMap = Object.fromEntries((leads || []).map(l => [l.id, l]));
+    allAssignments = assignments.map(a => ({ ...a, leads: leadsMap[a.lead_id] || {} }));
+
+    updateStats();
+    renderLeads();
+
+  } catch (err) {
     document.getElementById('leadsContainer').innerHTML =
-      '<div class="empty-state"><div class="empty-state-icon">⚠️</div><h3>Error loading leads</h3><p>' + error.message + '</p></div>';
-    return;
+      '<div class="empty-state"><div class="empty-state-icon">⚠️</div><h3>Error loading leads</h3><p>' + err.message + '</p></div>';
   }
-
-  allAssignments = data || [];
-  updateStats();
-  renderLeads();
 }
 
 // ── Stats ─────────────────────────────────────────────────────
