@@ -1,4 +1,10 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/3ffacae4a351cd2d3e1aa8844b7b1fcc.html",
+      "destination": "/3ffacae4a351cd2d3e1aa8844b7b1fcc"
+    }
+  ]
 }
