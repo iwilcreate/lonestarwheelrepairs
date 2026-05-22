@@ -67,6 +67,42 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Blog posts -->
+  <url>
+    <loc>https://lonestarwheelrepairs.com/blog-wheel-repair-cost-texas</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://lonestarwheelrepairs.com/blog-curb-rash-repair</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://lonestarwheelrepairs.com/blog-cracked-rim-repair-vs-replacement</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://lonestarwheelrepairs.com/blog-oem-vs-aftermarket-wheels</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://lonestarwheelrepairs.com/blog-find-wheel-repair-shop</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Terms of Service -->
   <url>
     <loc>https://lonestarwheelrepairs.com/terms</loc>
