@@ -2440,9 +2440,12 @@ document.getElementById('quoteForm').addEventListener('submit', async function(e
     ]);
 
     if (res.ok) {
-      // GA4 event
-      if (typeof gtag === 'function') gtag('event', 'quote_submitted', {
-        city: payload.city, repair_type: payload.repair_type
+      // GA4 conversion via GTM dataLayer
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event:       'quote_submitted',
+        city:        payload.city,
+        repair_type: payload.repair_type
       });
       // Show confirmation
       document.getElementById('quoteFormWrap').classList.add('hidden');
