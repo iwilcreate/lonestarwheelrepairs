@@ -2501,11 +2501,32 @@ document.getElementById('shopForm').addEventListener('submit', async function(e)
   };
 
   try {
-    await fetch('/api/shop-apply', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload)
-    }).catch(err => console.warn('[shop-apply] API error:', err));
+    // Fire Formspree (email backup) and Supabase API in parallel
+    await Promise.allSettled([
+      fetch('https://formspree.io/f/mzdybzwq', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject:   `New Shop Application — ${payload.shop_name}`,
+          shop_name:  payload.shop_name,
+          owner_name: payload.owner_name,
+          phone:      payload.phone,
+          email:      payload.email,
+          city:       payload.city,
+          zip:        payload.zip,
+          tier:       payload.tier,
+          radius:     payload.radius ? `${payload.radius} miles` : 'Not specified',
+          type:       'SHOP APPLICATION'
+        })
+      }),
+      fetch('/api/shop-apply', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
+      })
+    ]);
+  } catch(err) {
+    console.warn('[shop-apply] submission error:', err);
   } finally {
     btn.disabled = false;
     btn.textContent = originalText;
