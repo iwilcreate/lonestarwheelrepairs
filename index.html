@@ -2476,17 +2476,53 @@ function resetForm() {
 }
 
 // ── Shop Apply ────────────────────────────────────────────────────────────────
-document.getElementById('shopForm').addEventListener('submit', function(e) {
+document.getElementById('shopForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const fields = ['shopName','ownerName','shopPhone','shopEmail','shopCity','shopZip','shopTier'];
   if (fields.some(id => !document.getElementById(id).value.trim())) {
     alert(currentLang === 'es' ? 'Por favor completa todos los campos requeridos.' : 'Please fill out all required fields.');
     return;
   }
+
+  const btn = this.querySelector('button[type="submit"]');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = currentLang === 'es' ? 'Enviando...' : 'Submitting...';
+
+  const payload = {
+    shop_name:  document.getElementById('shopName').value.trim(),
+    owner_name: document.getElementById('ownerName').value.trim(),
+    phone:      document.getElementById('shopPhone').value.trim(),
+    email:      document.getElementById('shopEmail').value.trim(),
+    zip:        document.getElementById('shopZip').value.trim(),
+    city:       document.getElementById('shopCity').value.trim(),
+    tier:       document.getElementById('shopTier').value,
+    radius:     document.getElementById('shopRadius').value || null
+  };
+
+  try {
+    await fetch('/api/shop-apply', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    }).catch(err => console.warn('[shop-apply] API error:', err));
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+
+  // Show confirmation regardless of API result (never block UX)
   document.getElementById('shopForm').classList.add('hidden');
   document.getElementById('shopConfirmation').classList.remove('hidden');
   setLang(currentLang);
-  if (typeof gtag === 'function') gtag('event', 'shop_application_submitted', { tier: document.getElementById('shopTier').value });
+
+  // GTM conversion event
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'shop_application_submitted',
+    tier:  payload.tier,
+    city:  payload.city
+  });
 });
 
 // ── Real-time field validation ────────────────────────────────────────────────

@@ -73,6 +73,28 @@ CREATE POLICY "shops_own_assignments"
   ON public.lead_assignments FOR ALL
   USING (shop_id = auth.uid());
 
+-- ── Shop Applications (pre-signup form submissions) ─────────
+CREATE TABLE IF NOT EXISTS public.shop_applications (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  shop_name   TEXT NOT NULL,
+  owner_name  TEXT,
+  phone       TEXT,
+  email       TEXT,
+  zip         TEXT,
+  city        TEXT,
+  tier        TEXT,
+  radius      INTEGER,
+  status      TEXT DEFAULT 'pending',  -- pending | approved | rejected
+  submitted_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.shop_applications ENABLE ROW LEVEL SECURITY;
+
+-- Service role only (no public read access to applications)
+CREATE POLICY "service_role_only_applications"
+  ON public.shop_applications FOR ALL
+  USING (false);
+
 -- ── Auto-update updated_at on lead_assignments ────────────────
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
